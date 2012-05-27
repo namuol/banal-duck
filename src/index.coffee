@@ -7,7 +7,12 @@ html ->
     script type:'text/javascript', src:'soundmanager2.js'
 
   body ->
-    div id:'results', ->
+    div id:'loading_wrapper', ->
+      table ->
+        tbody ->
+          tr ->
+            td id:'loading', 'Please Wait...'
+    div id:'results', style:'display:none', ->
       div id:'instructions', ->
         text 'How to play Dual 2-Back:'
         ul ->
@@ -22,7 +27,7 @@ html ->
               td id:'percent', ''
       div id:'start_game_msg', ->
         text 'Press [SPACE] to start another round'
-    div id:'game', ->
+    div id:'game', style:'display:none', ->
       table id:'layout', ->
         tr ->
           td id:'a_button', 'POSITION (A)'
@@ -76,9 +81,9 @@ html ->
         soundManager.useHTML5Audio = true
         #soundManager.preferFlash = true
         soundManager.onready ->
+          all_loaded = undefined
+          sounds_loaded = 0
           soundManager.defaultOptions.autoLoad = true
-          soundManager.defaultOptions.onload = ->
-            console.log 'sound loaded!'
 
           sounds_to_load = [
               id: 'c'
@@ -113,6 +118,11 @@ html ->
               url: 't.wav'
               volume: 50
           ]
+
+          soundManager.defaultOptions.onload = ->
+            if ++sounds_loaded == sounds_to_load.length
+              all_loaded()
+
           for sound in sounds_to_load
             sounds.push soundManager.createSound sound
 
@@ -217,61 +227,64 @@ html ->
               , turn_dur
 
             return ret
-          
-          $(window).keydown (e) ->
 
-            switch e.which
-              when 65 # A
-                return true if not window.round
-                round.a_pressed()
-              when 76 # B
-                return true if not window.round
-                round.b_pressed()
-              when 32 # Spacebar
-                if not window.round?
-                  window.round = dual_n_back 2, 24, 3000
-                  $('#results').hide()
-                  round.start (r) ->
-                    window.round = undefined
-                    console.log r
-                    tot = r.a_missed + r.b_missed + r.a_correct + r.b_correct
-                    cor = r.a_correct + r.b_correct - r.a_incorrect - r.b_incorrect
-                    console.log tot
-                    console.log cor
-                    percent = Math.round(100 * (cor/tot))
-                    if percent <= 50
-                      cssclass = 'bad'
-                      msg = choose [
-                        'don\'t be discouraged!'
-                        'room for improvement; try again!'
-                      ]
-                    else if percent <= 80
-                      cssclass = 'better'
-                      msg = choose [
-                        'not bad at all.'
-                        'you\'re getting there!'
-                        'keep it up!'
-                      ]
-                    else
-                      cssclass = 'excellent'
-                      msg = choose [
-                        'excellent!'
-                        'now you\'ve got it!'
-                        'bravo!'
-                        '*high fives*'
-                        'is this too easy for you?'
-                      ]
+          all_loaded = ->
+            $('#loading_wrapper').hide()
+            $('#results').show()
+            $('#game').show()
+            $(window).keydown (e) ->
+              switch e.which
+                when 65 # A
+                  return true if not window.round
+                  round.a_pressed()
+                when 76 # B
+                  return true if not window.round
+                  round.b_pressed()
+                when 32 # Spacebar
+                  if not window.round?
+                    window.round = dual_n_back 2, 24, 3000
+                    $('#results').hide()
+                    round.start (r) ->
+                      window.round = undefined
+                      console.log r
+                      tot = r.a_missed + r.b_missed + r.a_correct + r.b_correct
+                      cor = r.a_correct + r.b_correct - r.a_incorrect - r.b_incorrect
+                      console.log tot
+                      console.log cor
+                      percent = Math.round(100 * (cor/tot))
+                      if percent <= 50
+                        cssclass = 'bad'
+                        msg = choose [
+                          'don\'t be discouraged!'
+                          'room for improvement; try again!'
+                        ]
+                      else if percent <= 80
+                        cssclass = 'better'
+                        msg = choose [
+                          'not bad at all.'
+                          'you\'re getting there!'
+                          'keep it up!'
+                        ]
+                      else
+                        cssclass = 'excellent'
+                        msg = choose [
+                          'excellent!'
+                          'now you\'ve got it!'
+                          'bravo!'
+                          '*high fives*'
+                          'is this too easy for you?'
+                        ]
 
-                    $('#percent').html "#{percent}% correct"
-                    $('#percent').removeClass 'bad'
-                    $('#percent').removeClass 'better'
-                    $('#percent').removeClass 'excellent'
-                    $('#percent').addClass cssclass
-                    $('#results').show()
+                      $('#percent').html "#{percent}% correct<br>#{msg}"
+                      $('#percent').removeClass 'bad'
+                      $('#percent').removeClass 'better'
+                      $('#percent').removeClass 'excellent'
+                      $('#percent').addClass cssclass
+                      $('#results').show()
 
-          $(window).on 'click', '#a_button', ->
-            return true if not window.round
-            round.a_pressed()
-          $(window).on 'click', '#b_button', ->
-            return true if not window.round
-            round.b_pressed()
+            $(window).on 'click', '#a_button', ->
+              return true if not window.round
+              round.a_pressed()
+            $(window).on 'click', '#b_button', ->
+              return true if not window.round
+              round.b_pressed()

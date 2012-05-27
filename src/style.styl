@@ -71,23 +71,26 @@ body
   position absolute
   text-align center
 
-.bad
+#percent_wrapper table tr td#percent.bad
   color #faa
 
-.better
+#percent_wrapper table tr td#percent.better
   color #ffa
 
-.excellent
+#percent_wrapper table tr td#percent.excellent
   color #afa
 
-#percent_wrapper
+#loading_wrapper
+  background rgba(0,0,0,0.85)
+
+#percent_wrapper, #loading_wrapper
   width 100%
   height 100%
   position absolute
   top 0
   left 0
 
-#percent_wrapper table
+#percent_wrapper table, #loading_wrapper table
   width 100%
   height 100%
   margin 0
@@ -95,7 +98,8 @@ body
   border 0
   border-collapse collapse
 
-#percent_wrapper table tr td#percent
+#percent_wrapper table tr td#percent, #loading_wrapper table tr td#loading
+  color #ccc
   font-size 48pt
   vertical-align middle
   text-align center
