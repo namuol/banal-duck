@@ -19,6 +19,3 @@ task 'build', 'Create compiled HTML/CSS output', ->
   stylus.render fs.readFileSync('src/style.styl','utf-8'), {filename: css_fn}, (err, css) ->
     throw err if err
     fs.writeFileSync css_fn, css
-
-task 'deploy', 'Deploy the project', ->
-  console.log 'TODO'
