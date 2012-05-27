@@ -3,6 +3,7 @@ html ->
     meta charset:'utf-8'
     title 'Dual N-Back'
     link rel:'stylesheet', href:'style.css'
+    script type:'text/javascript', src:'json2.min.js'
     script type:'text/javascript', src:'storage.min.js'
     script type:'text/javascript', src:'jquery-1.7.2.min.js'
     script type:'text/javascript', src:'soundmanager2.js'
@@ -253,12 +254,15 @@ html ->
               window.round = dual_n_back 2, 24, 3000
               $('#results').hide()
               round.start (r) ->
+                h = JSON.parse localStorage.getItem 'history'
+                if not h?
+                  h = []
+                h.push round
+                localStorage.setItem 'history', JSON.stringify h
+
                 window.round = undefined
-                console.log r
                 tot = r.a_missed + r.b_missed + r.a_correct + r.b_correct
                 cor = r.a_correct + r.b_correct - r.a_incorrect - r.b_incorrect
-                console.log tot
-                console.log cor
                 percent = Math.round(100 * (cor/tot))
                 if percent <= 50
                   cssclass = 'bad'
