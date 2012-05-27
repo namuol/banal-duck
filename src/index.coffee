@@ -3,6 +3,7 @@ html ->
     meta charset:'utf-8'
     title 'Dual N-Back'
     link rel:'stylesheet', href:'style.css'
+    script type:'text/javascript', src:'storage.min.js'
     script type:'text/javascript', src:'jquery-1.7.2.min.js'
     script type:'text/javascript', src:'soundmanager2.js'
 
@@ -74,101 +75,172 @@ html ->
           , delay
 
         window.sounds = []
+        all_loaded = undefined
+        sounds_loaded = 0
+        sounds_to_load = [
+            id: 'c'
+            url: 'c.wav'
+            volume: 50
+          ,
+            id: 'h'
+            url: 'h.wav'
+            volume: 50
+          ,
+            id: 'k'
+            url: 'k.wav'
+            volume: 50
+          ,
+            id: 'l'
+            url: 'l.wav'
+            volume: 50
+          ,
+            id: 'q'
+            url: 'q.wav'
+            volume: 50
+          ,
+            id: 'r'
+            url: 'r.wav'
+            volume: 50
+          ,
+            id: 's'
+            url: 's.wav'
+            volume: 50
+          ,
+            id: 't'
+            url: 't.wav'
+            volume: 50
+        ]
         soundManager.url = 'swf'
         soundManager.flashVersion = 9
-        soundManager.useHighPerformance = true
+        soundManager.useHighPerformance = false
         soundManager.useFastPolling = true
         soundManager.useHTML5Audio = true
-        #soundManager.preferFlash = true
+        soundManager.preferFlash = false
+
+        soundManager.defaultOptions.onload = ->
+          if ++sounds_loaded == sounds_to_load.length
+            all_loaded()
+
+
         soundManager.onready ->
-          all_loaded = undefined
-          sounds_loaded = 0
           soundManager.defaultOptions.autoLoad = true
 
-          sounds_to_load = [
-              id: 'c'
-              url: 'c.wav'
-              volume: 50
-            ,
-              id: 'h'
-              url: 'h.wav'
-              volume: 50
-            ,
-              id: 'k'
-              url: 'k.wav'
-              volume: 50
-            ,
-              id: 'l'
-              url: 'l.wav'
-              volume: 50
-            ,
-              id: 'q'
-              url: 'q.wav'
-              volume: 50
-            ,
-              id: 'r'
-              url: 'r.wav'
-              volume: 50
-            ,
-              id: 's'
-              url: 's.wav'
-              volume: 50
-            ,
-              id: 't'
-              url: 't.wav'
-              volume: 50
-          ]
-
-          soundManager.defaultOptions.onload = ->
-            if ++sounds_loaded == sounds_to_load.length
-              all_loaded()
 
           for sound in sounds_to_load
             sounds.push soundManager.createSound sound
 
           dual_n_back = (n, count, turn_dur=3000) ->
             started = false
-            moves = []
+            turns = []
             a_match = b_match = false
-            a_pressed = b_pressed = false
-            a_correct = b_correct = 0
-            a_missed = b_missed = 0
-            a_incorrect = b_incorrect = 0
+            current = 0
             i = 0
             while i < count
               a = rand(0, grid.length-1)
               b = rand(0, sounds.length-1)
-              moves.push {a:a, b:b}
+              turns.push
+                a:a
+                b:b
+                a_pressed:false
+                b_pressed:false
 
               # Add some more matches:
               if (i >= n) and (Math.random() > 0.15)
-                moves[i-n].a = a
+                turns[i-n].a = a
               if (i >= n) and (Math.random() > 0.15)
-                moves[i-n].b = b
+                turns[i-n].b = b
               ++i
 
 
             $('#type').html "Dual #{n}-Back"
             start = undefined
 
-            ret = {
+            a_matches = (num) ->
+              return false if num < n
+              return turns[num].a == turns[num-n].a
+            b_matches = (num) ->
+              return false if num < n
+              return turns[num].b == turns[num-n].b
+
+
+            generate_results = ->
+              a_correct = b_correct = 0
+              a_incorrect = b_incorrect = 0
+              a_missed = b_missed = 0
+              a_match = b_match = false
+
+              i = 0
+              while i < turns.length
+                a_match = b_match = false
+                curr = turns[i]
+                a_match = a_matches(i)
+                b_match = b_matches(i)
+
+                if a_match
+                  if curr.a_pressed
+                    ++a_correct
+                  else
+                    ++a_missed
+                else if curr.a_pressed
+                  ++a_incorrect
+
+                if b_match
+                  if curr.b_pressed
+                    ++b_correct
+                  else
+                    ++b_missed
+                else if curr.b_pressed
+                  ++b_incorrect
+
+                ++i
+
+              return {
+                a_correct: a_correct
+                b_correct: b_correct
+                a_incorrect: a_incorrect
+                b_incorrect: b_incorrect
+                a_missed: a_missed
+                b_missed: b_missed
+              }
+
+            intvl = 0
+
+            start = (done) ->
+              started = true
+              current = 0
+              intvl = setInterval ->
+                if current >= count
+                  clearInterval intvl
+                  done generate_results()
+                  return
+
+                $('#type').html "Dual #{n}-Back"
+                $('#remaining').html "#{current+1} of #{count}"
+                highlight grid[turns[current].a]
+                sounds[turns[current].b].play()
+                
+                ++current
+              , turn_dur
+
+            return {
               n: n
               count: count
+              turns: turns
               turn_dur: turn_dur
               a_pressed: ->
-                if not a_pressed
-                  if a_match
+                if not turns[current-1].a_pressed
+                  if a_matches(current-1)
                     highlight $('#a_button'), 'success', 0, 250
                   else
                     highlight $('#a_button'), 'failure', 0, 250
-                  a_pressed = true
+                  turns[current-1].a_pressed = true
               b_pressed: ->
-                if not b_pressed
-                  if b_match
+                if not turns[current-1].b_pressed
+                  if b_matches(current-1)
                     highlight $('#b_button'), 'success', 0, 250
                   else
                     highlight $('#b_button'), 'failure', 0, 250
-                  b_pressed = true
+                  turns[current-1].b_pressed = true
               start: (done=new Function) ->
                 start(done)
               stop: ->
@@ -176,57 +248,47 @@ html ->
                   clearInterval intvl
             }
 
-            intvl = 0
-            start = (done) ->
-              started = true
-              current = 0
-              intvl = setInterval ->
-                if a_match
-                  if a_pressed
-                    ++a_correct
-                  else
-                    ++a_missed
-                else if a_pressed
-                  ++a_incorrect
-                  console.log 'A'
+          new_round = ->
+            if not window.round?
+              window.round = dual_n_back 2, 24, 3000
+              $('#results').hide()
+              round.start (r) ->
+                window.round = undefined
+                console.log r
+                tot = r.a_missed + r.b_missed + r.a_correct + r.b_correct
+                cor = r.a_correct + r.b_correct - r.a_incorrect - r.b_incorrect
+                console.log tot
+                console.log cor
+                percent = Math.round(100 * (cor/tot))
+                if percent <= 50
+                  cssclass = 'bad'
+                  msg = choose [
+                    'don\'t be discouraged!'
+                    'give it another try!'
+                  ]
+                else if percent <= 80
+                  cssclass = 'better'
+                  msg = choose [
+                    'not bad.'
+                    'you\'re getting there!'
+                    'keep it up!'
+                  ]
+                else
+                  cssclass = 'excellent'
+                  msg = choose [
+                    'excellent!'
+                    'now you\'ve got it!'
+                    'bravo!'
+                    '*high fives*'
+                    'is this too easy for you?'
+                  ]
 
-                if b_match
-                  if b_pressed
-                    ++b_correct
-                  else
-                    ++b_missed
-                else if b_pressed
-                  console.log 'B'
-                  ++b_incorrect
-
-                if current >= count
-                  clearInterval intvl
-                  done {
-                    a_correct: a_correct
-                    b_correct: b_correct
-                    a_incorrect: a_incorrect
-                    b_incorrect: b_incorrect
-                    a_missed: a_missed
-                    b_missed: b_missed
-                  }
-                  return
-
-                $('#type').html "Dual #{n}-Back"
-                $('#remaining').html "#{current+1} of #{count}"
-                a_match = b_match = false
-                a_pressed = b_pressed = false
-                highlight grid[moves[current].a]
-                sounds[moves[current].b].play()
-                
-                if current >= n
-                  prev = moves[current-n]
-                  a_match = moves[current].a == prev.a
-                  b_match = moves[current].b == prev.b
-                
-                ++current
-              , turn_dur
-
-            return ret
+                $('#percent').html "#{percent}% correct<br>#{msg}"
+                $('#percent').removeClass 'bad'
+                $('#percent').removeClass 'better'
+                $('#percent').removeClass 'excellent'
+                $('#percent').addClass cssclass
+                $('#results').show()
 
           all_loaded = ->
             $('#loading_wrapper').hide()
@@ -241,47 +303,9 @@ html ->
                   return true if not window.round
                   round.b_pressed()
                 when 32 # Spacebar
-                  if not window.round?
-                    window.round = dual_n_back 2, 24, 3000
-                    $('#results').hide()
-                    round.start (r) ->
-                      window.round = undefined
-                      console.log r
-                      tot = r.a_missed + r.b_missed + r.a_correct + r.b_correct
-                      cor = r.a_correct + r.b_correct - r.a_incorrect - r.b_incorrect
-                      console.log tot
-                      console.log cor
-                      percent = Math.round(100 * (cor/tot))
-                      if percent <= 50
-                        cssclass = 'bad'
-                        msg = choose [
-                          'don\'t be discouraged!'
-                          'room for improvement; try again!'
-                        ]
-                      else if percent <= 80
-                        cssclass = 'better'
-                        msg = choose [
-                          'not bad at all.'
-                          'you\'re getting there!'
-                          'keep it up!'
-                        ]
-                      else
-                        cssclass = 'excellent'
-                        msg = choose [
-                          'excellent!'
-                          'now you\'ve got it!'
-                          'bravo!'
-                          '*high fives*'
-                          'is this too easy for you?'
-                        ]
-
-                      $('#percent').html "#{percent}% correct<br>#{msg}"
-                      $('#percent').removeClass 'bad'
-                      $('#percent').removeClass 'better'
-                      $('#percent').removeClass 'excellent'
-                      $('#percent').addClass cssclass
-                      $('#results').show()
-
+                  new_round()
+            $(window).on 'click', '#percent_wrapper', ->
+              new_round()
             $(window).on 'click', '#a_button', ->
               return true if not window.round
               round.a_pressed()
