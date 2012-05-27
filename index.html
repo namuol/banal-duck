@@ -1,4 +1,4 @@
-<html><head><meta charset="utf-8" /><title>Dual N-Back</title><link rel="stylesheet" href="style.css" /><script type="text/javascript" src="storage.min.js"></script><script type="text/javascript" src="jquery-1.7.2.min.js"></script><script type="text/javascript" src="soundmanager2.js"></script></head><body><div id="loading_wrapper"><table><tbody><tr><td id="loading">Please Wait...</td></tr></tbody></table></div><div id="results" style="display:none"><div id="instructions">How to play Dual 2-Back:<ul><li>Any time a grid square you saw 2 turns ago is highlighted again, press [A]</li><li>Any time a letter you heard 2 turns ago is spoken again, press [L]</li><li>It's possible for both of these cases to occur on the same turn</li><li>Don't be discouraged! You <strong>will</strong> improve with practice!</li></ul></div><div id="percent_wrapper"><table><tbody><tr><td id="percent"></td></tr></tbody></table></div><div id="start_game_msg">Press [SPACE] to start another round</div></div><div id="game" style="display:none"><table id="layout"><tr><td id="a_button">POSITION (A)</td><td id="grid_wrap"><div id="hud"><div id="type"></div><div id="remaining"></div></div><table id="grid"><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></table></td><td id="b_button">LETTER (L)</td></tr></table></div><script>var __slice = Array.prototype.slice;var __hasProp = Object.prototype.hasOwnProperty;var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };var __extends = function(child, parent) {  for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; }  function ctor() { this.constructor = child; }  ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype;  return child; };var __indexOf = Array.prototype.indexOf || function(item) {  for (var i = 0, l = this.length; i < l; i++) {    if (this[i] === item) return i;  } return -1; };(function () {
+<html><head><meta charset="utf-8" /><title>Dual N-Back</title><link rel="stylesheet" href="style.css" /><script type="text/javascript" src="json2.min.js"></script><script type="text/javascript" src="storage.min.js"></script><script type="text/javascript" src="jquery-1.7.2.min.js"></script><script type="text/javascript" src="soundmanager2.js"></script></head><body><div id="loading_wrapper"><table><tbody><tr><td id="loading">Please Wait...</td></tr></tbody></table></div><div id="results" style="display:none"><div id="instructions">How to play Dual 2-Back:<ul><li>Any time a grid square you saw 2 turns ago is highlighted again, press [A]</li><li>Any time a letter you heard 2 turns ago is spoken again, press [L]</li><li>It's possible for both of these cases to occur on the same turn</li><li>Don't be discouraged! You <strong>will</strong> improve with practice!</li></ul></div><div id="percent_wrapper"><table><tbody><tr><td id="percent"></td></tr></tbody></table></div><div id="start_game_msg">Press [SPACE] to start another round</div></div><div id="game" style="display:none"><table id="layout"><tr><td id="a_button">POSITION (A)</td><td id="grid_wrap"><div id="hud"><div id="type"></div><div id="remaining"></div></div><table id="grid"><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></table></td><td id="b_button">LETTER (L)</td></tr></table></div><script>var __slice = Array.prototype.slice;var __hasProp = Object.prototype.hasOwnProperty;var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };var __extends = function(child, parent) {  for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; }  function ctor() { this.constructor = child; }  ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype;  return child; };var __indexOf = Array.prototype.indexOf || function(item) {  for (var i = 0, l = this.length; i < l; i++) {    if (this[i] === item) return i;  } return -1; };(function () {
       /*
       */
 
@@ -231,13 +231,16 @@
               window.round = dual_n_back(2, 24, 3000);
               $('#results').hide();
               return round.start(function(r) {
-                var cor, cssclass, msg, percent, tot;
+                var cor, cssclass, h, msg, percent, tot;
+                h = JSON.parse(localStorage.getItem('history'));
+                if (!(h != null)) {
+                  h = [];
+                }
+                h.push(round);
+                localStorage.setItem('history', JSON.stringify(h));
                 window.round = void 0;
-                console.log(r);
                 tot = r.a_missed + r.b_missed + r.a_correct + r.b_correct;
                 cor = r.a_correct + r.b_correct - r.a_incorrect - r.b_incorrect;
-                console.log(tot);
-                console.log(cor);
                 percent = Math.round(100 * (cor / tot));
                 if (percent <= 50) {
                   cssclass = 'bad';
