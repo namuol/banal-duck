@@ -69,27 +69,23 @@ body {
   min-width: 453px;
 }
 #grid td {
-  border: 1px solid #888;
+  border: 1px solid #222;
+  background: #dde;
   width: 150px;
   height: 150px;
 }
 #a_button,
 #b_button {
-  color: #888;
   font-weight: bold;
 }
 #grid td.highlighted {
   background: #369;
 }
 .success {
-  background: #afa;
+  background: rgba(200,255,200,0.5);
 }
 .failure {
-  background: #faa;
-}
-#hud {
-  font-weight: bold;
-  height: 30px;
+  background: rgba(255,200,200,0.5);
 }
 #type {
   float: left;
@@ -414,4 +410,13 @@ input[type='number'] {
   -moz-text-shadow: 0 1px 0 rgba(0,0,0,0.8);
   text-shadow: 0 1px 0 rgba(0,0,0,0.8);
   box-shadow: rgba(0,0,0,0.5) 0 1px 0px inset;
+}
+.bad {
+  color: #ccc;
+}
+.good {
+  color: #dd2;
+}
+.excellent {
+  color: #2d2;
 }

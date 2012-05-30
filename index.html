@@ -5,7 +5,7 @@
       /*
       */
       return $(function() {
-        var all_loaded, choose, clear_history, flash, frand, grid, rand, reset_settings, sounds_loaded, sounds_to_load, update_settings_display, _defaultSettings;
+        var all_loaded, choose, clear_history, frand, grid, rand, reset_settings, sounds_loaded, sounds_to_load, update_settings_display, _defaultSettings;
         _defaultSettings = {
           n: 2,
           count: 24,
@@ -73,7 +73,7 @@
             }, ttl);
           }, delay);
         };
-        flash = function(text, cssClass, buttonText, cb) {
+        window.flash = function(text, cssClass, buttonText, cb) {
           if (buttonText == null) {
             buttonText = 'Continue';
           }
@@ -479,7 +479,7 @@
             $('#new-game').click(function() {
               return new_round();
             });
-            return $('#nav [href="#help"]').click();
+            return $('#nav [href="#game"]').click();
           };
         });
       });
