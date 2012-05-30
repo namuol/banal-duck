@@ -1,4 +1,10 @@
-* {
+body {
+  -webkit-transition: background;
+  -moz-transition: background;
+  -o-transition: background;
+  transition: background;
+  height: 100%;
+  width: 100%;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -khtml-user-select: none;
@@ -6,12 +12,45 @@
   -ms-user-select: none;
   -o-user-select: none;
   user-select: none;
-}
-body {
+  color: #fff;
+  -webkit-text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+  -moz-text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+  text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+  background-color: #6995ac;
+  background-image: url("bg.png");
   border: 0;
   padding: 0;
   margin: 0;
-  font-family: sans-serif, Arial;
+  font-family: Helvetica, sans-serif, Arial;
+  overflow: hidden;
+}
+#vignette {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  -webkit-transition: opacity 1000ms;
+  -moz-transition: opacity 1000ms;
+  -o-transition: opacity 1000ms;
+  transition: opacity 1000ms;
+  background: -webkit-radial-gradient(transparent 0%, rgba(0,0,0,0.9));
+  background: -moz-radial-gradient(transparent 0%, rgba(0,0,0,0.9));
+  background: -o-radial-gradient(transparent 0%, rgba(0,0,0,0.9));
+  opacity: 0.5;
+  z-index: -3;
+}
+#main {
+  position: absolute;
+  top: 0;
+  left: 0;
+  -webkit-transition: margin-left 750ms;
+  -moz-transition: margin-left 750ms;
+  -o-transition: margin-left 750ms;
+  transition: margin-left 750ms;
+  margin-left: 100%;
+  width: 100%;
+  height: 100%;
 }
 #layout {
   height: 100%;
@@ -19,7 +58,7 @@ body {
 }
 #layout td {
   text-align: center;
-  width: 33%;
+  width: 34%;
 }
 #grid {
   border-collapse: collapse;
@@ -59,6 +98,8 @@ body {
   float: right;
 }
 #results {
+  -webkit-text-shadow: 0px 1px 3px rgba(0,0,0,0.9);
+  -moz-text-shadow: 0px 1px 3px rgba(0,0,0,0.9);
   text-shadow: 0px 1px 3px rgba(0,0,0,0.9);
   display: inline-block;
   color: #ccc;
@@ -70,44 +111,7 @@ body {
   position: absolute;
   text-align: center;
 }
-#percent_wrapper table tr td#percent.bad {
-  color: #faa;
-}
-#percent_wrapper table tr td#percent.better {
-  color: #ffa;
-}
-#percent_wrapper table tr td#percent.excellent {
-  color: #afa;
-}
-#loading_wrapper {
-  background: rgba(0,0,0,0.85);
-}
-#percent_wrapper,
-#loading_wrapper {
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
-}
-#percent_wrapper table,
-#loading_wrapper table {
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  border: 0;
-  border-collapse: collapse;
-}
-#percent_wrapper table tr td#percent,
-#loading_wrapper table tr td#loading {
-  color: #ccc;
-  font-size: 48pt;
-  vertical-align: middle;
-  text-align: center;
-}
 #instructions {
-  padding: 15px;
   text-align: left;
   font-size: 18pt;
 }
@@ -117,4 +121,297 @@ body {
   position: absolute;
   bottom: 15px;
   font-size: 24pt;
+}
+#flash_bg {
+  background: rgba(0,0,0,0.6);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  -webkit-transition: opacity 250ms;
+  -moz-transition: opacity 250ms;
+  -o-transition: opacity 250ms;
+  transition: opacity 250ms;
+  opacity: 0;
+  height: 0;
+  z-index: 20;
+}
+body.flash #flash_bg {
+  -webkit-transition: opacity 250ms;
+  -moz-transition: opacity 250ms;
+  -o-transition: opacity 250ms;
+  transition: opacity 250ms;
+  opacity: 1;
+  height: 100%;
+}
+body.flash #flash_wrapper {
+  -webkit-transition: margin-top 250ms;
+  -moz-transition: margin-top 250ms;
+  -o-transition: margin-top 250ms;
+  transition: margin-top 250ms;
+  margin-top: 0%;
+}
+#flash_wrapper {
+  -webkit-transition: margin-top 250ms;
+  -moz-transition: margin-top 250ms;
+  -o-transition: margin-top 250ms;
+  transition: margin-top 250ms;
+  margin-top: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  z-index: 21;
+}
+#flash {
+  text-align: center;
+  font-size: 32pt;
+}
+#continue {
+  margin: 20px;
+  padding: 10px;
+  font-size: 24pt;
+}
+#graph-panel {
+  float: left;
+}
+#graph {
+  width: 600px;
+  height: 400px;
+  margin-left: 20px;
+}
+#content {
+  -webkit-transition: margin-left 650ms;
+  -moz-transition: margin-left 650ms;
+  -o-transition: margin-left 650ms;
+  transition: margin-left 650ms;
+  position: absolute;
+  top: 40px;
+}
+#nav {
+  -webkit-transition: margin-top 500ms;
+  -moz-transition: margin-top 500ms;
+  -o-transition: margin-top 500ms;
+  transition: margin-top 500ms;
+  box-shadow: rgba(0,0,0,0.5) 0 4px 16px;
+  overflow: hidden;
+  width: 100%;
+  height: 40px;
+}
+body.loading #content,
+body.loading #nav,
+body.loading #main {
+  display: none;
+}
+#loading_wrapper {
+  display: none;
+}
+body.loading #loading_wrapper {
+  display: block;
+}
+body.playing #nav {
+  margin-top: -60px;
+}
+body.playing #content {
+  margin-left: -100%;
+}
+body.playing #vignette {
+  opacity: 1;
+}
+body.playing #main {
+  display: block;
+  -webkit-transition: margin-left 750ms;
+  -moz-transition: margin-left 750ms;
+  -o-transition: margin-left 750ms;
+  transition: margin-left 750ms;
+  margin-left: 0px;
+}
+#nav > ul {
+  margin: 0;
+  padding: 0;
+}
+#nav > ul > li {
+  border-radius: 0 !important;
+  border: 0 !important;
+  font-size: 14pt;
+  font-weight: bold;
+  text-align: center;
+  float: left;
+  width: 33%;
+  padding-top: 10px;
+  height: 30px;
+}
+#nav > ul > li.first {
+  padding-left: 1%;
+}
+#nav a {
+  color: #fff;
+  text-decoration: none;
+}
+#nav li a:hover {
+  cursor: default;
+}
+#nav li.selected,
+#nav li.selected:hover {
+  cursor: auto;
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #c84), color-stop(1, #930));
+  background: -webkit-linear-gradient(#c84, #930);
+  background: -moz-linear-gradient(#c84, #930);
+  background: -o-linear-gradient(#c84, #930);
+  box-shadow: rgba(0,0,0,0.5) 0 2px 6px inset;
+}
+#game,
+#help,
+#stats {
+  padding: 20px;
+}
+legend {
+  color: rgba(0,0,0,0.5);
+  float: left;
+  font-size: 15pt;
+  padding: 0;
+  padding-bottom: 10px;
+  margin: 0;
+  margin-top: -35px;
+  -webkit-text-shadow: 0 1px 0 rgba(255,255,255,0.8), 0 0px 0 rgba(0,0,0,0.8);
+  -moz-text-shadow: 0 1px 0 rgba(255,255,255,0.8), 0 0px 0 rgba(0,0,0,0.8);
+  text-shadow: 0 1px 0 rgba(255,255,255,0.8), 0 0px 0 rgba(0,0,0,0.8);
+}
+#game-mode,
+#settings {
+  float: left;
+  height: 164px;
+  width: 200px;
+}
+input[type='radio'] {
+  display: none;
+}
+input[type='radio'] + label {
+  display: block;
+  margin: 10px;
+  padding: 6px;
+  height: 27px;
+  font-size: 16pt;
+  text-align: center;
+}
+input[type='radio']:checked + label,
+input[type='radio']:checked + label:hover {
+  cursor: default;
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #c84), color-stop(1, #930));
+  background: -webkit-linear-gradient(#c84, #930);
+  background: -moz-linear-gradient(#c84, #930);
+  background: -o-linear-gradient(#c84, #930);
+  box-shadow: rgba(0,0,0,0.5) 0 2px 6px inset;
+}
+button,
+input[type='radio'] + label,
+#nav > ul > li {
+  color: #fff;
+  border: 1px solid #000;
+  border-radius: 10px;
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0, rgba(0,0,0,0)), color-stop(1, rgba(0,0,0,0.75))), #567;
+  background: -webkit-linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.75)), #567;
+  background: -moz-linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.75)), #567;
+  background: -o-linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.75)), #567;
+  box-shadow: rgba(255,255,255,0.25) 0 -1px 0 inset, rgba(255,255,255,0.25) 0 1px 0 inset;
+  -webkit-text-shadow: 0 -1px 0 rgba(0,0,0,0.8);
+  -moz-text-shadow: 0 -1px 0 rgba(0,0,0,0.8);
+  text-shadow: 0 -1px 0 rgba(0,0,0,0.8);
+}
+button:hover,
+input[type='radio'] + label:hover,
+#nav > ul > li:hover {
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0, rgba(0,0,0,0)), color-stop(1, rgba(0,0,0,0.75))), #789;
+  background: -webkit-linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.75)), #789;
+  background: -moz-linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.75)), #789;
+  background: -o-linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.75)), #789;
+}
+button:active,
+input[type='radio'] + label:active,
+#nav > ul > li:active {
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0, rgba(0,0,0,0)), color-stop(1, rgba(0,0,0,0.75))), #567;
+  background: -webkit-linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.75)), #567;
+  background: -moz-linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.75)), #567;
+  background: -o-linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.75)), #567;
+  box-shadow: rgba(0,0,0,0.5) 0 2px 6px inset;
+}
+button#new-game {
+  color: #fff;
+  border: 1px solid #000;
+  border-radius: 10px;
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0, rgba(0,0,0,0)), color-stop(1, rgba(0,0,0,0.75))), #585;
+  background: -webkit-linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.75)), #585;
+  background: -moz-linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.75)), #585;
+  background: -o-linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.75)), #585;
+  box-shadow: rgba(255,255,255,0.25) 0 -1px 0 inset, rgba(255,255,255,0.25) 0 1px 0 inset;
+  -webkit-text-shadow: 0 -1px 0 rgba(0,0,0,0.8);
+  -moz-text-shadow: 0 -1px 0 rgba(0,0,0,0.8);
+  text-shadow: 0 -1px 0 rgba(0,0,0,0.8);
+  float: left;
+  font-size: 18pt;
+  font-weight: bold;
+  width: 200px;
+  height: 50px;
+}
+button#new-game:hover {
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0, rgba(0,0,0,0)), color-stop(1, rgba(0,0,0,0.75))), #7a7;
+  background: -webkit-linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.75)), #7a7;
+  background: -moz-linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.75)), #7a7;
+  background: -o-linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.75)), #7a7;
+}
+button#new-game:active {
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0, rgba(0,0,0,0)), color-stop(1, rgba(0,0,0,0.75))), #585;
+  background: -webkit-linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.75)), #585;
+  background: -moz-linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.75)), #585;
+  background: -o-linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.75)), #585;
+  box-shadow: rgba(0,0,0,0.5) 0 2px 6px inset;
+}
+fieldset {
+  display: inline-block;
+  border-radius: 5px;
+  border: 1px solid #000;
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #abc), color-stop(1, #789));
+  background: -webkit-linear-gradient(#abc, #789);
+  background: -moz-linear-gradient(#abc, #789);
+  background: -o-linear-gradient(#abc, #789);
+  box-shadow: rgba(0,0,0,0.5) 0 1px 2px inset;
+  color: rgba(0,0,0,0.75);
+  font-weight: bold;
+  -webkit-text-shadow: 0 1px 0 rgba(255,255,255,0.48);
+  -moz-text-shadow: 0 1px 0 rgba(255,255,255,0.48);
+  text-shadow: 0 1px 0 rgba(255,255,255,0.48);
+  padding: 5px;
+  margin: 5px;
+  margin-top: 35px;
+}
+fieldset.outer > button {
+  border-radius: 5px;
+  margin: 5px;
+  padding: 4px;
+  font-size: 12pt;
+}
+fieldset.outer {
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #cdf), color-stop(1, #abc));
+  background: -webkit-linear-gradient(#cdf, #abc);
+  background: -moz-linear-gradient(#cdf, #abc);
+  background: -o-linear-gradient(#cdf, #abc);
+  box-shadow: rgba(255,255,255,0.25) 0 1px 0 inset, rgba(0,0,0,0.5) 0 2px 6px;
+  margin-top: 0px;
+}
+input[type='text'],
+input[type='number'] {
+  border-radius: 4px;
+  background: rgba(0,0,0,0.25);
+  font-size: 14pt;
+  width: 6em;
+  margin-bottom: 10px;
+  border: 0;
+  color: #fff;
+  text-align: right;
+  -webkit-text-shadow: 0 1px 0 rgba(0,0,0,0.8);
+  -moz-text-shadow: 0 1px 0 rgba(0,0,0,0.8);
+  text-shadow: 0 1px 0 rgba(0,0,0,0.8);
+  box-shadow: rgba(0,0,0,0.5) 0 1px 0px inset;
 }
