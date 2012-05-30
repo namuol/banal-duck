@@ -15,20 +15,50 @@ text-shadow()
 linear-gradient(a,b)
   -webkit-gradient(linear,left top,left bottom,color-stop(0, a),color-stop(1, b))
 
+transition()
+  -webkit-transition arguments
+  -moz-transition arguments
+  -o-transition arguments
+  transition arguments
+
+
+
 body
+  transition background
   height 100%
   width 100%
   user-select none
   color #fff
   text-shadow 0 1px 2px rgba(0,0,0,0.8)
   background-color #6995ac
-  background -webkit-radial-gradient(transparent 0%, rgba(0,0,0,0.4)), url('bg.png')
-  background -moz-radial-gradient(transparent 0%, rgba(0,0,0,0.4)), url('bg.png')
-  background -o-radial-gradient(transparent 0%, rgba(0,0,0,0.4)), url('bg.png')
+  background-image url('bg.png')
   border 0
   padding 0
   margin 0
   font-family Helvetica, sans-serif, Arial
+  overflow hidden
+
+#vignette
+  position fixed
+  top 0
+  left 0
+  width 100%
+  height 100%
+  transition opacity 1000ms
+  background -webkit-radial-gradient(transparent 0%, rgba(0,0,0,0.9))
+  background -moz-radial-gradient(transparent 0%, rgba(0,0,0,0.9))
+  background -o-radial-gradient(transparent 0%, rgba(0,0,0,0.9))
+  opacity 0.5
+  z-index -3
+
+#main
+  position absolute
+  top 0
+  left 0
+  transition margin-left 750ms
+  margin-left 100%
+  width 100%
+  height 100%
 
 #layout
   height 100%
@@ -96,15 +126,90 @@ body
   bottom 15px
   font-size 24pt
 
+
+#flash_bg
+  background rgba(0,0,0,0.6)
+  position absolute
+  top 0
+  left 0
+  width 100%
+
+  transition opacity 250ms
+  opacity 0
+  height 0
+  z-index 20
+
+body.flash #flash_bg
+  transition opacity 250ms
+  opacity 1
+  height 100%
+
+body.flash #flash_wrapper
+  transition margin-top 250ms
+  margin-top 0%
+
+#flash_wrapper
+  transition margin-top 250ms
+  margin-top 100%
+  position absolute
+  top 0
+  left 0
+  width 100%
+  height 100%
+  text-align center
+  z-index 21
+
+#flash
+  text-align center
+  font-size 32pt
+
+#continue
+  margin 20px
+  padding 10px
+  font-size 24pt
+
+#graph-panel
+  float left
+
 #graph
-  width 400px
-  height 200px
+  width 600px
+  height 400px
   margin-left 20px
 
+#content
+  transition margin-left 650ms
+  position absolute
+  top 40px
+
 #nav
+  transition margin-top 500ms
+  box-shadow rgba(0,0,0,0.5) 0 4px 16px
   overflow hidden
   width 100%
-  height 44px
+  height 40px
+
+body.loading #content, body.loading #nav, body.loading #main
+  display none
+
+#loading_wrapper
+  display none
+
+body.loading #loading_wrapper
+  display block
+
+body.playing #nav
+  margin-top -60px
+
+body.playing #content
+  margin-left -100%
+
+body.playing #vignette
+  opacity 1
+
+body.playing #main
+  display block
+  transition margin-left 750ms
+  margin-left 0px
 
 #nav > ul
   margin 0
@@ -133,14 +238,13 @@ body
 
 #nav li.selected, #nav li.selected:hover
   cursor auto
-
   background linear-gradient(#c84, #930)
   background -webkit-linear-gradient(#c84, #930)
   background -moz-linear-gradient(#c84, #930)
   background -o-linear-gradient(#c84, #930)
-  box-shadow rgba(0,0,0,0.5) 0 2px 6px,rgba(0,0,0,0.5) 0 2px 6px inset
+  box-shadow rgba(0,0,0,0.5) 0 2px 6px inset
 
-#game
+#game, #help, #stats
   padding 20px
 
 legend
@@ -153,28 +257,11 @@ legend
   margin-top -35px
   text-shadow 0 1px 0 rgba(255,255,255,0.8), 0 0px 0 rgba(0,0,0,0.8)
 
-#game input[type='number']
-  font-size 14pt
-  width 6em
-  margin-bottom 10px
-  border 0
-  background none
-  color #fff
-  text-align right
-  text-shadow 0 1px 0 rgba(0,0,0,0.8)
-
 #game-mode, #settings
   float left
   height 164px
   width 200px
 
-#new-game
-  //text-shadow 0 1px 0 rgba(255,255,255,0.8)
-  float left
-  font-size 18pt
-  font-weight bold
-  width 200px
-  height 50px
 
 input[type='radio']
   display none
@@ -195,30 +282,52 @@ input[type='radio']:checked + label, input[type='radio']:checked + label:hover
   background -o-linear-gradient(#c84, #930)
   box-shadow rgba(0,0,0,0.5) 0 2px 6px inset
 
-button, input[type='radio'] + label, #nav > ul > li
+norm_button(color)
   color #fff
   border 1px solid #000
   border-radius 10px
-  background linear-gradient(#567, #17191E)
-  background -webkit-linear-gradient(#567, #17191E)
-  background -moz-linear-gradient(#567, #17191E)
-  background -o-linear-gradient(#567, #17191E)
-  box-shadow rgba(255, 255, 255, 0.25) 0 1px 0 inset, rgba(0,0,0,0.5) 0 2px 6px
+  background linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.75)), color
+  background -webkit-linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.75)), color
+  background -moz-linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.75)), color
+  background -o-linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.75)), color
+  box-shadow rgba(255, 255, 255, 0.25) 0 -1px 0 inset, rgba(255, 255, 255, 0.25) 0 1px 0 inset
   text-shadow 0 -1px 0 rgba(0,0,0,0.8)
 
+hover_button(color)
+  background linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.75)), color
+  background -webkit-linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.75)), color
+  background -moz-linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.75)), color
+  background -o-linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.75)), color
+
+active_button(color)
+  background linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.75)), color
+  background -webkit-linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.75)), color
+  background -moz-linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.75)), color
+  background -o-linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.75)), color
+  box-shadow rgba(0,0,0,0.5) 0 2px 6px inset
+
+button, input[type='radio'] + label, #nav > ul > li
+  norm_button(#567)
+
 button:hover, input[type='radio'] + label:hover, #nav > ul > li:hover
-  //cursor pointer
-  background linear-gradient(#789, #17191E)
-  background -webkit-linear-gradient(#789, #17191E)
-  background -moz-linear-gradient(#789, #17191E)
-  background -o-linear-gradient(#789, #17191E)
+  hover_button(#789)
 
 button:active, input[type='radio'] + label:active, #nav > ul > li:active
-  background linear-gradient(#567, #17191E)
-  background -webkit-linear-gradient(#567, #17191E)
-  background -moz-linear-gradient(#567, #17191E)
-  background -o-linear-gradient(#567, #17191E)
-  box-shadow rgba(0,0,0,0.5) 0 2px 6px
+  active_button(#567)
+
+button#new-game
+  norm_button(#585)
+  float left
+  font-size 18pt
+  font-weight bold
+  width 200px
+  height 50px
+
+button#new-game:hover
+  hover_button(#7a7)
+
+button#new-game:active
+  active_button(#585)
 
 fieldset
   display inline-block
@@ -236,6 +345,12 @@ fieldset
   margin 5px
   margin-top 35px
 
+fieldset.outer > button
+  border-radius 5px
+  margin 5px
+  padding 4px
+  font-size 12pt
+
 fieldset.outer
   background linear-gradient(#cdf, #abc)
   background -webkit-linear-gradient(#cdf, #abc)
@@ -244,5 +359,14 @@ fieldset.outer
   box-shadow rgba(255, 255, 255, 0.25) 0 1px 0 inset, rgba(0,0,0,0.5) 0 2px 6px
   margin-top 0px
 
-#help
-  padding 20px
+input[type='text'], input[type='number']
+  border-radius 4px
+  background rgba(0,0,0,0.25)
+  font-size 14pt
+  width 6em
+  margin-bottom 10px
+  border 0
+  color #fff
+  text-align right
+  text-shadow 0 1px 0 rgba(0,0,0,0.8)
+  box-shadow rgba(0,0,0,0.5) 0 1px 0px inset

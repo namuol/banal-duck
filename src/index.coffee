@@ -10,14 +10,15 @@ html ->
     script type:'text/javascript', src:'soundmanager2.js'
     script type:'text/javascript', src:'flotr2.min.js'
 
-  body ->
+  body class:'loading', ->
+    div id:'vignette', ''
     div id:'loading_wrapper', ->
       table ->
         tbody ->
           tr ->
             td id:'loading', 'Please Wait...'
 
-    div id:'nav', style:'display:none', ->
+    div id:'nav', ->
       ul ->
         li class:'first', ->
           a href:'#game', 'Game'
@@ -27,7 +28,7 @@ html ->
           a href:'#help', 'Help'
 
     div id:'content', ->
-      div id:'help', style:'display:none', ->
+      div id:'help', ->
         fieldset id:'instructions', class:'outer', ->
           fieldset ->
             legend 'How to Play Dual <i>N</i>-Back'
@@ -37,11 +38,16 @@ html ->
               li 'It\'s possible for both of these cases to occur on the same turn'
               li 'Don\'t be discouraged! You <strong>will</strong> improve with practice!'
 
-      div id:'stats', style:'display:none', ->
-        div id:'percent'
-        div id:'graph'
+      div id:'stats', ->
+        fieldset id:'graph-panel', class:'outer', ->
+          fieldset ->
+            legend 'Your Progress'
+            div id:'graph'
+          br ''
+          button id:'clear-history', 'Clear My History'
 
-      div id:'game', style:'display:none', ->
+
+      div id:'game', ->
         fieldset class:'outer', ->
           fieldset id:'game-mode', ->
             legend 'Game Mode'
@@ -54,36 +60,48 @@ html ->
           fieldset id:'settings', ->
             legend 'Settings'
             text 'Number of Turns: '
-            input id:'numturns', name:'numturns', type:'number', value:24
+            input id:'count', name:'count', type:'number', value:24
             br ''
             text 'Turn Duration: '
             input id:'turndur', name:'turndur', type:'number', value:3000
             text 'ms'
             button id:'new-game', 'NEW ROUND!'
+          br ''
+          button id:'reset-settings', 'Reset All Settings'
 
+    div id:'flash_bg'
+    table id:'flash_wrapper', ->
+      tbody ->
+        tr ->
+          td ->
+            div id:'flash', '100% Correct.<br>Dayum.'
+            button id:'continue', 'Continue'
 
-      div id:'main', style:'display:none', ->
-        table id:'layout', ->
-          tr ->
-            td id:'a_button', 'POSITION (A)'
-            td id:'grid_wrap', ->
-              div id:'hud', ->
-                div id:'type'
-                div id:'remaining'
-              table id:'grid', ->
-                tr ->
-                  td ''
-                  td ''
-                  td ''
-                tr ->
-                  td ''
-                  td ''
-                  td ''
-                tr ->
-                  td ''
-                  td ''
-                  td ''
-            td id:'b_button', 'LETTER (L)'
+    div id:'main', ->
+          table id:'layout', ->
+            tr ->
+              td id:'a_button', 'POSITION (A)'
+              td id:'grid_wrap', ->
+
+                fieldset class:'outer', ->
+                  fieldset ->
+                    div id:'hud', ->
+                      legend id:'type'
+                      legend id:'remaining'
+                    table id:'grid', ->
+                      tr ->
+                        td ''
+                        td ''
+                        td ''
+                      tr ->
+                        td ''
+                        td ''
+                        td ''
+                      tr ->
+                        td ''
+                        td ''
+                        td ''
+              td id:'b_button', 'LETTER (L)'
 
     coffeescript ->
       ###           ###
@@ -96,6 +114,25 @@ html ->
       #               #
       ###           ###
       $ ->
+        _defaultSettings =
+          n: 2
+          count: 24
+          turndur: 3000
+        
+        update_settings_display = ->
+          settings = JSON.parse localStorage.getItem 'settings'
+          $("#game input[name='n'][value=#{settings.n}]").attr('checked', 'checked')
+          $("#game input[name='n'][value!=#{settings.n}]").attr('checked', false)
+
+          for own name,val of settings
+            continue if name is 'n'
+            $("#game input[name='#{name}']'").val parseInt val
+
+        reset_settings = ->
+          localStorage.setItem 'settings', JSON.stringify _defaultSettings
+
+        clear_history = ->
+          localStorage.setItem 'history', JSON.stringify []
 
         $('#nav').on 'click', 'li', ->
           $('.selected').removeClass 'selected'
@@ -119,6 +156,19 @@ html ->
               $(el).removeClass klass
             , ttl
           , delay
+
+        flash = (text, cssClass, buttonText='Continue', cb=undefined) ->
+          $('#flash').html text
+          $('#flash').removeClass 'bad'
+          $('#flash').removeClass 'better'
+          $('#flash').removeClass 'excellent'
+          $('#flash').addClass cssClass
+          $('body').addClass 'flash'
+          
+          $('#continue').click ->
+            if cb?
+              cb()
+            $('body').removeClass 'flash'
 
         window.sounds = []
         all_loaded = undefined
@@ -231,8 +281,14 @@ html ->
           window.draw_history_graph = (container, history) ->
             drawGraph = (opts) ->
               o = Flotr._.extend(Flotr._.clone(options), opts or {})
-              Flotr.draw container, [ {data:d1, points:{show:false}} ], o
+              Flotr.draw container, [
+                {data:d1, label:'Dual 1-Back', lines:{show:true}, points:{show:true}}
+                {data:d2, label:'Dual 2-Back', lines:{show:true}, points:{show:true}}
+                {data:d3, label:'Dual 3-Back', lines:{show:true}, points:{show:true}}
+              ], o
             d1 = []
+            d2 = []
+            d3 = []
             options = undefined
             graph = undefined
             x = undefined
@@ -240,7 +296,13 @@ html ->
             i = 0
             while i < history.length
               r = generate_results history[i].turns, history[i].n
-              d1.push [Date.parse(history[i].timestamp), r.percent]
+              switch history[i].n
+                when 1
+                  d1.push [Date.parse(history[i].timestamp), r.percent]
+                when 2
+                  d2.push [Date.parse(history[i].timestamp), r.percent]
+                when 3
+                  d3.push [Date.parse(history[i].timestamp), r.percent]
               i++
             options =
               xaxis:
@@ -252,6 +314,8 @@ html ->
 
               HtmlText: false
               title: "Time"
+              legend:
+                position: 'nw'
 
             graph = drawGraph()
             Flotr.EventAdapter.observe container, "flotr:select", (area) ->
@@ -340,11 +404,14 @@ html ->
               stop: ->
                 if intvl
                   clearInterval intvl
+                  $('body').removeClass 'playing'
             }
 
           new_round = ->
             if not window.round?
-              window.round = dual_n_back 2, 4, 3000
+              settings = JSON.parse localStorage.getItem('settings')
+              $('body').addClass 'playing'
+              window.round = dual_n_back settings.n, settings.count, settings.turndur
               $('#results').hide()
               round.start (r) ->
                 h = JSON.parse localStorage.getItem 'history'
@@ -378,18 +445,22 @@ html ->
                     'is this too easy for you?'
                   ]
 
-                $('#percent').html "#{percent}% correct<br>#{msg}"
-                $('#percent').removeClass 'bad'
-                $('#percent').removeClass 'better'
-                $('#percent').removeClass 'excellent'
-                $('#percent').addClass cssclass
+                flash "#{percent}% correct<br>#{msg}", cssclass, 'Okay', ->
+                  $('#nav a[href="#stats"]').click()
+                  $('body').removeClass 'playing'
+                  draw_history_graph $('#graph')[0], JSON.parse localStorage.getItem 'history'
 
-                draw_history_graph $('#graph')[0], JSON.parse localStorage.getItem 'history'
 
           all_loaded = ->
-            $('#loading_wrapper').hide()
+            $('body').removeClass 'loading'
             $('#nav').show()
             $('#content').show()
+
+            settings = JSON.parse(localStorage.getItem('settings')) or _defaultSettings
+            localStorage.setItem 'settings', JSON.stringify settings
+            update_settings_display()
+
+            draw_history_graph $('#graph')[0], JSON.parse(localStorage.getItem('history') or [])
 
             $(window).keydown (e) ->
               switch e.which
@@ -400,12 +471,33 @@ html ->
                   return true if not window.round
                   round.b_pressed()
                 #when 32 # Spacebar
+                #  return true if $('body').hasClass('playing')
                 #  new_round()
+              return true
+
             $(window).on 'click', '#a_button', ->
               return true if not window.round
               round.a_pressed()
             $(window).on 'click', '#b_button', ->
               return true if not window.round
               round.b_pressed()
+
+            $('#game').on 'change', 'input', ->
+              settings = JSON.parse localStorage.getItem('settings')
+              settings[@name] = parseInt @value
+              localStorage.setItem 'settings', JSON.stringify settings
+
+            $('#clear-history').click ->
+              return if not confirm "Are you sure?"
+              clear_history()
+              draw_history_graph $('#graph')[0], JSON.parse localStorage.getItem 'history'
+
+            $('#reset-settings').click ->
+              return if not confirm "Are you sure?"
+              reset_settings()
+              update_settings_display()
+            
+            $('#new-game').click ->
+              new_round()
 
             $('#nav [href="#help"]').click()
