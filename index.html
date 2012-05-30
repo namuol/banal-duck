@@ -420,14 +420,15 @@
             }
           };
           return all_loaded = function() {
-            var settings;
+            var h, settings;
             $('body').removeClass('loading');
             $('#nav').show();
             $('#content').show();
             settings = JSON.parse(localStorage.getItem('settings')) || _defaultSettings;
             localStorage.setItem('settings', JSON.stringify(settings));
             update_settings_display();
-            draw_history_graph($('#graph')[0], JSON.parse(localStorage.getItem('history') || []));
+            h = JSON.parse(localStorage.getItem('history')) || [];
+            draw_history_graph($('#graph')[0], h);
             $(window).keydown(function(e) {
               switch (e.which) {
                 case 65:
