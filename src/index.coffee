@@ -460,7 +460,9 @@ html ->
             localStorage.setItem 'settings', JSON.stringify settings
             update_settings_display()
 
-            draw_history_graph $('#graph')[0], JSON.parse(localStorage.getItem('history') or [])
+            h = JSON.parse(localStorage.getItem('history')) or []
+
+            draw_history_graph $('#graph')[0], h 
 
             $(window).keydown (e) ->
               switch e.which
