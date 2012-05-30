@@ -157,7 +157,7 @@ html ->
             , ttl
           , delay
 
-        flash = (text, cssClass, buttonText='Continue', cb=undefined) ->
+        window.flash = (text, cssClass, buttonText='Continue', cb=undefined) ->
           $('#flash').html text
           $('#flash').removeClass 'bad'
           $('#flash').removeClass 'better'
@@ -502,4 +502,4 @@ html ->
             $('#new-game').click ->
               new_round()
 
-            $('#nav [href="#help"]').click()
+            $('#nav [href="#game"]').click()
