@@ -2,8 +2,9 @@ html ->
   head ->
     meta charset:'utf-8'
     title 'Dual N-Back'
-    link rel:'stylesheet', href:'style.css'
     link rel:'stylesheet', href:'flotr2-examples.css'
+    link href:'http://fonts.googleapis.com/css?family=Carme', rel:'stylesheet', type:'text/css'
+    link rel:'stylesheet', href:'style.css'
     script type:'text/javascript', src:'json2.min.js'
     script type:'text/javascript', src:'storage.min.js'
     script type:'text/javascript', src:'jquery-1.7.2.min.js'
@@ -44,26 +45,33 @@ html ->
             legend 'Your Progress'
             div id:'graph'
           br ''
-          button id:'clear-history', 'Clear My History'
+          button id:'clear-history', 'Clear My Progress'
 
 
       div id:'game', ->
         fieldset class:'outer', ->
           fieldset id:'game-mode', ->
-            legend 'Game Mode'
-            input id:'n1', type:'radio', name:'n', value:'1'
-            label for:'n1', 'Dual <strong>1</strong>-Back'
-            input id:'n2', type:'radio', name:'n', value:'2'
-            label for:'n2', 'Dual <strong>2</strong>-Back'
-            input id:'n3', type:'radio', name:'n', value:'3'
-            label for:'n3', 'Dual <strong>3</strong>-Back'
+            legend 'Progress Mode'
+
+            input id:'mode_training', type:'radio', name:'mode', value:'training'
+            label for:'mode_training', 'Training'
+            input id:'mode_manual', type:'radio', name:'mode', value:'manual'
+            label for:'mode_manual', 'Manual'
+            
+            div id:'n-wrap', ->
+              text 'Dual '
+              input id:'n', name:'n', type:'number'
+              text '-Back'
+
           fieldset id:'settings', ->
             legend 'Settings'
             text 'Number of Turns: '
-            input id:'count', name:'count', type:'number', value:24
+            input id:'count', name:'count', type:'number'
+            text ' +'
+            span id:'extra_count'
             br ''
             text 'Turn Duration: '
-            input id:'turndur', name:'turndur', type:'number', value:3000
+            input id:'turndur', name:'turndur', type:'number'
             text 'ms'
             button id:'new-game', 'NEW ROUND!'
           br ''
@@ -78,30 +86,31 @@ html ->
             button id:'continue', 'Continue'
 
     div id:'main', ->
-          table id:'layout', ->
-            tr ->
-              td id:'a_button', 'POSITION (A)'
-              td id:'grid_wrap', ->
+      button id:'cancel', 'Cancel'
+      table id:'layout', ->
+        tr ->
+          td id:'a_button', 'POSITION (A)'
+          td id:'grid_wrap', ->
 
-                fieldset class:'outer', ->
-                  fieldset ->
-                    div id:'hud', ->
-                      legend id:'type'
-                      legend id:'remaining'
-                    table id:'grid', ->
-                      tr ->
-                        td ''
-                        td ''
-                        td ''
-                      tr ->
-                        td ''
-                        td ''
-                        td ''
-                      tr ->
-                        td ''
-                        td ''
-                        td ''
-              td id:'b_button', 'LETTER (L)'
+            fieldset class:'outer', ->
+              fieldset ->
+                div id:'hud', ->
+                  legend id:'type'
+                  legend id:'remaining'
+                table id:'grid', ->
+                  tr ->
+                    td ''
+                    td ''
+                    td ''
+                  tr ->
+                    td ''
+                    td ''
+                    td ''
+                  tr ->
+                    td ''
+                    td ''
+                    td ''
+          td id:'b_button', 'LETTER (L)'
 
     coffeescript ->
       ###           ###
@@ -115,18 +124,28 @@ html ->
       ###           ###
       $ ->
         _defaultSettings =
+          mode: 'training'
           n: 2
-          count: 24
+          count: 20
           turndur: 3000
+          retreat_threshodl: 50
+          advance_threshold: 80
         
         update_settings_display = ->
           settings = JSON.parse localStorage.getItem 'settings'
-          $("#game input[name='n'][value=#{settings.n}]").attr('checked', 'checked')
-          $("#game input[name='n'][value!=#{settings.n}]").attr('checked', false)
-
+          $("#game input[name='mode']").attr 'checked', false
+          $("#game input[name='mode'][value='#{settings.mode}']").attr 'checked', 'checked'
           for own name,val of settings
-            continue if name is 'n'
-            $("#game input[name='#{name}']'").val parseInt val
+            continue if name is 'mode'
+            $("#game input[name='#{name}']'").val val
+
+          if settings.mode == 'manual'
+            $('#n').attr 'disabled', false
+          else
+            $('#n').attr 'disabled', 'disabled'
+
+          $('#extra_count').html settings.n*settings.n
+
 
         reset_settings = ->
           localStorage.setItem 'settings', JSON.stringify _defaultSettings
@@ -164,11 +183,16 @@ html ->
           $('#flash').removeClass 'excellent'
           $('#flash').addClass cssClass
           $('body').addClass 'flash'
-          
-          $('#continue').click ->
+
+          flash.continue = ->
             if cb?
               cb()
             $('body').removeClass 'flash'
+
+         
+          $('#continue').click ->
+            flash.continue()
+
 
         window.sounds = []
         all_loaded = undefined
@@ -247,25 +271,26 @@ html ->
               b_match = b_matches(turns, n, i)
 
               if a_match
-                if curr.a_pressed
+                if curr.ap
                   ++a_correct
                 else
                   ++a_missed
-              else if curr.a_pressed
+              else if curr.ap
                 ++a_incorrect
 
               if b_match
-                if curr.b_pressed
+                if curr.bp
                   ++b_correct
                 else
                   ++b_missed
-              else if curr.b_pressed
+              else if curr.bp
                 ++b_incorrect
 
               ++i
 
-            tot = a_missed + b_missed + a_correct + b_correct
-            cor = a_correct + b_correct - a_incorrect - b_incorrect
+            cor = a_correct + b_correct
+            err = a_missed + b_missed + a_incorrect + b_incorrect
+            tot = cor + err
             percent = 100 * (cor/tot)
 
             return {
@@ -347,14 +372,14 @@ html ->
               turns.push
                 a:a
                 b:b
-                a_pressed:false
-                b_pressed:false
+                ap:false
+                bp:false
 
               # Add some more matches:
-              if (i >= n) and (Math.random() > 0.15)
-                turns[i-n].a = a
-              if (i >= n) and (Math.random() > 0.15)
-                turns[i-n].b = b
+              #if (i >= n) and (Math.random() > 0.15)
+              #  turns[i-n].a = a
+              #if (i >= n) and (Math.random() > 0.15)
+              #  turns[i-n].b = b
               ++i
 
 
@@ -386,19 +411,19 @@ html ->
               turn_dur: turn_dur
               timestamp: timestamp
               a_pressed: ->
-                if not turns[current-1].a_pressed
+                if not turns[current-1].ap
                   if a_matches(turns, n, current-1)
                     highlight $('#a_button'), 'success', 0, 250
                   else
                     highlight $('#a_button'), 'failure', 0, 250
-                  turns[current-1].a_pressed = true
+                  turns[current-1].ap = true
               b_pressed: ->
-                if not turns[current-1].b_pressed
+                if not turns[current-1].bp
                   if b_matches(turns, n, current-1)
                     highlight $('#b_button'), 'success', 0, 250
                   else
                     highlight $('#b_button'), 'failure', 0, 250
-                  turns[current-1].b_pressed = true
+                  turns[current-1].bp = true
               start: (done=new Function) ->
                 start(done)
               stop: ->
@@ -409,9 +434,12 @@ html ->
 
           new_round = ->
             if not window.round?
-              settings = JSON.parse localStorage.getItem('settings')
+              s = JSON.parse localStorage.getItem('settings')
               $('body').addClass 'playing'
-              window.round = dual_n_back settings.n, settings.count, settings.turndur
+              n = parseInt(s.n)
+              count = parseInt(s.count) + n*n
+              turndur = parseInt(s.turndur)
+              window.round = dual_n_back n, count, turndur
               $('#results').hide()
               round.start (r) ->
                 h = JSON.parse localStorage.getItem 'history'
@@ -422,47 +450,91 @@ html ->
 
                 window.round = undefined
                 percent = Math.round r.percent
-                if percent <= 50
+
+                localStorage.setItem 'lastgame', JSON.stringify new Date
+
+                if percent < 50
                   cssclass = 'bad'
                   msg = choose [
-                    'don\'t be discouraged!'
-                    'give it another try!'
+                    'Don\'t be discouraged!'
+                    'Give it another try!'
+                    'Keep practicing!'
+                    'Don\'t worry, you\'ll get there.'
                   ]
-                else if percent <= 80
+                else if percent < 60
                   cssclass = 'better'
                   msg = choose [
-                    'not bad.'
-                    'you\'re getting there!'
-                    'keep it up!'
+                    'Not bad.'
+                    'Keep practicing!'
                   ]
-                else
+                else if percent < 70
+                  cssclass = 'better'
+                  msg = choose [
+                    'You\'re getting there!'
+                    'Not bad!'
+                  ]
+                else if percent < 80
+                  cssclass = 'better'
+                  msg = choose [
+                    'Nice score!'
+                    'Nice job! Keep it up!'
+                    'Well done!'
+                  ]
+                else if percent < 100
                   cssclass = 'excellent'
                   msg = choose [
-                    'excellent!'
-                    'now you\'ve got it!'
-                    'bravo!'
+                    'Excellent!'
+                    'Now you\'ve got it!'
+                    'Bravo!'
                     '*high fives*'
-                    'is this too easy for you?'
                   ]
+                else
+                  msg = choose [
+                    'Perfect! *high fives*'
+                    'Outstanding!'
+                    'Masterful!'
+                    '<i>Dayum.</i> Is this too easy for you?'
+                  ]
+
+
+                if s.mode == 'training'
+                  if percent >= s.advance_threshold
+                    ++s.n
+                    msg += "<br>N increased to <b>#{s.n}</b>!"
+                  else if percent < s.retreat_threshold
+                    strikes = localStorage.getItem('strikes') or 0
+                    if n >= 2
+                      msg += "<br>Strike #{++strikes} of 3"
+                      if strikes >= 3
+                        strikes = 0
+                        --s.n
+                        msg += "<br><i>N</i> decreased to #{s.n}"
+                    localStorage.setItem 'strikes', strikes
+
+                localStorage.setItem 'settings', JSON.stringify s
+                update_settings_display()
 
                 flash "#{percent}% correct<br>#{msg}", cssclass, 'Okay', ->
                   $('#nav a[href="#stats"]').click()
                   $('body').removeClass 'playing'
                   draw_history_graph $('#graph')[0], JSON.parse localStorage.getItem 'history'
 
-
           all_loaded = ->
             $('body').removeClass 'loading'
             $('#nav').show()
             $('#content').show()
-
             settings = JSON.parse(localStorage.getItem('settings')) or _defaultSettings
+            if settings.mode == 'training'
+              lastgame = new Date JSON.parse localStorage.getItem 'lastgame'
+              if ((new Date) - lastgame) > 24 * 60 * 60 * 1000
+                settings.n = 2
+                localStorage.setItem 'strikes', 0
             localStorage.setItem 'settings', JSON.stringify settings
             update_settings_display()
 
             h = JSON.parse(localStorage.getItem('history')) or []
 
-            draw_history_graph $('#graph')[0], h 
+            draw_history_graph $('#graph')[0], h
 
             $(window).keydown (e) ->
               switch e.which
@@ -472,9 +544,15 @@ html ->
                 when 76 # B
                   return true if not window.round
                   round.b_pressed()
-                #when 32 # Spacebar
-                #  return true if $('body').hasClass('playing')
-                #  new_round()
+                when 32 # Spacebar
+                  if $('body').hasClass 'flash'
+                    flash.continue()
+                  else if not $('body').hasClass 'playing'
+                    new_round()
+                when 27 # ESC
+                  return true if not $('body').hasClass('playing')
+                  round.stop()
+                  window.round = undefined
               return true
 
             $(window).on 'click', '#a_button', ->
@@ -484,10 +562,17 @@ html ->
               return true if not window.round
               round.b_pressed()
 
+            $('#cancel').click ->
+              if window.round?
+                round.stop()
+                window.round = undefined
+
             $('#game').on 'change', 'input', ->
+              console.log @
               settings = JSON.parse localStorage.getItem('settings')
-              settings[@name] = parseInt @value
+              settings[@name] = @value
               localStorage.setItem 'settings', JSON.stringify settings
+              update_settings_display()
 
             $('#clear-history').click ->
               return if not confirm "Are you sure?"
