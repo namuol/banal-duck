@@ -21,7 +21,7 @@ body {
   border: 0;
   padding: 0;
   margin: 0;
-  font-family: Helvetica, sans-serif, Arial;
+  font-family: 'Carme', sans-serif;
   overflow: hidden;
 }
 #vignette {
@@ -34,14 +34,14 @@ body {
   -moz-transition: opacity 1000ms;
   -o-transition: opacity 1000ms;
   transition: opacity 1000ms;
-  background: -webkit-radial-gradient(transparent 0%, rgba(0,0,0,0.9));
-  background: -moz-radial-gradient(transparent 0%, rgba(0,0,0,0.9));
-  background: -o-radial-gradient(transparent 0%, rgba(0,0,0,0.9));
+  background: -webkit-radial-gradient(transparent 0%, #000);
+  background: -moz-radial-gradient(transparent 0%, #000);
+  background: -o-radial-gradient(transparent 0%, #000);
   opacity: 0.5;
   z-index: -3;
 }
 #main {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   -webkit-transition: margin-left 750ms;
@@ -58,7 +58,7 @@ body {
 }
 #layout td {
   text-align: center;
-  width: 34%;
+  width: 33%;
 }
 #grid {
   border-collapse: collapse;
@@ -120,7 +120,7 @@ body {
 }
 #flash_bg {
   background: rgba(0,0,0,0.6);
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
@@ -153,7 +153,7 @@ body.flash #flash_wrapper {
   -o-transition: margin-top 250ms;
   transition: margin-top 250ms;
   margin-top: 100%;
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
@@ -183,10 +183,14 @@ body.flash #flash_wrapper {
   -moz-transition: margin-left 650ms;
   -o-transition: margin-left 650ms;
   transition: margin-left 650ms;
-  position: absolute;
+  position: fixed;
   top: 40px;
 }
 #nav {
+  z-index: 20 !important;
+  position: fixed;
+  top: 0;
+  font-family: 'Carme', sans-serif;
   -webkit-transition: margin-top 500ms;
   -moz-transition: margin-top 500ms;
   -o-transition: margin-top 500ms;
@@ -198,22 +202,48 @@ body.flash #flash_wrapper {
 }
 body.loading #content,
 body.loading #nav,
-body.loading #main {
-  display: none;
-}
-#loading_wrapper {
-  display: none;
-}
-body.loading #loading_wrapper {
-  display: block;
-}
-body.playing #nav {
-  margin-top: -60px;
-}
+body.loading #main,
 body.playing #content {
+  height: 0;
+}
+#loading_wrapper table {
+  width: 100%;
+  height: 100%;
+}
+#loading {
+  font-family: 'Carme', sans-serif;
+  font-size: 48pt;
+  text-align: center;
+  top: -100%;
+  -webkit-transition: opacity 250ms;
+  -moz-transition: opacity 250ms;
+  -o-transition: opacity 250ms;
+  transition: opacity 250ms;
+  opacity: 0;
+  left: 0;
+}
+body.loading #loading {
+  top: 0;
+  -webkit-transition: opacity 250ms;
+  -moz-transition: opacity 250ms;
+  -o-transition: opacity 250ms;
+  transition: opacity 250ms;
+  opacity: 1;
+}
+body.playing #nav,
+body.loading #nav {
+  margin-top: -60px;
+  -webkit-transition: margin-top 750ms;
+  -moz-transition: margin-top 750ms;
+  -o-transition: margin-top 750ms;
+  transition: margin-top 750ms;
+}
+body.playing #content,
+body.loading #content {
   margin-left: -100%;
 }
-body.playing #vignette {
+body.playing #vignette,
+body.loading #vignette {
   opacity: 1;
 }
 body.playing #main {
@@ -249,21 +279,17 @@ body.playing #main {
 #nav li a:hover {
   cursor: default;
 }
-#nav li.selected,
-#nav li.selected:hover {
-  cursor: auto;
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #c84), color-stop(1, #930));
-  background: -webkit-linear-gradient(#c84, #930);
-  background: -moz-linear-gradient(#c84, #930);
-  background: -o-linear-gradient(#c84, #930);
-  box-shadow: rgba(0,0,0,0.5) 0 2px 6px inset;
-}
 #game,
 #help,
 #stats {
   padding: 20px;
 }
+#game {
+  font-weight: bold;
+}
 legend {
+  font-weight: bold;
+  font-family: 'Carme';
   color: rgba(0,0,0,0.5);
   float: left;
   font-size: 15pt;
@@ -278,32 +304,18 @@ legend {
 #game-mode,
 #settings {
   float: left;
-  height: 164px;
   width: 200px;
 }
-input[type='radio'] {
-  display: none;
+#n {
+  width: 2.5em;
 }
-input[type='radio'] + label {
-  display: block;
-  margin: 10px;
-  padding: 6px;
-  height: 27px;
-  font-size: 16pt;
+#n-wrap {
   text-align: center;
-}
-input[type='radio']:checked + label,
-input[type='radio']:checked + label:hover {
-  cursor: default;
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #c84), color-stop(1, #930));
-  background: -webkit-linear-gradient(#c84, #930);
-  background: -moz-linear-gradient(#c84, #930);
-  background: -o-linear-gradient(#c84, #930);
-  box-shadow: rgba(0,0,0,0.5) 0 2px 6px inset;
 }
 button,
 input[type='radio'] + label,
 #nav > ul > li {
+  font-family: 'Carme', sans-serif;
   color: #fff;
   border: 1px solid #000;
   border-radius: 10px;
@@ -322,7 +334,7 @@ input[type='radio'] + label:hover,
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0, rgba(0,0,0,0)), color-stop(1, rgba(0,0,0,0.75))), #789;
   background: -webkit-linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.75)), #789;
   background: -moz-linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.75)), #789;
-  background: -o-linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.75)), #789;
+  background: -o-linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.75)), cactive;
 }
 button:active,
 input[type='radio'] + label:active,
@@ -355,13 +367,73 @@ button#new-game:hover {
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0, rgba(0,0,0,0)), color-stop(1, rgba(0,0,0,0.75))), #7a7;
   background: -webkit-linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.75)), #7a7;
   background: -moz-linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.75)), #7a7;
-  background: -o-linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.75)), #7a7;
+  background: -o-linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.75)), cactive;
 }
 button#new-game:active {
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0, rgba(0,0,0,0)), color-stop(1, rgba(0,0,0,0.75))), #585;
   background: -webkit-linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.75)), #585;
   background: -moz-linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.75)), #585;
   background: -o-linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.75)), #585;
+  box-shadow: rgba(0,0,0,0.5) 0 2px 6px inset;
+}
+button#cancel {
+  position: absolute;
+  color: #fff;
+  border: 1px solid #000;
+  border-radius: 10px;
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0, rgba(0,0,0,0)), color-stop(1, rgba(0,0,0,0.75))), #933;
+  background: -webkit-linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.75)), #933;
+  background: -moz-linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.75)), #933;
+  background: -o-linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.75)), #933;
+  box-shadow: rgba(255,255,255,0.25) 0 -1px 0 inset, rgba(255,255,255,0.25) 0 1px 0 inset;
+  -webkit-text-shadow: 0 -1px 0 rgba(0,0,0,0.8);
+  -moz-text-shadow: 0 -1px 0 rgba(0,0,0,0.8);
+  text-shadow: 0 -1px 0 rgba(0,0,0,0.8);
+  float: left;
+  margin: 10px;
+  font-size: 18pt;
+  font-weight: bold;
+  width: 200px;
+  height: 50px;
+}
+button#cancel:hover {
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0, rgba(0,0,0,0)), color-stop(1, rgba(0,0,0,0.75))), #b44;
+  background: -webkit-linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.75)), #b44;
+  background: -moz-linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.75)), #b44;
+  background: -o-linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.75)), cactive;
+}
+button#cancel:active {
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0, rgba(0,0,0,0)), color-stop(1, rgba(0,0,0,0.75))), #933;
+  background: -webkit-linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.75)), #933;
+  background: -moz-linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.75)), #933;
+  background: -o-linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.75)), #933;
+  box-shadow: rgba(0,0,0,0.5) 0 2px 6px inset;
+}
+input[type='radio'] {
+  display: none;
+}
+input[type='radio'] + label {
+  display: block;
+  margin: 10px;
+  padding: 6px;
+  height: 27px;
+  font-size: 16pt;
+  text-align: center;
+}
+input[type='radio']:checked + label,
+input[type='radio']:checked + label:hover {
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0, rgba(0,0,0,0)), color-stop(1, rgba(0,0,0,0.75))), #cc4;
+  background: -webkit-linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.75)), #cc4;
+  background: -moz-linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.75)), #cc4;
+  background: -o-linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.75)), #cc4;
+  box-shadow: rgba(0,0,0,0.5) 0 2px 6px inset;
+}
+#nav li.selected,
+#nav li.selected:hover {
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0, rgba(0,0,0,0)), color-stop(1, rgba(0,0,0,0.75))), #c44;
+  background: -webkit-linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.75)), #c44;
+  background: -moz-linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.75)), #c44;
+  background: -o-linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.75)), #c44;
   box-shadow: rgba(0,0,0,0.5) 0 2px 6px inset;
 }
 fieldset {
@@ -374,7 +446,6 @@ fieldset {
   background: -o-linear-gradient(#abc, #789);
   box-shadow: rgba(0,0,0,0.5) 0 1px 2px inset;
   color: rgba(0,0,0,0.75);
-  font-weight: bold;
   -webkit-text-shadow: 0 1px 0 rgba(255,255,255,0.48);
   -moz-text-shadow: 0 1px 0 rgba(255,255,255,0.48);
   text-shadow: 0 1px 0 rgba(255,255,255,0.48);
@@ -411,6 +482,16 @@ input[type='number'] {
   text-shadow: 0 1px 0 rgba(0,0,0,0.8);
   box-shadow: rgba(0,0,0,0.5) 0 1px 0px inset;
 }
+input[disabled='disabled'] {
+  color: rgba(255,255,255,0.5);
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+}
 .bad {
   color: #ccc;
 }
@@ -419,4 +500,62 @@ input[type='number'] {
 }
 .excellent {
   color: #2d2;
+}
+#logo {
+  display: none;
+  font-weight: bold;
+  letter-spacing: -0.1em;
+  color: transparent;
+  position: fixed;
+  bottom: 0;
+  font-size: 128pt;
+  -webkit-transition: text-shadow 500ms;
+  -moz-transition: text-shadow 500ms;
+  -o-transition: text-shadow 500ms;
+  transition: text-shadow 500ms;
+  -webkit-text-shadow: 0 0 60px rgba(255,255,255,0.5), 0 1px 60px rgba(0,0,0,0);
+  -moz-text-shadow: 0 0 60px rgba(255,255,255,0.5), 0 1px 60px rgba(0,0,0,0);
+  text-shadow: 0 0 60px rgba(255,255,255,0.5), 0 1px 60px rgba(0,0,0,0);
+}
+#logo:hover {
+  -webkit-transition: text-shadow 500ms;
+  -moz-transition: text-shadow 500ms;
+  -o-transition: text-shadow 500ms;
+  transition: text-shadow 500ms;
+  -webkit-text-shadow: 0 0 0 #fff, 0 1px 4px rgba(0,0,0,0.5);
+  -moz-text-shadow: 0 0 0 #fff, 0 1px 4px rgba(0,0,0,0.5);
+  text-shadow: 0 0 0 #fff, 0 1px 4px rgba(0,0,0,0.5);
+}
+#focus_wrap {
+  color: transparent;
+  position: fixed;
+  top: 0;
+  left: 0;
+  margin-left: 33.3333%;
+  width: 33.3333%;
+  height: 100%;
+  font-size: 64pt;
+  -webkit-transition: opacity 500ms 1500ms;
+  -moz-transition: opacity 500ms 1500ms;
+  -o-transition: opacity 500ms 1500ms;
+  transition: opacity 500ms 1500ms;
+}
+#focus {
+  text-align: center;
+  z-index: -2;
+  -webkit-text-shadow: 0 0 64px rgba(255,255,255,0), 0 1px 64px rgba(0,0,0,0);
+  -moz-text-shadow: 0 0 64px rgba(255,255,255,0), 0 1px 64px rgba(0,0,0,0);
+  text-shadow: 0 0 64px rgba(255,255,255,0), 0 1px 64px rgba(0,0,0,0);
+  -webkit-transition: text-shadow 1000ms 500ms;
+  -moz-transition: text-shadow 1000ms 500ms;
+  -o-transition: text-shadow 1000ms 500ms;
+  transition: text-shadow 1000ms 500ms;
+}
+body.playing #focus_wrap {
+  opacity: 0;
+}
+body.playing #focus {
+  -webkit-text-shadow: 0 0 0 #fff, 0 1px 1px #000;
+  -moz-text-shadow: 0 0 0 #fff, 0 1px 1px #000;
+  text-shadow: 0 0 0 #fff, 0 1px 1px #000;
 }

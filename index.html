@@ -1,4 +1,4 @@
-<html><head><meta charset="utf-8" /><title>Dual N-Back</title><link rel="stylesheet" href="style.css" /><link rel="stylesheet" href="flotr2-examples.css" /><script type="text/javascript" src="json2.min.js"></script><script type="text/javascript" src="storage.min.js"></script><script type="text/javascript" src="jquery-1.7.2.min.js"></script><script type="text/javascript" src="soundmanager2.js"></script><script type="text/javascript" src="flotr2.min.js"></script></head><body class="loading"><div id="vignette"></div><div id="loading_wrapper"><table><tbody><tr><td id="loading">Please Wait...</td></tr></tbody></table></div><div id="nav"><ul><li class="first"><a href="#game">Game</a></li><li><a href="#stats">Stats</a></li><li><a href="#help">Help</a></li></ul></div><div id="content"><div id="help"><fieldset id="instructions" class="outer"><fieldset><legend>How to Play Dual <i>N</i>-Back</legend><ul><li>Any time a grid square you saw <i>N</i> turns ago is highlighted again, press [A]</li><li>Any time a letter you heard <i>N</i> turns ago is spoken again, press [L]</li><li>It's possible for both of these cases to occur on the same turn</li><li>Don't be discouraged! You <strong>will</strong> improve with practice!</li></ul></fieldset></fieldset></div><div id="stats"><fieldset id="graph-panel" class="outer"><fieldset><legend>Your Progress</legend><div id="graph"></div></fieldset><br /><button id="clear-history">Clear My History</button></fieldset></div><div id="game"><fieldset class="outer"><fieldset id="game-mode"><legend>Game Mode</legend><input id="n1" type="radio" name="n" value="1" /><label for="n1">Dual <strong>1</strong>-Back</label><input id="n2" type="radio" name="n" value="2" /><label for="n2">Dual <strong>2</strong>-Back</label><input id="n3" type="radio" name="n" value="3" /><label for="n3">Dual <strong>3</strong>-Back</label></fieldset><fieldset id="settings"><legend>Settings</legend>Number of Turns: <input id="count" name="count" type="number" value="24" /><br />Turn Duration: <input id="turndur" name="turndur" type="number" value="3000" />ms<button id="new-game">NEW ROUND!</button></fieldset><br /><button id="reset-settings">Reset All Settings</button></fieldset></div></div><div id="flash_bg"></div><table id="flash_wrapper"><tbody><tr><td><div id="flash">100% Correct.<br>Dayum.</div><button id="continue">Continue</button></td></tr></tbody></table><div id="main"><table id="layout"><tr><td id="a_button">POSITION (A)</td><td id="grid_wrap"><fieldset class="outer"><fieldset><div id="hud"><legend id="type"></legend><legend id="remaining"></legend></div><table id="grid"><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></table></fieldset></fieldset></td><td id="b_button">LETTER (L)</td></tr></table></div><script>var __slice = Array.prototype.slice;var __hasProp = Object.prototype.hasOwnProperty;var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };var __extends = function(child, parent) {  for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; }  function ctor() { this.constructor = child; }  ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype;  return child; };var __indexOf = Array.prototype.indexOf || function(item) {  for (var i = 0, l = this.length; i < l; i++) {    if (this[i] === item) return i;  } return -1; };(function () {
+<html><head><meta charset="utf-8" /><title>Dual N-Back</title><link rel="stylesheet" href="flotr2-examples.css" /><link href="http://fonts.googleapis.com/css?family=Carme" rel="stylesheet" type="text/css" /><link rel="stylesheet" href="style.css" /><script type="text/javascript" src="json2.min.js"></script><script type="text/javascript" src="storage.min.js"></script><script type="text/javascript" src="jquery-1.7.2.min.js"></script><script type="text/javascript" src="soundmanager2.js"></script><script type="text/javascript" src="flotr2.min.js"></script></head><body class="loading"><div id="vignette"></div><div id="loading_wrapper"><table><tbody><tr><td id="loading">Please Wait...</td></tr></tbody></table></div><div id="nav"><ul><li class="first"><a href="#game">Game</a></li><li><a href="#stats">Stats</a></li><li><a href="#help">Help</a></li></ul></div><div id="content"><div id="help"><fieldset id="instructions" class="outer"><fieldset><legend>How to Play Dual <i>N</i>-Back</legend><ul><li>Any time a grid square you saw <i>N</i> turns ago is highlighted again, press [A]</li><li>Any time a letter you heard <i>N</i> turns ago is spoken again, press [L]</li><li>It's possible for both of these cases to occur on the same turn</li><li>Don't be discouraged! You <strong>will</strong> improve with practice!</li></ul></fieldset></fieldset></div><div id="stats"><fieldset id="graph-panel" class="outer"><fieldset><legend>Your Progress</legend><div id="graph"></div></fieldset><br /><button id="clear-history">Clear My Progress</button></fieldset></div><div id="game"><fieldset class="outer"><fieldset id="game-mode"><legend>Progress Mode</legend><input id="mode_training" type="radio" name="mode" value="training" /><label for="mode_training">Training</label><input id="mode_manual" type="radio" name="mode" value="manual" /><label for="mode_manual">Manual</label><div id="n-wrap">Dual <input id="n" name="n" type="number" />-Back</div></fieldset><fieldset id="settings"><legend>Settings</legend>Number of Turns: <input id="count" name="count" type="number" /> + <span id="extra_count"></span><br />Turn Duration: <input id="turndur" name="turndur" type="number" />ms<br />Increase <i>N</i> Threshold: <input id="advance_threshold" name="advance_threshold" type="number" />%<br />Decrease <i>N</i> Threshold: <input id="retreat_threshold" name="retreat_threshold" type="number" />%<button id="new-game">NEW ROUND!</button></fieldset><br /><button id="reset-settings">Reset All Settings</button></fieldset></div></div><div id="flash_bg"></div><table id="flash_wrapper"><tbody><tr><td><div id="flash">100% Correct.<br>Dayum.</div><button id="continue">Continue</button></td></tr></tbody></table><div id="main"><table id="focus_wrap"><tbody><tr><td id="focus">focus.</td></tr></tbody></table><button id="cancel">Cancel</button><table id="layout"><tbody><tr><td id="a_button">POSITION (A)</td><td id="grid_wrap"><fieldset class="outer"><fieldset><div id="hud"><legend id="type"></legend><legend id="remaining"></legend></div><table id="grid"><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></table></fieldset></fieldset></td><td id="b_button">LETTER (L)</td></tr></tbody></table></div><div id="logo">banalduck</div><script>var __slice = Array.prototype.slice;var __hasProp = Object.prototype.hasOwnProperty;var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };var __extends = function(child, parent) {  for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; }  function ctor() { this.constructor = child; }  ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype;  return child; };var __indexOf = Array.prototype.indexOf || function(item) {  for (var i = 0, l = this.length; i < l; i++) {    if (this[i] === item) return i;  } return -1; };(function () {
       /*
       */
 
@@ -7,25 +7,36 @@
       return $(function() {
         var all_loaded, choose, clear_history, frand, grid, rand, reset_settings, sounds_loaded, sounds_to_load, update_settings_display, _defaultSettings;
         _defaultSettings = {
+          mode: 'training',
           n: 2,
-          count: 24,
-          turndur: 3000
+          count: 20,
+          turndur: 3000,
+          retreat_threshold: 50,
+          advance_threshold: 80
         };
         update_settings_display = function() {
-          var name, settings, val, _results;
+          var name, settings, val;
           settings = JSON.parse(localStorage.getItem('settings'));
-          $("#game input[name='n'][value=" + settings.n + "]").attr('checked', 'checked');
-          $("#game input[name='n'][value!=" + settings.n + "]").attr('checked', false);
-          _results = [];
+          $("#game input[name='mode']").attr('checked', false);
+          $("#game input[name='mode'][value='" + settings.mode + "']").attr('checked', 'checked');
           for (name in settings) {
             if (!__hasProp.call(settings, name)) continue;
             val = settings[name];
-            if (name === 'n') {
+            if (name === 'mode') {
               continue;
             }
-            _results.push($("#game input[name='" + name + "']'").val(parseInt(val)));
+            $("#game input[name='" + name + "']'").val(val);
           }
-          return _results;
+          if (settings.mode === 'manual') {
+            $('#n').attr('disabled', false);
+            $('#retreat_threshold').attr('disabled', 'disabled');
+            $('#advance_threshold').attr('disabled', 'disabled');
+          } else {
+            $('#n').attr('disabled', 'disabled');
+            $('#retreat_threshold').attr('disabled', false);
+            $('#advance_threshold').attr('disabled', false);
+          }
+          return $('#extra_count').html(settings.n * settings.n);
         };
         reset_settings = function() {
           return localStorage.setItem('settings', JSON.stringify(_defaultSettings));
@@ -86,11 +97,14 @@
           $('#flash').removeClass('excellent');
           $('#flash').addClass(cssClass);
           $('body').addClass('flash');
-          return $('#continue').click(function() {
+          flash["continue"] = function() {
             if (cb != null) {
               cb();
             }
             return $('body').removeClass('flash');
+          };
+          return $('#continue').click(function() {
+            return flash["continue"]();
           });
         };
         window.sounds = [];
@@ -162,7 +176,7 @@
             return turns[num].b === turns[num - n].b;
           };
           generate_results = function(turns, n) {
-            var a_correct, a_incorrect, a_match, a_missed, b_correct, b_incorrect, b_match, b_missed, cor, curr, i, percent, tot;
+            var a_correct, a_incorrect, a_match, a_missed, b_correct, b_incorrect, b_match, b_missed, cor, curr, err, i, percent, tot;
             a_correct = b_correct = 0;
             a_incorrect = b_incorrect = 0;
             a_missed = b_missed = 0;
@@ -174,27 +188,28 @@
               a_match = a_matches(turns, n, i);
               b_match = b_matches(turns, n, i);
               if (a_match) {
-                if (curr.a_pressed) {
+                if (curr.ap) {
                   ++a_correct;
                 } else {
                   ++a_missed;
                 }
-              } else if (curr.a_pressed) {
+              } else if (curr.ap) {
                 ++a_incorrect;
               }
               if (b_match) {
-                if (curr.b_pressed) {
+                if (curr.bp) {
                   ++b_correct;
                 } else {
                   ++b_missed;
                 }
-              } else if (curr.b_pressed) {
+              } else if (curr.bp) {
                 ++b_incorrect;
               }
               ++i;
             }
-            tot = a_missed + b_missed + a_correct + b_correct;
-            cor = a_correct + b_correct - a_incorrect - b_incorrect;
+            cor = a_correct + b_correct;
+            err = a_missed + b_missed + a_incorrect + b_incorrect;
+            tot = cor + err;
             percent = 100 * (cor / tot);
             return {
               a_correct: a_correct,
@@ -207,61 +222,40 @@
             };
           };
           window.draw_history_graph = function(container, history) {
-            var d1, d2, d3, drawGraph, graph, i, o, options, r, x;
+            var d, drawGraph, graph, i, n, o, options, r, x;
             drawGraph = function(opts) {
-              var o;
+              var ds, i, o;
               o = Flotr._.extend(Flotr._.clone(options), opts || {});
-              return Flotr.draw(container, [
-                {
-                  data: d1,
-                  label: 'Dual 1-Back',
+              ds = [];
+              i = 0;
+              while (i < d.length) {
+                ds.push({
+                  data: d[i],
+                  label: "Dual " + (i + 1) + "-Back",
                   lines: {
                     show: true
                   },
                   points: {
                     show: true
                   }
-                }, {
-                  data: d2,
-                  label: 'Dual 2-Back',
-                  lines: {
-                    show: true
-                  },
-                  points: {
-                    show: true
-                  }
-                }, {
-                  data: d3,
-                  label: 'Dual 3-Back',
-                  lines: {
-                    show: true
-                  },
-                  points: {
-                    show: true
-                  }
-                }
-              ], o);
+                });
+                ++i;
+              }
+              return Flotr.draw(container, ds, o);
             };
-            d1 = [];
-            d2 = [];
-            d3 = [];
             options = void 0;
             graph = void 0;
             x = void 0;
             o = void 0;
             i = 0;
+            d = [];
             while (i < history.length) {
-              r = generate_results(history[i].turns, history[i].n);
-              switch (history[i].n) {
-                case 1:
-                  d1.push([Date.parse(history[i].timestamp), r.percent]);
-                  break;
-                case 2:
-                  d2.push([Date.parse(history[i].timestamp), r.percent]);
-                  break;
-                case 3:
-                  d3.push([Date.parse(history[i].timestamp), r.percent]);
+              n = history[i].n;
+              r = generate_results(history[i].turns, n);
+              if (!(d[n - 1] != null)) {
+                d[n - 1] = [];
               }
+              d[n - 1].push([Date.parse(history[i].timestamp), r.percent]);
               i++;
             }
             options = {
@@ -314,14 +308,16 @@
               turns.push({
                 a: a,
                 b: b,
-                a_pressed: false,
-                b_pressed: false
+                ap: false,
+                bp: false
               });
-              if ((i >= n) && (Math.random() > 0.15)) {
+              if ((i >= n) && (Math.random() < 0.07)) {
                 turns[i - n].a = a;
+                console.log("a" + i);
               }
-              if ((i >= n) && (Math.random() > 0.15)) {
+              if ((i >= n) && (Math.random() < 0.07)) {
                 turns[i - n].b = b;
+                console.log("b" + i);
               }
               ++i;
             }
@@ -331,18 +327,20 @@
             start = function(done) {
               started = true;
               current = 0;
-              return intvl = setInterval(function() {
-                if (current >= count) {
-                  clearInterval(intvl);
-                  done(generate_results(turns, n));
-                  return;
-                }
-                $('#type').html("Dual " + n + "-Back");
-                $('#remaining').html("" + (current + 1) + " of " + count);
-                highlight(grid[turns[current].a]);
-                sounds[turns[current].b].play();
-                return ++current;
-              }, turn_dur);
+              return setTimeout(function() {
+                return intvl = setInterval(function() {
+                  if (current >= count) {
+                    clearInterval(intvl);
+                    done(generate_results(turns, n));
+                    return;
+                  }
+                  $('#type').html("Dual " + n + "-Back");
+                  $('#remaining').html("" + (current + 1) + " of " + count);
+                  highlight(grid[turns[current].a]);
+                  sounds[turns[current].b].play();
+                  return ++current;
+                }, turn_dur);
+              }, 2250 - turn_dur);
             };
             return {
               n: n,
@@ -351,23 +349,23 @@
               turn_dur: turn_dur,
               timestamp: timestamp,
               a_pressed: function() {
-                if (!turns[current - 1].a_pressed) {
+                if (!turns[current - 1].ap) {
                   if (a_matches(turns, n, current - 1)) {
                     highlight($('#a_button'), 'success', 0, 250);
                   } else {
                     highlight($('#a_button'), 'failure', 0, 250);
                   }
-                  return turns[current - 1].a_pressed = true;
+                  return turns[current - 1].ap = true;
                 }
               },
               b_pressed: function() {
-                if (!turns[current - 1].b_pressed) {
+                if (!turns[current - 1].bp) {
                   if (b_matches(turns, n, current - 1)) {
                     highlight($('#b_button'), 'success', 0, 250);
                   } else {
                     highlight($('#b_button'), 'failure', 0, 250);
                   }
-                  return turns[current - 1].b_pressed = true;
+                  return turns[current - 1].bp = true;
                 }
               },
               start: function(done) {
@@ -385,14 +383,17 @@
             };
           };
           new_round = function() {
-            var settings;
+            var count, n, s, turndur;
             if (!(window.round != null)) {
-              settings = JSON.parse(localStorage.getItem('settings'));
+              s = JSON.parse(localStorage.getItem('settings'));
               $('body').addClass('playing');
-              window.round = dual_n_back(settings.n, settings.count, settings.turndur);
+              n = parseInt(s.n);
+              count = parseInt(s.count) + n * n;
+              turndur = parseInt(s.turndur);
+              window.round = dual_n_back(n, count, turndur);
               $('#results').hide();
               return round.start(function(r) {
-                var cssclass, h, msg, percent;
+                var cssclass, h, msg, percent, strikes;
                 h = JSON.parse(localStorage.getItem('history'));
                 if (!(h != null)) {
                   h = [];
@@ -401,16 +402,45 @@
                 localStorage.setItem('history', JSON.stringify(h));
                 window.round = void 0;
                 percent = Math.round(r.percent);
-                if (percent <= 50) {
+                localStorage.setItem('lastgame', JSON.stringify(new Date));
+                if (percent < 50) {
                   cssclass = 'bad';
-                  msg = choose(['don\'t be discouraged!', 'give it another try!']);
-                } else if (percent <= 80) {
+                  msg = choose(['Don\'t be discouraged!', 'Give it another try!', 'Keep practicing!', 'Don\'t worry, you\'ll get there.']);
+                } else if (percent < 60) {
                   cssclass = 'better';
-                  msg = choose(['not bad.', 'you\'re getting there!', 'keep it up!']);
+                  msg = choose(['Not bad.', 'Keep practicing!']);
+                } else if (percent < 70) {
+                  cssclass = 'better';
+                  msg = choose(['You\'re getting there!', 'Not bad!']);
+                } else if (percent < 80) {
+                  cssclass = 'better';
+                  msg = choose(['Nice score!', 'Nice job! Keep it up!', 'Well done!']);
+                } else if (percent < 100) {
+                  cssclass = 'excellent';
+                  msg = choose(['Excellent!', 'Now you\'ve got it!', 'Bravo!', '*high fives*']);
                 } else {
                   cssclass = 'excellent';
-                  msg = choose(['excellent!', 'now you\'ve got it!', 'bravo!', '*high fives*', 'is this too easy for you?']);
+                  msg = choose(['Perfect! *high fives*', 'Outstanding!', 'Masterful!', '<i>Dayum.</i> Is this too easy for you?']);
                 }
+                if (s.mode === 'training') {
+                  if (percent >= s.advance_threshold) {
+                    ++s.n;
+                    msg += "<b><br>N increased to " + s.n + "</b>!";
+                  } else if (percent < s.retreat_threshold) {
+                    strikes = localStorage.getItem('strikes') || 0;
+                    if (n >= 2) {
+                      msg += "<br>Strike " + (++strikes) + " of 3";
+                      if (strikes >= 3) {
+                        strikes = 0;
+                        --s.n;
+                        msg += "<b><br><i>N</i> decreased to " + s.n + "</b>";
+                      }
+                    }
+                    localStorage.setItem('strikes', strikes);
+                  }
+                }
+                localStorage.setItem('settings', JSON.stringify(s));
+                update_settings_display();
                 return flash("" + percent + "% correct<br>" + msg, cssclass, 'Okay', function() {
                   $('#nav a[href="#stats"]').click();
                   $('body').removeClass('playing');
@@ -420,11 +450,18 @@
             }
           };
           return all_loaded = function() {
-            var h, settings;
+            var h, lastgame, settings;
             $('body').removeClass('loading');
             $('#nav').show();
             $('#content').show();
             settings = JSON.parse(localStorage.getItem('settings')) || _defaultSettings;
+            if (settings.mode === 'training') {
+              lastgame = new Date(JSON.parse(localStorage.getItem('lastgame')));
+              if (((new Date) - lastgame) > 24 * 60 * 60 * 1000) {
+                settings.n = 2;
+                localStorage.setItem('strikes', 0);
+              }
+            }
             localStorage.setItem('settings', JSON.stringify(settings));
             update_settings_display();
             h = JSON.parse(localStorage.getItem('history')) || [];
@@ -442,6 +479,20 @@
                     return true;
                   }
                   round.b_pressed();
+                  break;
+                case 32:
+                  if ($('body').hasClass('flash')) {
+                    flash["continue"]();
+                  } else if (!$('body').hasClass('playing')) {
+                    new_round();
+                  }
+                  break;
+                case 27:
+                  if (!$('body').hasClass('playing')) {
+                    return true;
+                  }
+                  round.stop();
+                  window.round = void 0;
               }
               return true;
             });
@@ -457,10 +508,18 @@
               }
               return round.b_pressed();
             });
+            $('#cancel').click(function() {
+              if (window.round != null) {
+                round.stop();
+                return window.round = void 0;
+              }
+            });
             $('#game').on('change', 'input', function() {
+              console.log(this);
               settings = JSON.parse(localStorage.getItem('settings'));
-              settings[this.name] = parseInt(this.value);
-              return localStorage.setItem('settings', JSON.stringify(settings));
+              settings[this.name] = this.value;
+              localStorage.setItem('settings', JSON.stringify(settings));
+              return update_settings_display();
             });
             $('#clear-history').click(function() {
               if (!confirm("Are you sure?")) {
