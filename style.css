@@ -453,6 +453,12 @@ fieldset {
   margin: 5px;
   margin-top: 35px;
 }
+fieldset section {
+  color: #fff;
+  -webkit-text-shadow: 0 1px 1px rgba(0,0,0,0.9);
+  -moz-text-shadow: 0 1px 1px rgba(0,0,0,0.9);
+  text-shadow: 0 1px 1px rgba(0,0,0,0.9);
+}
 fieldset.outer > button {
   border-radius: 5px;
   margin: 5px;
