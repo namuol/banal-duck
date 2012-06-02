@@ -33,7 +33,7 @@ body
   border 0
   padding 0
   margin 0
-  font-family 'Helvetica', sans-serif
+  font-family 'Carme', sans-serif
   overflow hidden
 
 #vignette
@@ -50,7 +50,7 @@ body
   z-index -3
 
 #main
-  position absolute
+  position fixed
   top 0
   left 0
   transition margin-left 750ms
@@ -64,7 +64,7 @@ body
 
 #layout td
   text-align center
-  width 34%
+  width 33%
 
 #grid
   border-collapse collapse
@@ -123,7 +123,7 @@ body
 
 #flash_bg
   background rgba(0,0,0,0.6)
-  position absolute
+  position fixed
   top 0
   left 0
   width 100%
@@ -145,7 +145,7 @@ body.flash #flash_wrapper
 #flash_wrapper
   transition margin-top 250ms
   margin-top 100%
-  position absolute
+  position fixed
   top 0
   left 0
   width 100%
@@ -172,11 +172,12 @@ body.flash #flash_wrapper
 
 #content
   transition margin-left 650ms
-  position absolute
+  position fixed
   top 40px
 
 #nav
-  position absolute
+  z-index 20 !important
+  position fixed
   top 0
   font-family 'Carme', sans-serif
   transition margin-top 500ms
@@ -185,7 +186,7 @@ body.flash #flash_wrapper
   width 100%
   height 40px
 
-body.loading #content, body.loading #nav, body.loading #main
+body.loading #content, body.loading #nav, body.loading #main, body.playing #content
   height 0
 
 #loading_wrapper table
@@ -268,7 +269,6 @@ legend
 
 #game-mode, #settings
   float left
-  height 164px
   width 200px
 
 #n
@@ -301,6 +301,7 @@ active_button(color)
   box-shadow rgba(0,0,0,0.5) 0 2px 6px inset
 
 button, input[type='radio'] + label, #nav > ul > li
+  font-family 'Carme', sans-serif
   norm_button(#567)
 
 button:hover, input[type='radio'] + label:hover, #nav > ul > li:hover
@@ -397,6 +398,10 @@ input[type='text'], input[type='number']
   text-shadow 0 1px 0 rgba(0,0,0,0.8)
   box-shadow rgba(0,0,0,0.5) 0 1px 0px inset
 
+input[disabled='disabled']
+  color rgba(255,255,255,0.5)
+  user-select none
+
 .bad
   color #ccc
 
@@ -405,3 +410,42 @@ input[type='text'], input[type='number']
 
 .excellent
   color #2d2
+
+#logo
+  display none
+  font-weight bold
+  letter-spacing -0.1em
+  color transparent
+  position fixed
+  bottom 0
+  font-size 128pt
+  transition text-shadow 500ms
+  text-shadow 0 0 60px rgba(255,255,255,0.5), 0 1px 60px rgba(0,0,0,0.0)
+#logo:hover
+  transition text-shadow 500ms
+  text-shadow 0 0 0 rgba(255,255,255,1), 0 1px 4px rgba(0,0,0,0.5)
+
+
+#focus_wrap
+  color transparent
+  position fixed
+  top 0
+  left 0
+  margin-left 33.3333%
+  width 33.3333%
+  height 100%
+  font-size 64pt
+  transition opacity 500ms 1500ms
+
+#focus
+  text-align center
+  z-index -2
+  text-shadow 0 0 64px rgba(255,255,255,0), 0 1px 64px rgba(0,0,0,0)
+  transition text-shadow 1000ms 500ms
+
+body.playing #focus_wrap
+  opacity 0
+
+body.playing #focus
+  text-shadow 0 0 0 rgba(255,255,255,1), 0 1px 1px rgba(0,0,0,1)
+  //transition text-shadow 750ms 500ms

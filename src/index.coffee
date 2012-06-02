@@ -67,12 +67,21 @@ html ->
             legend 'Settings'
             text 'Number of Turns: '
             input id:'count', name:'count', type:'number'
-            text ' +'
+            text ' + '
             span id:'extra_count'
             br ''
             text 'Turn Duration: '
             input id:'turndur', name:'turndur', type:'number'
             text 'ms'
+            br ''
+            text 'Increase <i>N</i> Threshold: '
+            input id:'advance_threshold', name:'advance_threshold', type:'number'
+            text '%'
+            br ''
+            text 'Decrease <i>N</i> Threshold: '
+            input id:'retreat_threshold', name:'retreat_threshold', type:'number'
+            text '%'
+
             button id:'new-game', 'NEW ROUND!'
           br ''
           button id:'reset-settings', 'Reset All Settings'
@@ -86,31 +95,38 @@ html ->
             button id:'continue', 'Continue'
 
     div id:'main', ->
+      table id:'focus_wrap', ->
+        tbody ->
+          tr ->
+            td id:'focus', 'focus.'
       button id:'cancel', 'Cancel'
       table id:'layout', ->
-        tr ->
-          td id:'a_button', 'POSITION (A)'
-          td id:'grid_wrap', ->
+        tbody ->
+          tr ->
+            td id:'a_button', 'POSITION (A)'
+            td id:'grid_wrap', ->
 
-            fieldset class:'outer', ->
-              fieldset ->
-                div id:'hud', ->
-                  legend id:'type'
-                  legend id:'remaining'
-                table id:'grid', ->
-                  tr ->
-                    td ''
-                    td ''
-                    td ''
-                  tr ->
-                    td ''
-                    td ''
-                    td ''
-                  tr ->
-                    td ''
-                    td ''
-                    td ''
-          td id:'b_button', 'LETTER (L)'
+              fieldset class:'outer', ->
+                fieldset ->
+                  div id:'hud', ->
+                    legend id:'type'
+                    legend id:'remaining'
+                  table id:'grid', ->
+                    tr ->
+                      td ''
+                      td ''
+                      td ''
+                    tr ->
+                      td ''
+                      td ''
+                      td ''
+                    tr ->
+                      td ''
+                      td ''
+                      td ''
+            td id:'b_button', 'LETTER (L)'
+
+    div id:'logo', 'banalduck'
 
     coffeescript ->
       ###           ###
@@ -128,7 +144,7 @@ html ->
           n: 2
           count: 20
           turndur: 3000
-          retreat_threshodl: 50
+          retreat_threshold: 50
           advance_threshold: 80
         
         update_settings_display = ->
@@ -141,8 +157,12 @@ html ->
 
           if settings.mode == 'manual'
             $('#n').attr 'disabled', false
+            $('#retreat_threshold').attr 'disabled', 'disabled'
+            $('#advance_threshold').attr 'disabled', 'disabled'
           else
             $('#n').attr 'disabled', 'disabled'
+            $('#retreat_threshold').attr 'disabled', false
+            $('#advance_threshold').attr 'disabled', false
 
           $('#extra_count').html settings.n*settings.n
 
@@ -306,28 +326,24 @@ html ->
           window.draw_history_graph = (container, history) ->
             drawGraph = (opts) ->
               o = Flotr._.extend(Flotr._.clone(options), opts or {})
-              Flotr.draw container, [
-                {data:d1, label:'Dual 1-Back', lines:{show:true}, points:{show:true}}
-                {data:d2, label:'Dual 2-Back', lines:{show:true}, points:{show:true}}
-                {data:d3, label:'Dual 3-Back', lines:{show:true}, points:{show:true}}
-              ], o
-            d1 = []
-            d2 = []
-            d3 = []
+              ds = []
+              i = 0
+              while i < d.length
+                ds.push {data:d[i], label:"Dual #{i+1}-Back", lines:{show:true}, points:{show:true}}
+                ++i
+              Flotr.draw container, ds, o
             options = undefined
             graph = undefined
             x = undefined
             o = undefined
             i = 0
+            d = []
             while i < history.length
-              r = generate_results history[i].turns, history[i].n
-              switch history[i].n
-                when 1
-                  d1.push [Date.parse(history[i].timestamp), r.percent]
-                when 2
-                  d2.push [Date.parse(history[i].timestamp), r.percent]
-                when 3
-                  d3.push [Date.parse(history[i].timestamp), r.percent]
+              n = history[i].n
+              r = generate_results history[i].turns, n
+              if not d[n-1]?
+                d[n-1] = []
+              d[n-1].push [Date.parse(history[i].timestamp), r.percent]
               i++
             options =
               xaxis:
@@ -376,10 +392,12 @@ html ->
                 bp:false
 
               # Add some more matches:
-              #if (i >= n) and (Math.random() > 0.15)
-              #  turns[i-n].a = a
-              #if (i >= n) and (Math.random() > 0.15)
-              #  turns[i-n].b = b
+              if (i >= n) and (Math.random() < 0.07)
+                turns[i-n].a = a
+                console.log "a#{i}"
+              if (i >= n) and (Math.random() < 0.07)
+                turns[i-n].b = b
+                console.log "b#{i}"
               ++i
 
 
@@ -390,19 +408,21 @@ html ->
             start = (done) ->
               started = true
               current = 0
-              intvl = setInterval ->
-                if current >= count
-                  clearInterval intvl
-                  done generate_results(turns, n)
-                  return
+              setTimeout ->
+                intvl = setInterval ->
+                  if current >= count
+                    clearInterval intvl
+                    done generate_results(turns, n)
+                    return
 
-                $('#type').html "Dual #{n}-Back"
-                $('#remaining').html "#{current+1} of #{count}"
-                highlight grid[turns[current].a]
-                sounds[turns[current].b].play()
-                
-                ++current
-              , turn_dur
+                  $('#type').html "Dual #{n}-Back"
+                  $('#remaining').html "#{current+1} of #{count}"
+                  highlight grid[turns[current].a]
+                  sounds[turns[current].b].play()
+                  
+                  ++current
+                , turn_dur
+              , 2250 - turn_dur
 
             return {
               n: n
@@ -489,6 +509,7 @@ html ->
                     '*high fives*'
                   ]
                 else
+                  cssclass = 'excellent'
                   msg = choose [
                     'Perfect! *high fives*'
                     'Outstanding!'
@@ -500,7 +521,7 @@ html ->
                 if s.mode == 'training'
                   if percent >= s.advance_threshold
                     ++s.n
-                    msg += "<br>N increased to <b>#{s.n}</b>!"
+                    msg += "<b><br>N increased to #{s.n}</b>!"
                   else if percent < s.retreat_threshold
                     strikes = localStorage.getItem('strikes') or 0
                     if n >= 2
@@ -508,7 +529,7 @@ html ->
                       if strikes >= 3
                         strikes = 0
                         --s.n
-                        msg += "<br><i>N</i> decreased to #{s.n}"
+                        msg += "<b><br><i>N</i> decreased to #{s.n}</b>"
                     localStorage.setItem 'strikes', strikes
 
                 localStorage.setItem 'settings', JSON.stringify s
