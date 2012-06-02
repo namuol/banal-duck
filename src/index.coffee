@@ -33,11 +33,13 @@ html ->
         fieldset id:'instructions', class:'outer', ->
           fieldset ->
             legend 'How to Play Dual <i>N</i>-Back'
-            ul ->
-              li 'Any time a grid square you saw <i>N</i> turns ago is highlighted again, press [A]'
-              li 'Any time a letter you heard <i>N</i> turns ago is spoken again, press [L]'
-              li 'It\'s possible for both of these cases to occur on the same turn'
-              li 'Don\'t be discouraged! You <strong>will</strong> improve with practice!'
+            section ->
+              ul ->
+                li 'Any time a grid square you saw <i>N</i> turns ago is highlighted again, press [A]'
+                li 'Any time a letter you heard <i>N</i> turns ago is spoken again, press [L]'
+                li 'It\'s possible for both of these cases to occur on the same turn'
+                li 'Don\'t be discouraged! You <strong>will</strong> improve with practice!'
+                li '<b>Training mode</b> (recommended) auto-adjusts the <i>N</i> value as you improve.'
 
       div id:'stats', ->
         fieldset id:'graph-panel', class:'outer', ->
