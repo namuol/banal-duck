@@ -250,6 +250,7 @@ body.playing #main
 
 
 #game, #help, #stats
+  z-index 2 !important
   padding 20px
 
 #game
@@ -431,6 +432,7 @@ input[disabled='disabled']
 
 
 #focus_wrap
+  z-index 0 !important
   color transparent
   position fixed
   top 0
@@ -443,7 +445,7 @@ input[disabled='disabled']
 
 #focus
   text-align center
-  z-index -2
+  z-index 0 !important
   text-shadow 0 0 64px rgba(255,255,255,0), 0 1px 64px rgba(0,0,0,0)
   transition text-shadow 1000ms 500ms
 
