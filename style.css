@@ -282,6 +282,7 @@ body.playing #main {
 #game,
 #help,
 #stats {
+  z-index: 2 !important;
   padding: 20px;
 }
 #game {
@@ -533,6 +534,7 @@ input[disabled='disabled'] {
   text-shadow: 0 0 0 #fff, 0 1px 4px rgba(0,0,0,0.5);
 }
 #focus_wrap {
+  z-index: 0 !important;
   color: transparent;
   position: fixed;
   top: 0;
@@ -548,7 +550,7 @@ input[disabled='disabled'] {
 }
 #focus {
   text-align: center;
-  z-index: -2;
+  z-index: 0 !important;
   -webkit-text-shadow: 0 0 64px rgba(255,255,255,0), 0 1px 64px rgba(0,0,0,0);
   -moz-text-shadow: 0 0 64px rgba(255,255,255,0), 0 1px 64px rgba(0,0,0,0);
   text-shadow: 0 0 64px rgba(255,255,255,0), 0 1px 64px rgba(0,0,0,0);
