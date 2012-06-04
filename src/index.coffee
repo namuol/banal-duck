@@ -523,6 +523,7 @@ html ->
                 if s.mode == 'training'
                   if percent >= s.advance_threshold
                     ++s.n
+                    strikes = 0
                     msg += "<b><br>N increased to #{s.n}</b>!"
                   else if percent < s.retreat_threshold
                     strikes = localStorage.getItem('strikes') or 0
@@ -532,7 +533,7 @@ html ->
                         strikes = 0
                         --s.n
                         msg += "<b><br><i>N</i> decreased to #{s.n}</b>"
-                    localStorage.setItem 'strikes', strikes
+                  localStorage.setItem 'strikes', strikes
 
                 localStorage.setItem 'settings', JSON.stringify s
                 update_settings_display()
