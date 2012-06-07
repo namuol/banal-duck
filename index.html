@@ -428,7 +428,7 @@
                     strikes = 0;
                     msg += "<b><br>N increased to " + s.n + "</b>!";
                   } else if (percent < s.retreat_threshold) {
-                    strikes = localStorage.getItem('strikes') || 0;
+                    strikes = parseInt(localStorage.getItem('strikes')) || 0;
                     if (n >= 2) {
                       msg += "<br>Strike " + (++strikes) + " of 3";
                       if (strikes >= 3) {
@@ -470,13 +470,13 @@
             $(window).keydown(function(e) {
               switch (e.which) {
                 case 65:
-                  if (!window.round) {
+                  if (!(window.round != null)) {
                     return true;
                   }
                   round.a_pressed();
                   break;
                 case 76:
-                  if (!window.round) {
+                  if (!(window.round != null)) {
                     return true;
                   }
                   round.b_pressed();
@@ -489,7 +489,7 @@
                   }
                   break;
                 case 27:
-                  if (!$('body').hasClass('playing')) {
+                  if (!(window.round != null)) {
                     return true;
                   }
                   round.stop();
@@ -498,13 +498,13 @@
               return true;
             });
             $(window).on('click', '#a_button', function() {
-              if (!window.round) {
+              if (!(window.round != null)) {
                 return true;
               }
               return round.a_pressed();
             });
             $(window).on('click', '#b_button', function() {
-              if (!window.round) {
+              if (!(window.round != null)) {
                 return true;
               }
               return round.b_pressed();
