@@ -526,7 +526,7 @@ html ->
                     strikes = 0
                     msg += "<b><br>N increased to #{s.n}</b>!"
                   else if percent < s.retreat_threshold
-                    strikes = localStorage.getItem('strikes') or 0
+                    strikes = parseInt(localStorage.getItem('strikes')) or 0
                     if n >= 2
                       msg += "<br>Strike #{++strikes} of 3"
                       if strikes >= 3
@@ -563,10 +563,10 @@ html ->
             $(window).keydown (e) ->
               switch e.which
                 when 65 # A
-                  return true if not window.round
+                  return true if not window.round?
                   round.a_pressed()
                 when 76 # B
-                  return true if not window.round
+                  return true if not window.round?
                   round.b_pressed()
                 when 32 # Spacebar
                   if $('body').hasClass 'flash'
@@ -574,16 +574,16 @@ html ->
                   else if not $('body').hasClass 'playing'
                     new_round()
                 when 27 # ESC
-                  return true if not $('body').hasClass('playing')
+                  return true if not window.round?
                   round.stop()
                   window.round = undefined
               return true
 
             $(window).on 'click', '#a_button', ->
-              return true if not window.round
+              return true if not window.round?
               round.a_pressed()
             $(window).on 'click', '#b_button', ->
-              return true if not window.round
+              return true if not window.round?
               round.b_pressed()
 
             $('#cancel').click ->
