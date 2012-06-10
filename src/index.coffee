@@ -22,11 +22,31 @@ html ->
     div id:'nav', ->
       ul ->
         li class:'first', ->
-          a href:'#game', 'Game'
+          a id:'profile_display', href:'#game', 'Game'
         li ->
           a href:'#stats', 'Stats'
         li ->
           a href:'#help', 'Help'
+
+    div id:'profile', ->
+      fieldset class:'outer', ->
+        fieldset ->
+          legend 'Choose a Profile'
+          select id:'profile_select', name:'profile_id', ->
+            option value:'test', 'Test'
+          button id:'profile_okay', 'Okay'
+        br ''
+        button id:'new_profile_button', 'Create New Profile'
+
+    div id:'new_profile', ->
+      fieldset class:'outer', ->
+        fieldset ->
+          legend 'Create a Profile'
+          form ->
+            input placeholder:'Enter Your Name', id:'new_profile_name', name:'new_profile_name', type:'text'
+            br ''
+            button id:'new_profile_create', 'Create'
+            button id:'new_profile_cancel', 'Cancel'
 
     div id:'content', ->
       div id:'help', ->
@@ -86,7 +106,8 @@ html ->
 
             button id:'new-game', 'NEW ROUND!'
           br ''
-          button id:'reset-settings', 'Reset All Settings'
+          button id:'reset-settings', 'Reset My Settings'
+          button id:'change_profile', 'Change Profile'
 
     div id:'flash_bg'
     table id:'flash_wrapper', ->
@@ -141,16 +162,40 @@ html ->
       #               #
       ###           ###
       $ ->
-        _defaultSettings =
-          mode: 'training'
-          n: 2
-          count: 20
-          turndur: 3000
-          retreat_threshold: 50
-          advance_threshold: 80
-        
+        _newProfile =
+          settings:
+            mode: 'training'
+            n: 2
+            count: 20
+            turndur: 3000
+            retreat_threshold: 50
+            advance_threshold: 80
+          strikes: 0
+          history: []
+
+        window.lget = (item) ->
+          profile_id = localStorage.getItem 'current_profile'
+          return undefined if not profile_id?
+          profile = JSON.parse(localStorage.getItem('profiles'))[profile_id]
+          item = profile[item]
+          return undefined if not item?
+          return item
+
+        window.lset = (item, val) ->
+          profile_id = localStorage.getItem 'current_profile'
+          return if not profile_id?
+          profiles = JSON.parse(localStorage.getItem('profiles'))
+          profile = profiles[profile_id]
+          profile[item] = val
+          profiles[profile_id] = profile
+
+          localStorage.setItem 'profiles', JSON.stringify profiles
+          return val
+
         update_settings_display = ->
-          settings = JSON.parse localStorage.getItem 'settings'
+          current_profile = localStorage.getItem 'current_profile'
+          $('#profile_display').html '@' + current_profile
+          settings = lget 'settings'
           $("#game input[name='mode']").attr 'checked', false
           $("#game input[name='mode'][value='#{settings.mode}']").attr 'checked', 'checked'
           for own name,val of settings
@@ -167,13 +212,21 @@ html ->
             $('#advance_threshold').attr 'disabled', false
 
           $('#extra_count').html settings.n*settings.n
-
+        
+        update_profile_list = ->
+          profiles = JSON.parse(localStorage.getItem 'profiles') or {}
+          curr = localStorage.getItem 'current_profile'
+          $('#profile_select').html('')
+          for own name,profile of profiles
+            $('#profile_select').append(
+              $("<option value:'#{name}'>#{name}</option>").attr('selected', curr is name ? true : undefined)
+            )
 
         reset_settings = ->
-          localStorage.setItem 'settings', JSON.stringify _defaultSettings
+          lset 'settings', _newProfile.settings
 
         clear_history = ->
-          localStorage.setItem 'history', JSON.stringify []
+          lset 'history', []
 
         $('#nav').on 'click', 'li', ->
           $('.selected').removeClass 'selected'
@@ -182,6 +235,44 @@ html ->
           href = $(@).children('a').attr('href')
           $(href).show()
           return false
+        
+        $('#change_profile').click ->
+          update_profile_list()
+          $('#profile').show()
+
+        $('#profile_select').change ->
+          localStorage.setItem 'current_profile', @value
+          update_settings_display()
+
+        $('#profile_okay').click ->
+          update_settings_display()
+          $('#profile').hide()
+
+        $('#new_profile_button').click ->
+          $('#new_profile').show()
+          $('#new_profile_name').focus()
+          $('#new_profile_cancel').show()
+
+        create_profile = ->
+          name = $('#new_profile_name').val()
+          return false if name.length <= 0
+          profiles = JSON.parse(localStorage.getItem('profiles')) or {}
+          profiles[name] = _newProfile
+          localStorage.setItem 'profiles', JSON.stringify profiles
+          localStorage.setItem 'current_profile', name
+          $('#new_profile_name').val ''
+          $('#new_profile').hide()
+          update_settings_display()
+          update_profile_list()
+
+        $('#new_profile form').submit ->
+          create_profile()
+          return false
+
+        $('#new_profile_cancel').click ->
+          $('#new_profile_name').val ''
+          $('#new_profile').hide()
+
         $('#nav').on 'click', 'a', ->
           $(@).parent().click()
           return false
@@ -264,10 +355,8 @@ html ->
           if ++sounds_loaded == sounds_to_load.length
             all_loaded()
 
-
         soundManager.onready ->
           soundManager.defaultOptions.autoLoad = true
-
 
           for sound in sounds_to_load
             sounds.push soundManager.createSound sound
@@ -396,10 +485,8 @@ html ->
               # Add some more matches:
               if (i >= n) and (Math.random() < 0.07)
                 turns[i-n].a = a
-                console.log "a#{i}"
               if (i >= n) and (Math.random() < 0.07)
                 turns[i-n].b = b
-                console.log "b#{i}"
               ++i
 
 
@@ -456,7 +543,7 @@ html ->
 
           new_round = ->
             if not window.round?
-              s = JSON.parse localStorage.getItem('settings')
+              s = lget 'settings'
               $('body').addClass 'playing'
               n = parseInt(s.n)
               count = parseInt(s.count) + n*n
@@ -464,16 +551,16 @@ html ->
               window.round = dual_n_back n, count, turndur
               $('#results').hide()
               round.start (r) ->
-                h = JSON.parse localStorage.getItem 'history'
+                h = lget 'history'
                 if not h?
                   h = []
                 h.push round
-                localStorage.setItem 'history', JSON.stringify h
+                lset 'history', h
 
                 window.round = undefined
                 percent = Math.round r.percent
 
-                localStorage.setItem 'lastgame', JSON.stringify new Date
+                lset 'lastgame', new Date
 
                 if percent < 50
                   cssclass = 'bad'
@@ -519,44 +606,49 @@ html ->
                     '<i>Dayum.</i> Is this too easy for you?'
                   ]
 
-
                 if s.mode == 'training'
                   if percent >= s.advance_threshold
                     ++s.n
                     strikes = 0
                     msg += "<b><br>N increased to #{s.n}</b>!"
                   else if percent < s.retreat_threshold
-                    strikes = parseInt(localStorage.getItem('strikes')) or 0
+                    strikes = parseInt(lget('strikes')) or 0
                     if n >= 2
                       msg += "<br>Strike #{++strikes} of 3"
                       if strikes >= 3
                         strikes = 0
                         --s.n
                         msg += "<b><br><i>N</i> decreased to #{s.n}</b>"
-                  localStorage.setItem 'strikes', strikes
+                  lset 'strikes', strikes
 
-                localStorage.setItem 'settings', JSON.stringify s
+                lset 'settings', s
                 update_settings_display()
 
                 flash "#{percent}% correct<br>#{msg}", cssclass, 'Okay', ->
                   $('#nav a[href="#stats"]').click()
                   $('body').removeClass 'playing'
-                  draw_history_graph $('#graph')[0], JSON.parse localStorage.getItem 'history'
+                  draw_history_graph $('#graph')[0], lget 'history'
 
           all_loaded = ->
             $('body').removeClass 'loading'
             $('#nav').show()
             $('#content').show()
-            settings = JSON.parse(localStorage.getItem('settings')) or _defaultSettings
-            if settings.mode == 'training'
-              lastgame = new Date JSON.parse localStorage.getItem 'lastgame'
-              if ((new Date) - lastgame) > 24 * 60 * 60 * 1000
-                settings.n = 2
-                localStorage.setItem 'strikes', 0
-            localStorage.setItem 'settings', JSON.stringify settings
-            update_settings_display()
+            
+            if not localStorage.getItem 'current_profile'
+              $('#new_profile').show()
+              $('#new_profile_cancel').hide()
+              
+            else
+              settings = lget('settings')# or _newProfile.settings
+              if settings.mode == 'training'
+                lastgame = new Date lget 'lastgame'
+                if ((new Date) - lastgame) > 24 * 60 * 60 * 1000
+                  settings.n = 2
+                  lset 'strikes', 0
+              lset 'settings', settings
+              update_settings_display()
 
-            h = JSON.parse(localStorage.getItem('history')) or []
+            h = lget('history') or []
 
             draw_history_graph $('#graph')[0], h
 
@@ -592,16 +684,15 @@ html ->
                 window.round = undefined
 
             $('#game').on 'change', 'input', ->
-              console.log @
-              settings = JSON.parse localStorage.getItem('settings')
+              settings = lget 'settings'
               settings[@name] = @value
-              localStorage.setItem 'settings', JSON.stringify settings
+              lset 'settings', settings
               update_settings_display()
 
             $('#clear-history').click ->
               return if not confirm "Are you sure?"
               clear_history()
-              draw_history_graph $('#graph')[0], JSON.parse localStorage.getItem 'history'
+              draw_history_graph $('#graph')[0], lget 'history'
 
             $('#reset-settings').click ->
               return if not confirm "Are you sure?"
