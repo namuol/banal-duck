@@ -282,9 +282,7 @@ body.playing #main {
 #nav li a:hover {
   cursor: default;
 }
-#game,
-#help,
-#stats {
+#content > div {
   z-index: 2 !important;
   padding: 20px;
 }
@@ -492,6 +490,9 @@ input[type='number'] {
   text-shadow: 0 1px 0 rgba(0,0,0,0.8);
   box-shadow: rgba(0,0,0,0.5) 0 1px 0px inset;
 }
+fieldset button {
+  margin-top: 5px;
+}
 input[disabled='disabled'] {
   color: rgba(255,255,255,0.5);
   -webkit-touch-callout: none;
@@ -569,4 +570,27 @@ body.playing #focus {
   -webkit-text-shadow: 0 0 0 #fff, 0 1px 1px #000;
   -moz-text-shadow: 0 0 0 #fff, 0 1px 1px #000;
   text-shadow: 0 0 0 #fff, 0 1px 1px #000;
+}
+#new_profile,
+#profile {
+  padding: 30px;
+  text-align: center;
+  background: rgba(0,0,0,0.6);
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+#new_profile {
+  z-index: 22 !important;
+}
+#profile {
+  z-index: 21 !important;
+}
+#new_profile input {
+  margin: 0;
+  width: 12em;
+  text-align: left;
 }
