@@ -34,7 +34,7 @@ html ->
           legend 'Choose a Profile'
           select id:'profile_select', name:'profile_id', ->
             option value:'test', 'Test'
-          button id:'profile_okay', 'Okay'
+          button id:'profile_cancel', 'Cancel'
         br ''
         button id:'new_profile_button', 'Create New Profile'
 
@@ -243,9 +243,9 @@ html ->
         $('#profile_select').change ->
           localStorage.setItem 'current_profile', @value
           update_settings_display()
+          $('#profile').hide()
 
-        $('#profile_okay').click ->
-          update_settings_display()
+        $('#profile_cancel').click ->
           $('#profile').hide()
 
         $('#new_profile_button').click ->
@@ -253,7 +253,7 @@ html ->
           $('#new_profile_name').focus()
           $('#new_profile_cancel').show()
 
-        create_profile = ->
+        $('#new_profile form').submit ->
           name = $('#new_profile_name').val()
           return false if name.length <= 0
           profiles = JSON.parse(localStorage.getItem('profiles')) or {}
@@ -264,9 +264,7 @@ html ->
           $('#new_profile').hide()
           update_settings_display()
           update_profile_list()
-
-        $('#new_profile form').submit ->
-          create_profile()
+          $('#profile').hide()
           return false
 
         $('#new_profile_cancel').click ->
