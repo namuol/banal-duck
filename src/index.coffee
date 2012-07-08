@@ -411,29 +411,68 @@ html ->
               b_missed: b_missed
               percent: percent
             }
+          
+          zpad = (n, d) ->
+            if n < d
+              return '0' + n
+            else
+              return '' + n
+
+          dstr = (date) ->
+            return zpad(date.getUTCFullYear(), 1000) +
+                   zpad(date.getUTCMonth(), 10) +
+                   zpad(date.getUTCDate(), 10)
+
+          strd = (str) ->
+            y = str.slice 0, 4
+            m = str.slice 4, 6
+            d = str.slice 6, 8
+            date = new Date
+            date.setUTCFullYear y
+            date.setUTCMonth m
+            date.setUTCDate d
+            date.setUTCHours 0
+            date.setUTCMinutes 0
+            date.setUTCSeconds 0
+            return date
 
           window.draw_history_graph = (container, history) ->
             drawGraph = (opts) ->
               o = Flotr._.extend(Flotr._.clone(options), opts or {})
               ds = []
               i = 0
-              while i < d.length
-                ds.push {data:d[i], label:"Dual #{i+1}-Back", lines:{show:true}, points:{show:true}}
+              days = {}
+              while i < history.length
+                date = dstr new Date Date.parse(history[i].timestamp)
+                if not days[date]?
+                  days[date] = []
+                days[date].push parseInt history[i].n
                 ++i
+              avgArr = []
+              maxArr = []
+              for own dstring, vals of days
+                sum = 0
+                i = 0
+                max = 0
+                while i < vals.length
+                  if max < vals[i]
+                    max = vals[i]
+                  sum += vals[i]
+                  ++i
+                avg = sum / vals.length
+                date = strd(dstring)
+                avgArr.push [date, avg]
+                maxArr.push [date, max]
+
+              ds.push {data:avgArr, label:"Average N", lines:{show:true}, points:{show:true}}
+              ds.push {data:maxArr, label:"Max N", lines:{show:true}, points:{show:true}}
+
               Flotr.draw container, ds, o
             options = undefined
             graph = undefined
             x = undefined
             o = undefined
             i = 0
-            d = []
-            while i < history.length
-              n = history[i].n
-              r = generate_results history[i].turns, n
-              if not d[n-1]?
-                d[n-1] = []
-              d[n-1].push [Date.parse(history[i].timestamp), r.percent]
-              i++
             options =
               xaxis:
                 mode: "time"
