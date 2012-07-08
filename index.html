@@ -1,4 +1,4 @@
-<html><head><meta charset="utf-8" /><title>Dual N-Back</title><link rel="stylesheet" href="flotr2-examples.css" /><link href="http://fonts.googleapis.com/css?family=Carme" rel="stylesheet" type="text/css" /><link rel="stylesheet" href="style.css" /><script type="text/javascript" src="json2.min.js"></script><script type="text/javascript" src="storage.min.js"></script><script type="text/javascript" src="jquery-1.7.2.min.js"></script><script type="text/javascript" src="soundmanager2.js"></script><script type="text/javascript" src="flotr2.min.js"></script></head><body class="loading"><div id="vignette"></div><div id="loading_wrapper"><table><tbody><tr><td id="loading">Please Wait...</td></tr></tbody></table></div><div id="nav"><ul><li class="first"><a id="profile_display" href="#game">Game</a></li><li><a href="#stats">Stats</a></li><li><a href="#help">Help</a></li></ul></div><div id="profile"><fieldset class="outer"><fieldset><legend>Choose a Profile</legend><select id="profile_select" name="profile_id"><option value="test">Test</option></select><button id="profile_cancel">Cancel</button></fieldset><br /><button id="new_profile_button">Create New Profile</button></fieldset></div><div id="new_profile"><fieldset class="outer"><fieldset><legend>Create a Profile</legend><form><input placeholder="Enter Your Name" id="new_profile_name" name="new_profile_name" type="text" /><br /><button id="new_profile_create">Create</button><button id="new_profile_cancel">Cancel</button></form></fieldset></fieldset></div><div id="content"><div id="help"><fieldset id="instructions" class="outer"><fieldset><legend>How to Play Dual <i>N</i>-Back</legend><section><ul><li>Any time a grid square you saw <i>N</i> turns ago is highlighted again, press [A]</li><li>Any time a letter you heard <i>N</i> turns ago is spoken again, press [L]</li><li>It's possible for both of these cases to occur on the same turn</li><li>Don't be discouraged! You <strong>will</strong> improve with practice!</li><li><b>Training mode</b> (recommended) auto-adjusts the <i>N</i> value as you improve.</li></ul></section></fieldset></fieldset></div><div id="stats"><fieldset id="graph-panel" class="outer"><fieldset><legend>Your Progress</legend><div id="graph"></div></fieldset><br /><button id="clear-history">Clear My Progress</button></fieldset></div><div id="game"><fieldset class="outer"><fieldset id="game-mode"><legend>Progress Mode</legend><input id="mode_training" type="radio" name="mode" value="training" /><label for="mode_training">Training</label><input id="mode_manual" type="radio" name="mode" value="manual" /><label for="mode_manual">Manual</label><div id="n-wrap">Dual <input id="n" name="n" type="number" />-Back</div></fieldset><fieldset id="settings"><legend>Settings</legend>Number of Turns: <input id="count" name="count" type="number" /> + <span id="extra_count"></span><br />Turn Duration: <input id="turndur" name="turndur" type="number" />ms<br />Increase <i>N</i> Threshold: <input id="advance_threshold" name="advance_threshold" type="number" />%<br />Decrease <i>N</i> Threshold: <input id="retreat_threshold" name="retreat_threshold" type="number" />%<button id="new-game">NEW ROUND!</button></fieldset><br /><button id="reset-settings">Reset My Settings</button><button id="change_profile">Change Profile</button></fieldset></div></div><div id="flash_bg"></div><table id="flash_wrapper"><tbody><tr><td><div id="flash">100% Correct.<br>Dayum.</div><button id="continue">Continue</button></td></tr></tbody></table><div id="main"><table id="focus_wrap"><tbody><tr><td id="focus">focus.</td></tr></tbody></table><button id="cancel">Cancel</button><table id="layout"><tbody><tr><td id="a_button">POSITION (A)</td><td id="grid_wrap"><fieldset class="outer"><fieldset><div id="hud"><legend id="type"></legend><legend id="remaining"></legend></div><table id="grid"><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></table></fieldset></fieldset></td><td id="b_button">LETTER (L)</td></tr></tbody></table></div><div id="logo">banalduck</div><script>var __slice = Array.prototype.slice;var __hasProp = Object.prototype.hasOwnProperty;var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };var __extends = function(child, parent) {  for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; }  function ctor() { this.constructor = child; }  ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype;  return child; };var __indexOf = Array.prototype.indexOf || function(item) {  for (var i = 0, l = this.length; i < l; i++) {    if (this[i] === item) return i;  } return -1; };(function () {
+<html><head><meta charset="utf-8" /><title>Dual N-Back</title><link rel="stylesheet" href="flotr2-examples.css" /><link href="http://fonts.googleapis.com/css?family=Carme" rel="stylesheet" type="text/css" /><link rel="stylesheet" href="style.css" /><script type="text/javascript" src="json2.min.js"></script><script type="text/javascript" src="storage.min.js"></script><script type="text/javascript" src="jquery-1.7.2.min.js"></script><script type="text/javascript" src="soundmanager2.js"></script><script type="text/javascript" src="flotr2.min.js"></script></head><body class="loading"><div id="vignette"></div><div id="loading_wrapper"><table><tbody><tr><td id="loading">Please Wait...</td></tr></tbody></table></div><div id="nav"><ul><li class="first"><a id="profile_display" href="#game">Game</a></li><li><a href="#stats">Stats</a></li><li><a href="#help">Help</a></li></ul></div><div id="profile"><fieldset class="outer"><fieldset><legend>Choose a Profile</legend><select id="profile_select" name="profile_id"><option value="test">Test</option></select><button id="profile_cancel">Cancel</button></fieldset><br /><button id="new_profile_button">Create New Profile</button></fieldset></div><div id="new_profile"><fieldset class="outer"><fieldset><legend>Create a Profile</legend><form><input placeholder="Enter Your Name" id="new_profile_name" name="new_profile_name" type="text" /><br /><button id="new_profile_create">Create</button><button id="new_profile_cancel">Cancel</button></form></fieldset></fieldset></div><div id="content"><div id="help"><fieldset id="instructions" class="outer"><fieldset><legend>How to Play Dual <i>N</i>-Back</legend><section><ul><li>Any time a grid square you saw <i>N</i> turns ago is highlighted again, press [A]</li><li>Any time a letter you heard <i>N</i> turns ago is spoken again, press [L]</li><li>It's possible for both of these cases to occur on the same turn</li><li>Don't be discouraged! You <strong>will</strong> improve with practice!</li><li><b>Training mode</b> (recommended) auto-adjusts the <i>N</i> value as you improve.</li></ul></section></fieldset></fieldset></div><div id="stats"><fieldset id="graph-panel" class="outer"><fieldset><legend>Your Progress</legend><div id="graph"></div></fieldset><br /><button id="clear-history">Clear My Progress</button></fieldset></div><div id="game"><fieldset class="outer"><fieldset id="game-mode"><legend>Progress Mode</legend><input id="mode_training" type="radio" name="mode" value="training" /><label for="mode_training">Training</label><input id="mode_manual" type="radio" name="mode" value="manual" /><label for="mode_manual">Manual</label><div id="n-wrap">Dual <input id="n" name="n" type="number" /><input id="n_manual" name="n_manual" type="number" />-Back</div></fieldset><fieldset id="settings"><legend>Settings</legend>Number of Turns: <input id="count" name="count" type="number" /> + <span id="extra_count"></span><br />Turn Duration: <input id="turndur" name="turndur" type="number" />ms<br />Increase <i>N</i> Threshold: <input id="advance_threshold" name="advance_threshold" type="number" />%<br />Decrease <i>N</i> Threshold: <input id="retreat_threshold" name="retreat_threshold" type="number" />%<button id="new-game">NEW ROUND!</button></fieldset><br /><button id="reset-settings">Reset My Settings</button><button id="change_profile">Change Profile</button></fieldset></div></div><div id="flash_bg"></div><table id="flash_wrapper"><tbody><tr><td><div id="flash">100% Correct.<br>Dayum.</div><button id="continue">Continue</button></td></tr></tbody></table><div id="main"><table id="focus_wrap"><tbody><tr><td id="focus">focus.</td></tr></tbody></table><button id="cancel">Cancel</button><table id="layout"><tbody><tr><td id="a_button">POSITION (A)</td><td id="grid_wrap"><fieldset class="outer"><fieldset><div id="hud"><legend id="type"></legend><legend id="remaining"></legend></div><table id="grid"><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></table></fieldset></fieldset></td><td id="b_button">LETTER (L)</td></tr></tbody></table></div><div id="logo">banalduck</div><script>var __slice = Array.prototype.slice;var __hasProp = Object.prototype.hasOwnProperty;var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };var __extends = function(child, parent) {  for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; }  function ctor() { this.constructor = child; }  ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype;  return child; };var __indexOf = Array.prototype.indexOf || function(item) {  for (var i = 0, l = this.length; i < l; i++) {    if (this[i] === item) return i;  } return -1; };(function () {
       /*
       */
 
@@ -10,6 +10,7 @@
           settings: {
             mode: 'training',
             n: 2,
+            n_manual: 2,
             count: 20,
             turndur: 3000,
             retreat_threshold: 50,
@@ -60,10 +61,13 @@
             $("#game input[name='" + name + "']'").val(val);
           }
           if (settings.mode === 'manual') {
-            $('#n').attr('disabled', false);
+            $('#n').hide();
+            $('#n_manual').show();
             $('#retreat_threshold').attr('disabled', 'disabled');
             $('#advance_threshold').attr('disabled', 'disabled');
           } else {
+            $('#n').show();
+            $('#n_manual').hide();
             $('#n').attr('disabled', 'disabled');
             $('#retreat_threshold').attr('disabled', false);
             $('#advance_threshold').attr('disabled', false);
@@ -328,6 +332,7 @@
             date.setUTCHours(0);
             date.setUTCMinutes(0);
             date.setUTCSeconds(0);
+            date.setUTCMilliseconds(0);
             return date;
           };
           window.draw_history_graph = function(container, history) {
@@ -339,11 +344,13 @@
               i = 0;
               days = {};
               while (i < history.length) {
-                date = dstr(new Date(Date.parse(history[i].timestamp)));
-                if (!(days[date] != null)) {
-                  days[date] = [];
+                if (history[i].training) {
+                  date = dstr(new Date(Date.parse(history[i].timestamp)));
+                  if (!(days[date] != null)) {
+                    days[date] = [];
+                  }
+                  days[date].push(parseInt(history[i].n));
                 }
-                days[date].push(parseInt(history[i].n));
                 ++i;
               }
               avgArr = [];
@@ -368,7 +375,7 @@
               }
               ds.push({
                 data: avgArr,
-                label: "Average N",
+                label: "Average N of Session",
                 lines: {
                   show: true
                 },
@@ -378,7 +385,7 @@
               });
               ds.push({
                 data: maxArr,
-                label: "Max N",
+                label: "Max N of Session",
                 lines: {
                   show: true
                 },
@@ -427,10 +434,11 @@
             });
           };
           dual_n_back = function(n, count, turn_dur) {
-            var a, a_match, b, b_match, current, i, intvl, start, started, timestamp, turns;
+            var a, a_match, b, b_match, current, i, intvl, settings, start, started, timestamp, turns;
             if (turn_dur == null) {
               turn_dur = 3000;
             }
+            settings = lget('settings');
             started = false;
             timestamp = new Date;
             turns = [];
@@ -446,10 +454,10 @@
                 ap: false,
                 bp: false
               });
-              if ((i >= n) && (Math.random() < 0.07)) {
+              if ((i >= n) && (Math.random() < 0.17)) {
                 turns[i - n].a = a;
               }
-              if ((i >= n) && (Math.random() < 0.07)) {
+              if ((i >= n) && (Math.random() < 0.17)) {
                 turns[i - n].b = b;
               }
               ++i;
@@ -462,6 +470,16 @@
               current = 0;
               return setTimeout(function() {
                 return intvl = setInterval(function() {
+                  setTimeout(function() {
+                    if (current > 0) {
+                      if (!turns[current - 1].ap && a_matches(turns, n, current - 1)) {
+                        highlight($('#a_button'), 'miss', 0, 70);
+                      }
+                      if (!turns[current - 1].bp && b_matches(turns, n, current - 1)) {
+                        return highlight($('#b_button'), 'miss', 0, 70);
+                      }
+                    }
+                  }, turn_dur - 100);
                   if (current >= count) {
                     clearInterval(intvl);
                     done(generate_results(turns, n));
@@ -481,6 +499,7 @@
               turns: turns,
               turn_dur: turn_dur,
               timestamp: timestamp,
+              training: settings.mode === 'training',
               a_pressed: function() {
                 if (!turns[current - 1].ap) {
                   if (a_matches(turns, n, current - 1)) {
@@ -520,13 +539,18 @@
             if (!(window.round != null)) {
               s = lget('settings');
               $('body').addClass('playing');
-              n = parseInt(s.n);
+              if (s.mode === 'training') {
+                n = parseInt(s.n);
+              } else {
+                n = parseInt(s.n_manual);
+              }
               count = parseInt(s.count) + n * n;
               turndur = parseInt(s.turndur);
               window.round = dual_n_back(n, count, turndur);
               $('#results').hide();
               return round.start(function(r) {
-                var cssclass, h, msg, percent, strikes;
+                var cssclass, h, msg, percent, settings, strikes;
+                settings = lget('settings');
                 h = lget('history');
                 if (!(h != null)) {
                   h = [];
