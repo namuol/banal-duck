@@ -83,6 +83,7 @@ html ->
             div id:'n-wrap', ->
               text 'Dual '
               input id:'n', name:'n', type:'number'
+              input id:'n_manual', name:'n_manual', type:'number'
               text '-Back'
 
           fieldset id:'settings', ->
@@ -166,6 +167,7 @@ html ->
           settings:
             mode: 'training'
             n: 2
+            n_manual: 2
             count: 20
             turndur: 3000
             retreat_threshold: 50
@@ -203,10 +205,13 @@ html ->
             $("#game input[name='#{name}']'").val val
 
           if settings.mode == 'manual'
-            $('#n').attr 'disabled', false
+            $('#n').hide()
+            $('#n_manual').show()
             $('#retreat_threshold').attr 'disabled', 'disabled'
             $('#advance_threshold').attr 'disabled', 'disabled'
           else
+            $('#n').show()
+            $('#n_manual').hide()
             $('#n').attr 'disabled', 'disabled'
             $('#retreat_threshold').attr 'disabled', false
             $('#advance_threshold').attr 'disabled', false
@@ -434,6 +439,7 @@ html ->
             date.setUTCHours 0
             date.setUTCMinutes 0
             date.setUTCSeconds 0
+            date.setUTCMilliseconds 0
             return date
 
           window.draw_history_graph = (container, history) ->
@@ -443,10 +449,11 @@ html ->
               i = 0
               days = {}
               while i < history.length
-                date = dstr new Date Date.parse(history[i].timestamp)
-                if not days[date]?
-                  days[date] = []
-                days[date].push parseInt history[i].n
+                if history[i].training
+                  date = dstr new Date Date.parse(history[i].timestamp)
+                  if not days[date]?
+                    days[date] = []
+                  days[date].push parseInt history[i].n
                 ++i
               avgArr = []
               maxArr = []
@@ -464,8 +471,8 @@ html ->
                 avgArr.push [date, avg]
                 maxArr.push [date, max]
 
-              ds.push {data:avgArr, label:"Average N", lines:{show:true}, points:{show:true}}
-              ds.push {data:maxArr, label:"Max N", lines:{show:true}, points:{show:true}}
+              ds.push {data:avgArr, label:"Average N of Session", lines:{show:true}, points:{show:true}}
+              ds.push {data:maxArr, label:"Max N of Session", lines:{show:true}, points:{show:true}}
 
               Flotr.draw container, ds, o
             options = undefined
@@ -504,6 +511,7 @@ html ->
               graph = drawGraph()
 
           dual_n_back = (n, count, turn_dur=3000) ->
+            settings = lget 'settings'
             started = false
             timestamp = new Date
             turns = []
@@ -520,9 +528,9 @@ html ->
                 bp:false
 
               # Add some more matches:
-              if (i >= n) and (Math.random() < 0.07)
+              if (i >= n) and (Math.random() < 0.17)
                 turns[i-n].a = a
-              if (i >= n) and (Math.random() < 0.07)
+              if (i >= n) and (Math.random() < 0.17)
                 turns[i-n].b = b
               ++i
 
@@ -536,6 +544,15 @@ html ->
               current = 0
               setTimeout ->
                 intvl = setInterval ->
+                  setTimeout ->
+                    if current > 0
+                      if not turns[current-1].ap and a_matches(turns, n, current-1)
+                        highlight $('#a_button'), 'miss', 0, 70
+                      
+                      if not turns[current-1].bp and b_matches(turns, n, current-1)
+                        highlight $('#b_button'), 'miss', 0, 70
+                  , turn_dur - 100
+
                   if current >= count
                     clearInterval intvl
                     done generate_results(turns, n)
@@ -556,6 +573,7 @@ html ->
               turns: turns
               turn_dur: turn_dur
               timestamp: timestamp
+              training: settings.mode is 'training'
               a_pressed: ->
                 if not turns[current-1].ap
                   if a_matches(turns, n, current-1)
@@ -582,12 +600,16 @@ html ->
             if not window.round?
               s = lget 'settings'
               $('body').addClass 'playing'
-              n = parseInt(s.n)
+              if s.mode is 'training'
+                n = parseInt(s.n)
+              else
+                n = parseInt(s.n_manual)
               count = parseInt(s.count) + n*n
               turndur = parseInt(s.turndur)
               window.round = dual_n_back n, count, turndur
               $('#results').hide()
               round.start (r) ->
+                settings = lget('settings')
                 h = lget 'history'
                 if not h?
                   h = []
