@@ -75,6 +75,8 @@ html ->
                 li 'It\'s possible for both of these cases to occur on the same turn'
                 li 'Don\'t be discouraged! You <strong>will</strong> improve with practice!'
                 li '<b>Training mode</b> (recommended) auto-adjusts the <i>N</i> value as you improve.'
+              ul ->
+                li 'But <i>why</i> does it work? Here\'s some <a href="http://www.gwern.net/DNB%20FAQ" target="_blank">recommended reading</a>.'
 
       div id:'stats', ->
         fieldset id:'graph-panel', class:'outer', ->
