@@ -598,3 +598,14 @@ body.playing #focus {
   width: 12em;
   text-align: left;
 }
+a {
+  text-decoration: none;
+  font-weight: bold;
+  color: #bcf;
+}
+a:hover {
+  color: #cdf;
+}
+a:active {
+  color: #abf;
+}
