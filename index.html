@@ -1,4 +1,4 @@
-<html><head><meta charset="utf-8" /><title>Dual N-Back</title><link rel="stylesheet" href="flotr2-examples.css" /><link href="http://fonts.googleapis.com/css?family=Carme" rel="stylesheet" type="text/css" /><link rel="stylesheet" href="style.css" /><script type="text/javascript" src="json2.min.js"></script><script type="text/javascript" src="storage.min.js"></script><script type="text/javascript" src="jquery-1.7.2.min.js"></script><script type="text/javascript" src="soundmanager2.js"></script><script type="text/javascript" src="flotr2.min.js"></script><script type="text/javascript">
+<html><head><meta charset="utf-8" /><title>Dual N-Back</title><link rel="stylesheet" href="flotr2-examples.css" /><link href="http://fonts.googleapis.com/css?family=Carme" rel="stylesheet" type="text/css" /><link rel="stylesheet" href="style.css" /><script type="text/javascript" src="json2.min.js"></script><script type="text/javascript" src="storage.min.js"></script><script type="text/javascript" src="jquery-1.7.2.min.js"></script><script type="text/javascript" src="soundmanager2.js"></script><script type="text/javascript" src="flotr2.min.js"></script><script type="text/javascript" src="http://www.parsecdn.com/js/parse-1.0.21.min.js"></script><script type="text/javascript">
 
   var _gaq = _gaq || [];
   _gaq.push(['_setAccount', 'UA-33247419-1']);
@@ -10,14 +10,15 @@
     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
   })();
 
-</script></head><body class="loading"><div id="vignette"></div><div id="loading_wrapper"><table><tbody><tr><td id="loading">Please Wait...</td></tr></tbody></table></div><div id="nav"><ul><li class="first"><a id="profile_display" href="#game">Game</a></li><li><a href="#stats">Stats</a></li><li><a href="#help">Help</a></li></ul></div><div id="profile"><fieldset class="outer"><fieldset><legend>Choose a Profile</legend><select id="profile_select" name="profile_id"><option value="test">Test</option></select><button id="profile_cancel">Cancel</button></fieldset><br /><button id="new_profile_button">Create New Profile</button></fieldset></div><div id="new_profile"><fieldset class="outer"><fieldset><legend>Create a Profile</legend><form><input placeholder="Enter Your Name" id="new_profile_name" name="new_profile_name" type="text" /><br /><button id="new_profile_create">Create</button><button id="new_profile_cancel">Cancel</button></form></fieldset></fieldset></div><div id="content"><div id="help"><fieldset id="instructions" class="outer"><fieldset><legend>How to Play Dual <i>N</i>-Back</legend><section><ul><li>Any time a grid square you saw <i>N</i> turns ago is highlighted again, press [A]</li><li>Any time a letter you heard <i>N</i> turns ago is spoken again, press [L]</li><li>It's possible for both of these cases to occur on the same turn</li><li>Don't be discouraged! You <strong>will</strong> improve with practice!</li><li><b>Training mode</b> (recommended) auto-adjusts the <i>N</i> value as you improve.</li></ul><ul><li>But <i>why</i> does it work? Here's some <a href="http://www.gwern.net/DNB%20FAQ" target="_blank">recommended reading</a>.</li></ul></section></fieldset></fieldset></div><div id="stats"><fieldset id="graph-panel" class="outer"><fieldset><legend>Your Progress</legend><div id="graph"></div></fieldset><br /><button id="clear-history">Clear My Progress</button></fieldset></div><div id="game"><fieldset class="outer"><fieldset id="game-mode"><legend>Progress Mode</legend><input id="mode_training" type="radio" name="mode" value="training" /><label for="mode_training">Training</label><input id="mode_manual" type="radio" name="mode" value="manual" /><label for="mode_manual">Manual</label><div id="n-wrap">Dual <input id="n" name="n" type="number" /><input id="n_manual" name="n_manual" type="number" />-Back</div></fieldset><fieldset id="settings"><legend>Settings</legend>Number of Turns: <input id="count" name="count" type="number" /> + <span id="extra_count"></span><br />Turn Duration: <input id="turndur" name="turndur" type="number" />ms<br />Increase <i>N</i> Threshold: <input id="advance_threshold" name="advance_threshold" type="number" />%<br />Decrease <i>N</i> Threshold: <input id="retreat_threshold" name="retreat_threshold" type="number" />%<button id="new-game">NEW ROUND!</button></fieldset><br /><button id="reset-settings">Reset My Settings</button><button id="change_profile">Change Profile</button></fieldset></div></div><div id="flash_bg"></div><table id="flash_wrapper"><tbody><tr><td><div id="flash">100% Correct.<br>Dayum.</div><button id="continue">Continue</button></td></tr></tbody></table><div id="main"><table id="focus_wrap"><tbody><tr><td id="focus">focus.</td></tr></tbody></table><button id="cancel">Cancel</button><table id="layout"><tbody><tr><td id="a_button">POSITION (A)</td><td id="grid_wrap"><fieldset class="outer"><fieldset><div id="hud"><legend id="type"></legend><legend id="remaining"></legend></div><table id="grid"><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></table></fieldset></fieldset></td><td id="b_button">LETTER (L)</td></tr></tbody></table></div><div id="logo">banalduck</div><div id="back"><a href="http://namuol.github.com">namuol.github.com</a></div><script>var __slice = Array.prototype.slice;var __hasProp = Object.prototype.hasOwnProperty;var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };var __extends = function(child, parent) {  for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; }  function ctor() { this.constructor = child; }  ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype;  return child; };var __indexOf = Array.prototype.indexOf || function(item) {  for (var i = 0, l = this.length; i < l; i++) {    if (this[i] === item) return i;  } return -1; };(function () {
+</script></head><body class="loading"><div id="vignette"></div><div id="loading_wrapper"><table><tbody><tr><td id="loading">Please Wait...</td></tr></tbody></table></div><div id="nav"><ul><li class="first"><a id="profile_display" href="#game">Log In</a></li><li><a href="#stats">Stats</a></li><li><a href="#help">Help</a></li></ul></div><div id="content"><div id="help"><fieldset id="instructions" class="outer"><fieldset><legend>How to Play Dual <i>N</i>-Back</legend><section><ul><li>Any time a grid square you saw <i>N</i> turns ago is highlighted again, press [A]</li><li>Any time a letter you heard <i>N</i> turns ago is spoken again, press [L]</li><li>It's possible for both of these cases to occur on the same turn</li><li>Don't be discouraged! You <strong>will</strong> improve with practice!</li><li><b>Training mode</b> (recommended) auto-adjusts the <i>N</i> value as you improve.</li></ul><ul><li>But <i>why</i> does it work? Here's some <a href="http://www.gwern.net/DNB%20FAQ" target="_blank">recommended reading</a>.</li></ul></section></fieldset></fieldset></div><div id="stats"><fieldset id="graph-panel" class="outer"><fieldset><legend>Your Progress</legend><div id="graph"></div></fieldset><br /><button id="clear-history">Clear My Progress</button></fieldset></div><div id="game"><fieldset id="profile" class="outer"><fieldset><legend>Sign Up</legend><form id="new_profile_form"><input placeholder="Email" id="new_profile_email" email="new_profile_email" type="text" required="required" /><br /><input placeholder="Username" id="new_profile_name" name="new_profile_name" type="text" required="required" /><br /><input placeholder="Password" id="new_profile_pass" name="new_profile_pass" type="password" required="required" /><br /><button id="new_profile_create">Create</button></form></fieldset><fieldset><legend>Log In</legend><form id="log_in_form"><input placeholder="Username" id="profile_name" name="profile_name" type="text" required="required" /><br /><input placeholder="Password" id="profile_pass" name="profile_pass" type="password" required="required" /><br /><button id="log_in_button">Log In</button></form></fieldset></fieldset><fieldset id="game_settings" class="outer"><fieldset id="game-mode"><legend>Progress Mode</legend><input id="mode_training" type="radio" name="mode" value="training" /><label for="mode_training">Training</label><input id="mode_manual" type="radio" name="mode" value="manual" /><label for="mode_manual">Manual</label><div id="n-wrap">Dual <input id="n" name="n" type="number" /><input id="n_manual" name="n_manual" type="number" />-Back</div></fieldset><fieldset id="settings"><legend>Settings</legend>Number of Turns: <input id="count" name="count" type="number" /> + <span id="extra_count"></span><br />Turn Duration: <input id="turndur" name="turndur" type="number" />ms<br />Increase <i>N</i> Threshold: <input id="advance_threshold" name="advance_threshold" type="number" />%<br />Decrease <i>N</i> Threshold: <input id="retreat_threshold" name="retreat_threshold" type="number" />%<button id="new-game">NEW ROUND!</button></fieldset><br /><button id="reset-settings">Reset My Settings</button><button id="log_out">Log Out</button></fieldset></div></div><div id="flash_bg"></div><table id="flash_wrapper"><tbody><tr><td><div id="flash">100% Correct.<br>Dayum.</div><button id="continue">Continue</button></td></tr></tbody></table><div id="main"><table id="focus_wrap"><tbody><tr><td id="focus">focus.</td></tr></tbody></table><button id="cancel">Cancel</button><table id="layout"><tbody><tr><td id="a_button">POSITION (A)</td><td id="grid_wrap"><fieldset class="outer"><fieldset><div id="hud"><legend id="type"></legend><legend id="remaining"></legend></div><table id="grid"><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></table></fieldset></fieldset></td><td id="b_button">LETTER (L)</td></tr></tbody></table></div><div id="logo">banalduck</div><div id="back"><a href="http://namuol.github.com">namuol.github.com</a></div><script>var __slice = Array.prototype.slice;var __hasProp = Object.prototype.hasOwnProperty;var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };var __extends = function(child, parent) {  for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; }  function ctor() { this.constructor = child; }  ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype;  return child; };var __indexOf = Array.prototype.indexOf || function(item) {  for (var i = 0, l = this.length; i < l; i++) {    if (this[i] === item) return i;  } return -1; };(function () {
       /*
       */
 
       /*
       */
       return $(function() {
-        var all_loaded, choose, clear_history, frand, grid, rand, reset_settings, sounds_loaded, sounds_to_load, update_profile_list, update_settings_display, _newProfile;
+        var all_loaded, choose, clear_history, frand, grid, rand, reset_settings, sounds_loaded, sounds_to_load, update_settings_display, _newProfile;
+        Parse.initialize('vrBnhG18TQkX99xX1MDw3paUIVJWYwmT5rVvkfJe', 'GYI87sIoXXru3ToOa33Gculz7RSWAxupGWiQWwtT');
         _newProfile = {
           settings: {
             mode: 'training',
@@ -31,36 +32,36 @@
           strikes: 0,
           history: []
         };
-        window.lget = function(item) {
-          var profile, profile_id;
-          profile_id = localStorage.getItem('current_profile');
-          if (!(profile_id != null)) {
+        window.lget = function(itemName) {
+          var item, user;
+          user = Parse.User.current();
+          if (!user) {
             return void 0;
           }
-          profile = JSON.parse(localStorage.getItem('profiles'))[profile_id];
-          item = profile[item];
+          item = user.get(itemName);
           if (!(item != null)) {
             return void 0;
           }
           return item;
         };
-        window.lset = function(item, val) {
-          var profile, profile_id, profiles;
-          profile_id = localStorage.getItem('current_profile');
-          if (!(profile_id != null)) {
+        window.lset = function(itemName, val) {
+          var changes, user;
+          user = Parse.User.current();
+          if (!user) {
             return;
           }
-          profiles = JSON.parse(localStorage.getItem('profiles'));
-          profile = profiles[profile_id];
-          profile[item] = val;
-          profiles[profile_id] = profile;
-          localStorage.setItem('profiles', JSON.stringify(profiles));
+          changes = {};
+          changes[itemName] = val;
+          user.save(changes, {
+            error: function(user, error) {
+              return flash(error.message, 'err');
+            }
+          });
           return val;
         };
         update_settings_display = function() {
-          var current_profile, name, settings, val;
-          current_profile = localStorage.getItem('current_profile');
-          $('#profile_display').html('@' + current_profile);
+          var name, settings, val;
+          $('#profile_display').html('@' + Parse.User.current().get('username'));
           settings = lget('settings');
           $("#game input[name='mode']").attr('checked', false);
           $("#game input[name='mode'][value='" + settings.mode + "']").attr('checked', 'checked');
@@ -86,21 +87,6 @@
           }
           return $('#extra_count').html(settings.n * settings.n);
         };
-        update_profile_list = function() {
-          var curr, name, profile, profiles, _ref, _results;
-          profiles = JSON.parse(localStorage.getItem('profiles')) || {};
-          curr = localStorage.getItem('current_profile');
-          $('#profile_select').html('');
-          _results = [];
-          for (name in profiles) {
-            if (!__hasProp.call(profiles, name)) continue;
-            profile = profiles[name];
-            _results.push($('#profile_select').append($("<option value:'" + name + "'>" + name + "</option>").attr('selected', (_ref = curr === name) != null ? _ref : {
-              "true": void 0
-            })));
-          }
-          return _results;
-        };
         reset_settings = function() {
           return lset('settings', _newProfile.settings);
         };
@@ -116,43 +102,70 @@
           $(href).show();
           return false;
         });
-        $('#change_profile').click(function() {
-          update_profile_list();
+        $('#log_out').click(function(e) {
+          Parse.User.logOut();
+          $('#game_settings').hide();
           return $('#profile').show();
         });
-        $('#profile_select').change(function() {
-          localStorage.setItem('current_profile', this.value);
-          update_settings_display();
-          return $('#profile').hide();
-        });
-        $('#profile_cancel').click(function() {
-          return $('#profile').hide();
-        });
-        $('#new_profile_button').click(function() {
-          $('#new_profile').show();
-          $('#new_profile_name').focus();
-          return $('#new_profile_cancel').show();
-        });
-        $('#new_profile form').submit(function() {
-          var name, profiles;
-          name = $('#new_profile_name').val();
-          if (name.length <= 0) {
-            return false;
-          }
-          profiles = JSON.parse(localStorage.getItem('profiles')) || {};
-          profiles[name] = _newProfile;
-          localStorage.setItem('profiles', JSON.stringify(profiles));
-          localStorage.setItem('current_profile', name);
-          $('#new_profile_name').val('');
-          $('#new_profile').hide();
-          update_settings_display();
-          update_profile_list();
-          $('#profile').hide();
+        $('#log_in_form').submit(function(e) {
+          var name, pass;
+          e.preventDefault();
+          name = $('#profile_name').val();
+          pass = $('#profile_pass').val();
+          Parse.User.logIn(name, pass, {
+            success: function(user) {
+              $('#profile').hide();
+              update_settings_display();
+              return $('#game_settings').show();
+            },
+            error: function(user, error) {
+              return flash(error.message, 'err');
+            }
+          });
+          $('#profile_name').val('');
+          $('#profile_pass').val('');
           return false;
         });
-        $('#new_profile_cancel').click(function() {
+        $('#new_profile_form').submit(function(e) {
+          var email, key, name, pass, user, val;
+          e.preventDefault();
+          name = $('#new_profile_name').val();
+          pass = $('#new_profile_pass').val();
+          email = $('#new_profile_email').val();
+          user = new Parse.User;
+          user.set('username', name);
+          user.set('password', pass);
+          user.set('email', email);
+          for (key in _newProfile) {
+            if (!__hasProp.call(_newProfile, key)) continue;
+            val = _newProfile[key];
+            user.set(key, val);
+          }
+          user.signUp(null, {
+            success: function(user) {
+              $('#profile').hide();
+              update_settings_display();
+              $('#game_settings').show();
+              return Parse.User.logIn(name, pass, {
+                success: function(user) {
+                  flash('Success! You\'re all signed up and logged in!', 'excellent');
+                  $('#profile').hide();
+                  update_settings_display();
+                  return $('#game_settings').show();
+                },
+                error: function(user, error) {
+                  return flash(error.message, 'err');
+                }
+              });
+            },
+            error: function(user, error) {
+              return flash(error.message, 'err');
+            }
+          });
           $('#new_profile_name').val('');
-          return $('#new_profile').hide();
+          $('#new_profile_pass').val('');
+          $('#new_profile_email').val('');
+          return false;
         });
         $('#nav').on('click', 'a', function() {
           $(this).parent().click();
@@ -624,10 +637,14 @@
             $('body').removeClass('loading');
             $('#nav').show();
             $('#content').show();
-            if (!localStorage.getItem('current_profile')) {
-              $('#new_profile').show();
-              $('#new_profile_cancel').hide();
+            if (!Parse.User.current()) {
+              $('#profile').show();
+              $('#game_settings').hide();
             } else {
+              $('#profile').hide();
+              $('#game_settings').show();
+              h = lget('history') || [];
+              draw_history_graph($('#graph')[0], h);
               settings = lget('settings');
               if (settings.mode === 'training') {
                 lastgame = new Date(lget('lastgame'));
@@ -639,8 +656,6 @@
               lset('settings', settings);
               update_settings_display();
             }
-            h = lget('history') || [];
-            draw_history_graph($('#graph')[0], h);
             $(window).keydown(function(e) {
               switch (e.which) {
                 case 65:
@@ -689,7 +704,7 @@
                 return window.round = void 0;
               }
             });
-            $('#game').on('change', 'input', function() {
+            $('#game_settings').on('change', 'input', function() {
               settings = lget('settings');
               settings[this.name] = this.value;
               lset('settings', settings);

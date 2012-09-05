@@ -443,6 +443,7 @@ input[type='radio']:checked + label:hover {
   box-shadow: rgba(0,0,0,0.5) 0 2px 6px inset;
 }
 fieldset {
+  float: left;
   display: inline-block;
   border-radius: 5px;
   border: 1px solid #000;
@@ -480,7 +481,8 @@ fieldset.outer {
   margin-top: 0px;
 }
 input[type='text'],
-input[type='number'] {
+input[type='number'],
+input[type='password'] {
   border-radius: 4px;
   background: rgba(0,0,0,0.25);
   font-size: 14pt;
@@ -506,6 +508,9 @@ input[disabled='disabled'] {
   -ms-user-select: none;
   -o-user-select: none;
   user-select: none;
+}
+.err {
+  color: #c22;
 }
 .bad {
   color: #ccc;
@@ -575,26 +580,10 @@ body.playing #focus {
   -moz-text-shadow: 0 0 0 #fff, 0 1px 1px #000;
   text-shadow: 0 0 0 #fff, 0 1px 1px #000;
 }
-#new_profile,
-#profile {
-  padding: 30px;
-  text-align: center;
-  background: rgba(0,0,0,0.6);
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-}
-#new_profile {
-  z-index: 22 !important;
-}
-#profile {
-  z-index: 21 !important;
-}
-#new_profile input {
-  margin: 0;
+#new_profile input,
+#profile input {
+  padding: 2px;
+  margin: 2px;
   width: 12em;
   text-align: left;
 }
