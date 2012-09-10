@@ -73,7 +73,7 @@ html ->
         fieldset id:'profile', class:'outer', ->
           fieldset ->
             legend 'Sign Up'
-            form id: 'new_profile_form', ->
+            form id:'new_profile_form', ->
               input placeholder:'Email', id:'new_profile_email', email:'new_profile_email', type:'text', required:'required'
               br ''
               input placeholder:'Username', id:'new_profile_name', name:'new_profile_name', type:'text', required:'required'
@@ -84,12 +84,19 @@ html ->
 
           fieldset ->
             legend 'Log In'
-            form id: 'log_in_form', ->
+            form id:'log_in_form', ->
               input placeholder:'Username', id:'profile_name', name:'profile_name', type:'text', required:'required'
               br ''
               input placeholder:'Password', id:'profile_pass', name:'profile_pass', type:'password', required:'required'
               br ''
               button id:'log_in_button', 'Log In'
+              a id:'trouble_logging_in', href:'#', 'Trouble logging in?'
+
+            form id:'reset_pass_form', ->
+              input placeholder:'Email', id:'reset_pass_email', name:'reset_pass_email', type:'text', required:'required'
+              br ''
+              button id:'reset_pass_button', 'Reset My Password'
+              button id:'cancel_reset_pass', 'Cancel'
 
         fieldset id:'game_settings', class:'outer', ->
           fieldset id:'game-mode', ->
@@ -279,6 +286,42 @@ html ->
           $('#profile_pass').val ''
           return false
 
+        $('#trouble_logging_in').click (e) ->
+          e.preventDefault()
+          $('#reset_pass_form').show()
+          $('#log_in_form').hide()
+          return false
+
+        $('#cancel_reset_pass').click (e) ->
+          e.preventDefault()
+          $('#reset_pass_form').hide()
+          $('#log_in_form').show()
+          return false
+
+        $('#reset_pass_form').submit (e) ->
+          e.preventDefault()
+
+          email = $('#reset_pass_email').val()
+          Parse.User.requestPasswordReset email,
+            success: ->
+              $('#reset_pass_email').val('')
+              $('#reset_pass_email').attr('placeholder', 'Email Sent!')
+                .attr('disabled', 'disabled')
+                .blur()
+
+              setTimeout ->
+                $('#reset_pass_email').attr('disabled', false).attr('placeholder', 'Email')
+              , 1500
+
+              $('#reset_pass_form').delay(1500).hide()
+              $('#trouble_logging_in').delay(1500).show()
+            error: (error) ->
+              flash error.message, 'err'
+
+          return false
+
+
+
         $('#new_profile_form').submit (e) ->
           e.preventDefault()
 
@@ -331,6 +374,7 @@ html ->
           , delay
 
         window.flash = (text, cssClass, buttonText='Continue', cb=undefined) ->
+          $('input').blur()
           $('#flash').html text
           $('#flash').removeClass 'bad'
           $('#flash').removeClass 'better'
