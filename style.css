@@ -604,3 +604,17 @@ a:active {
   padding: 5px;
   font-weight: normal;
 }
+a#trouble_logging_in {
+  -webkit-text-shadow: none;
+  -moz-text-shadow: none;
+  text-shadow: none;
+  color: #ddd;
+  font-weight: normal;
+  float: right;
+}
+a#trouble_logging_in:hover {
+  color: #fff;
+}
+#reset_pass_form {
+  display: none;
+}
