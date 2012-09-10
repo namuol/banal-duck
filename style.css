@@ -70,6 +70,9 @@ body {
   width: 453px;
   min-width: 453px;
 }
+#grid_wrap fieldset {
+  float: none;
+}
 #grid td {
   border: 1px solid #222;
   background: #dde;
