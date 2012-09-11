@@ -1,4 +1,4 @@
-<html><head><meta charset="utf-8" /><meta name="viewport" content="width=100%; 
+<html><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width; 
 initial-scale=1;
 maximum-scale=1;
 minimum-scale=1; 
@@ -148,13 +148,10 @@ user-scalable=no;" /><title>Dual N-Back</title><link rel="stylesheet" href="flot
           email = $('#reset_pass_email').val();
           Parse.User.requestPasswordReset(email, {
             success: function() {
+              flash('Password Reset email sent!', 'excellent');
               $('#reset_pass_email').val('');
-              $('#reset_pass_email').attr('placeholder', 'Email Sent!').attr('disabled', 'disabled').blur();
-              setTimeout(function() {
-                return $('#reset_pass_email').attr('disabled', false).attr('placeholder', 'Email');
-              }, 1500);
-              $('#reset_pass_form').delay(1500).hide();
-              return $('#trouble_logging_in').delay(1500).show();
+              $('#reset_pass_form').hide();
+              return $('#log_in_form').show();
             },
             error: function(error) {
               return flash(error.message, 'err');
