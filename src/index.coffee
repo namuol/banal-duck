@@ -3,7 +3,7 @@ html ->
     meta charset:'utf-8'
     meta
       name:'viewport'
-      content:'''width=100%; 
+      content:'''width=device-width; 
               initial-scale=1;
               maximum-scale=1;
               minimum-scale=1; 
@@ -315,17 +315,10 @@ html ->
           email = $('#reset_pass_email').val()
           Parse.User.requestPasswordReset email,
             success: ->
+              flash 'Password Reset email sent!', 'excellent'
               $('#reset_pass_email').val('')
-              $('#reset_pass_email').attr('placeholder', 'Email Sent!')
-                .attr('disabled', 'disabled')
-                .blur()
-
-              setTimeout ->
-                $('#reset_pass_email').attr('disabled', false).attr('placeholder', 'Email')
-              , 1500
-
-              $('#reset_pass_form').delay(1500).hide()
-              $('#trouble_logging_in').delay(1500).show()
+              $('#reset_pass_form').hide()
+              $('#log_in_form').show()
             error: (error) ->
               flash error.message, 'err'
 
