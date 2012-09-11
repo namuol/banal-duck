@@ -1,6 +1,13 @@
 html ->
   head ->
     meta charset:'utf-8'
+    meta
+      name:'viewport'
+      content:'''width=100%; 
+              initial-scale=1;
+              maximum-scale=1;
+              minimum-scale=1; 
+              user-scalable=no;'''
     title 'Dual N-Back'
     link rel:'stylesheet', href:'flotr2-examples.css'
     link href:'http://fonts.googleapis.com/css?family=Carme', rel:'stylesheet', type:'text/css'
@@ -33,7 +40,11 @@ html ->
       table ->
         tbody ->
           tr ->
-            td id:'loading', 'Please Wait...'
+            td id:'loading', ->
+              text 'Please Wait...'
+              br ''
+              span id:'sounds_loaded_count', '0'
+              text ' / 8 sounds loaded'
 
     div id:'nav', ->
       ul ->
@@ -320,8 +331,6 @@ html ->
 
           return false
 
-
-
         $('#new_profile_form').submit (e) ->
           e.preventDefault()
 
@@ -396,52 +405,54 @@ html ->
         sounds_loaded = 0
         sounds_to_load = [
             id: 'c'
-            url: 'c.wav'
+            url: 'c.mp3'
             volume: 50
           ,
             id: 'h'
-            url: 'h.wav'
+            url: 'h.mp3'
             volume: 50
           ,
             id: 'k'
-            url: 'k.wav'
+            url: 'k.mp3'
             volume: 50
           ,
             id: 'l'
-            url: 'l.wav'
+            url: 'l.mp3'
             volume: 50
           ,
             id: 'q'
-            url: 'q.wav'
+            url: 'q.mp3'
             volume: 50
           ,
             id: 'r'
-            url: 'r.wav'
+            url: 'r.mp3'
             volume: 50
           ,
             id: 's'
-            url: 's.wav'
+            url: 's.mp3'
             volume: 50
           ,
             id: 't'
-            url: 't.wav'
+            url: 't.mp3'
             volume: 50
         ]
 
-        soundManager.url = 'swf'
-        soundManager.flashVersion = 9
-        soundManager.useHighPerformance = false
-        soundManager.useFastPolling = true
-        soundManager.useHTML5Audio = true
-        soundManager.preferFlash = false
-
-        soundManager.defaultOptions.onload = ->
-          if ++sounds_loaded == sounds_to_load.length
-            all_loaded()
+        soundManager.setup
+          debugMode: false
+          url: 'swf'
+          flashVersion: 9
+          useHighPerformance: true
+          useHTML5Audio: true
+          preferFlash: false
+          defaultOptions:
+            autoLoad: true
+            onload: ->
+              console.log 'sound loaded: ' + sounds_loaded + ' of ' + sounds_to_load.length
+              if ++sounds_loaded == sounds_to_load.length
+                all_loaded()
+              $('#sounds_loaded_count').html sounds_loaded
 
         soundManager.onready ->
-          soundManager.defaultOptions.autoLoad = true
-
           for sound in sounds_to_load
             sounds.push soundManager.createSound sound
 
