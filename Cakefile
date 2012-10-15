@@ -16,6 +16,9 @@ task 'build', 'Create compiled HTML/CSS output', ->
 
   console.log 'building css'
   css_fn = BUILD_DIR+'/style.css'
-  stylus.render fs.readFileSync('src/style.styl','utf-8'), {filename: css_fn}, (err, css) ->
+  stylus.render fs.readFileSync('src/style.styl','utf-8'),
+    filename: css_fn
+    paths: [require('nib').path]
+  , (err, css) ->
     throw err if err
     fs.writeFileSync css_fn, css
