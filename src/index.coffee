@@ -85,11 +85,11 @@ html ->
           fieldset ->
             legend 'Sign Up'
             form id:'new_profile_form', ->
-              input placeholder:'Email', id:'new_profile_email', email:'new_profile_email', type:'text', required:'required'
-              br ''
               input placeholder:'Username', id:'new_profile_name', name:'new_profile_name', type:'text', required:'required'
               br ''
               input placeholder:'Password', id:'new_profile_pass', name:'new_profile_pass', type:'password', required:'required'
+              br ''
+              input placeholder:'Email (optional)', id:'new_profile_email', email:'new_profile_email', type:'text'
               br ''
               button id:'new_profile_create', 'Create'
 
@@ -191,7 +191,7 @@ html ->
     div id:'logo', 'banalduck'
 
     div id:'back', ->
-      a href:'http://namuol.github.com', 'namuol.github.com'
+      a href:'http://namuol.github.io', 'namuol.github.io'
 
     coffeescript ->
       ###           ###
@@ -279,6 +279,7 @@ html ->
           Parse.User.logOut()
           $('#game_settings').hide()
           $('#profile').show()
+          $('#profile_display').html 'Log In'
 
         $('#log_in_form').submit (e) ->
           e.preventDefault()
@@ -806,7 +807,7 @@ html ->
                 when 76 # B
                   return true if not window.round?
                   round.b_pressed()
-                when 32 # Spacebar
+                when 32,13 # Spacebar/Enter
                   if $('body').hasClass 'flash'
                     flash.continue()
                   else if not $('body').hasClass 'playing'
