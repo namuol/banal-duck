@@ -398,35 +398,35 @@ html ->
         sounds_loaded = 0
         sounds_to_load = [
             id: 'c'
-            url: 'c.mp3'
+            url: ['c.ogg', 'c.mp3', 'c.m4a']
             volume: 50
           ,
             id: 'h'
-            url: 'h.mp3'
+            url: ['h.ogg', 'h.mp3', 'h.m4a']
             volume: 50
           ,
             id: 'k'
-            url: 'k.mp3'
+            url: ['k.ogg', 'k.mp3', 'k.m4a']
             volume: 50
           ,
             id: 'l'
-            url: 'l.mp3'
+            url: ['l.ogg', 'l.mp3', 'l.m4a']
             volume: 50
           ,
             id: 'q'
-            url: 'q.mp3'
+            url: ['q.ogg', 'q.mp3', 'q.m4a']
             volume: 50
           ,
             id: 'r'
-            url: 'r.mp3'
+            url: ['r.ogg', 'r.mp3', 'r.m4a']
             volume: 50
           ,
             id: 's'
-            url: 's.mp3'
+            url: ['s.ogg', 's.mp3', 's.m4a']
             volume: 50
           ,
             id: 't'
-            url: 't.mp3'
+            url: ['t.ogg', 't.mp3', 't.m4a']
             volume: 50
         ]
 
