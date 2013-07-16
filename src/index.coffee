@@ -807,7 +807,7 @@ html ->
                 when 76 # B
                   return true if not window.round?
                   round.b_pressed()
-                when 32,13 # Spacebar/Enter
+                when 32 # Spacebar
                   if $('body').hasClass 'flash'
                     flash.continue()
                   else if not $('body').hasClass 'playing'
