@@ -83,7 +83,7 @@ html ->
       div id:'game', ->
         fieldset id:'profile', class:'outer', ->
           fieldset ->
-            legend 'Sign Up'
+            legend 'Quick Sign Up'
             form id:'new_profile_form', ->
               input placeholder:'Username', id:'new_profile_name', name:'new_profile_name', type:'text', required:'required'
               br ''
@@ -195,13 +195,11 @@ html ->
 
     coffeescript ->
       ###           ###
-      #               #
       #  ,d88b.d88b,  #
-      #  888hello888  #
+      #  8888hai8888  #
       #  `Y8888888Y'  #
       #    `Y888Y'    #
       #      `Y'      #
-      #               #
       ###           ###
       $ ->
 

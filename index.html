@@ -1,0 +1,775 @@
+<html><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width; 
+initial-scale=1;
+maximum-scale=1;
+minimum-scale=1; 
+user-scalable=no;" /><title>Dual N-Back</title><link rel="stylesheet" href="flotr2-examples.css" /><link href="http://fonts.googleapis.com/css?family=Carme" rel="stylesheet" type="text/css" /><link rel="stylesheet" href="style.css" /><script type="text/javascript" src="json2.min.js"></script><script type="text/javascript" src="storage.min.js"></script><script type="text/javascript" src="jquery-1.7.2.min.js"></script><script type="text/javascript" src="soundmanager2.js"></script><script type="text/javascript" src="flotr2.min.js"></script><script type="text/javascript" src="http://www.parsecdn.com/js/parse-1.0.21.min.js"></script><script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-33247419-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script></head><body class="loading"><div id="vignette"></div><div id="loading_wrapper"><table><tbody><tr><td id="loading">Please Wait...<br /><span id="sounds_loaded_count">0</span> / 8 sounds loaded</td></tr></tbody></table></div><div id="nav"><ul><li class="first"><a id="profile_display" href="#game">Log In</a></li><li><a href="#stats">Stats</a></li><li><a href="#help">Help</a></li></ul></div><div id="content"><div id="help"><fieldset id="instructions" class="outer"><fieldset><legend>How to Play Dual <i>N</i>-Back</legend><section><ul><li>Any time a grid square you saw <i>N</i> turns ago is highlighted again, press [A]</li><li>Any time a letter you heard <i>N</i> turns ago is spoken again, press [L]</li><li>It's possible for both of these cases to occur on the same turn</li><li>Don't be discouraged! You <strong>will</strong> improve with practice!</li><li><b>Training mode</b> (recommended) auto-adjusts the <i>N</i> value as you improve.</li></ul><ul><li>But <i>why</i> does it work? Here's some <a href="http://www.gwern.net/DNB%20FAQ" target="_blank">recommended reading</a>.</li></ul></section></fieldset></fieldset></div><div id="stats"><fieldset id="graph-panel" class="outer"><fieldset><legend>Your Progress</legend><div id="graph"></div></fieldset><br /><button id="clear-history">Clear My Progress</button></fieldset></div><div id="game"><fieldset id="profile" class="outer"><fieldset><legend>Quick Sign Up</legend><form id="new_profile_form"><input placeholder="Username" id="new_profile_name" name="new_profile_name" type="text" required="required" /><br /><input placeholder="Password" id="new_profile_pass" name="new_profile_pass" type="password" required="required" /><br /><input placeholder="Email (optional)" id="new_profile_email" email="new_profile_email" type="text" /><br /><button id="new_profile_create">Create</button></form></fieldset><fieldset><legend>Log In</legend><form id="log_in_form"><input placeholder="Username" id="profile_name" name="profile_name" type="text" required="required" /><br /><input placeholder="Password" id="profile_pass" name="profile_pass" type="password" required="required" /><br /><button id="log_in_button">Log In</button><a id="trouble_logging_in" href="#">Trouble logging in?</a></form><form id="reset_pass_form"><input placeholder="Email" id="reset_pass_email" name="reset_pass_email" type="text" required="required" /><br /><button id="reset_pass_button">Reset My Password</button><button id="cancel_reset_pass">Cancel</button></form></fieldset></fieldset><fieldset id="game_settings" class="outer"><fieldset id="game-mode"><legend>Progress Mode</legend><input id="mode_training" type="radio" name="mode" value="training" /><label for="mode_training">Training</label><input id="mode_manual" type="radio" name="mode" value="manual" /><label for="mode_manual">Manual</label><div id="n-wrap">Dual <input id="n" name="n" type="number" /><input id="n_manual" name="n_manual" type="number" />-Back</div></fieldset><fieldset id="settings"><legend>Settings</legend>Number of Turns: <input id="count" name="count" type="number" /> + <span id="extra_count"></span><br />Turn Duration: <input id="turndur" name="turndur" type="number" />ms<br />Increase <i>N</i> Threshold: <input id="advance_threshold" name="advance_threshold" type="number" />%<br />Decrease <i>N</i> Threshold: <input id="retreat_threshold" name="retreat_threshold" type="number" />%<button id="new-game">NEW ROUND!</button></fieldset><br /><button id="reset-settings">Reset My Settings</button><button id="log_out">Log Out</button></fieldset></div></div><div id="flash_bg"></div><table id="flash_wrapper"><tbody><tr><td><div id="flash">100% Correct.<br>Dayum.</div><button id="continue">Continue</button></td></tr></tbody></table><div id="main"><table id="focus_wrap"><tbody><tr><td id="focus">focus.</td></tr></tbody></table><button id="cancel">Cancel</button><table id="layout"><tbody><tr><td id="a_button">POSITION (A)</td><td id="grid_wrap"><fieldset class="outer"><fieldset><div id="hud"><legend id="type"></legend><legend id="remaining"></legend></div><table id="grid"><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></table></fieldset></fieldset></td><td id="b_button">LETTER (L)</td></tr></tbody></table></div><div id="logo">banalduck</div><div id="back"><a href="http://namuol.github.io">namuol.github.io</a></div><script>var __slice = Array.prototype.slice;var __hasProp = Object.prototype.hasOwnProperty;var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };var __extends = function(child, parent) {  for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; }  function ctor() { this.constructor = child; }  ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype;  return child; };var __indexOf = Array.prototype.indexOf || function(item) {  for (var i = 0, l = this.length; i < l; i++) {    if (this[i] === item) return i;  } return -1; };(function () {
+      /*
+      */
+
+      /*
+      */
+      return $(function() {
+        var all_loaded, choose, clear_history, frand, grid, rand, reset_settings, sounds_loaded, sounds_to_load, update_settings_display, _newProfile;
+        Parse.initialize('vrBnhG18TQkX99xX1MDw3paUIVJWYwmT5rVvkfJe', 'GYI87sIoXXru3ToOa33Gculz7RSWAxupGWiQWwtT');
+        _newProfile = {
+          settings: {
+            mode: 'training',
+            n: 2,
+            n_manual: 2,
+            count: 20,
+            turndur: 3000,
+            retreat_threshold: 50,
+            advance_threshold: 80
+          },
+          strikes: 0,
+          history: []
+        };
+        window.lget = function(itemName) {
+          var item, user;
+          user = Parse.User.current();
+          if (!user) {
+            return void 0;
+          }
+          item = user.get(itemName);
+          if (!(item != null)) {
+            return void 0;
+          }
+          return item;
+        };
+        window.lset = function(itemName, val) {
+          var changes, user;
+          user = Parse.User.current();
+          if (!user) {
+            return;
+          }
+          changes = {};
+          changes[itemName] = val;
+          user.save(changes, {
+            error: function(user, error) {
+              return flash(error.message, 'err');
+            }
+          });
+          return val;
+        };
+        update_settings_display = function() {
+          var name, settings, val;
+          $('#profile_display').html('@' + Parse.User.current().get('username'));
+          settings = lget('settings');
+          $("#game input[name='mode']").attr('checked', false);
+          $("#game input[name='mode'][value='" + settings.mode + "']").attr('checked', 'checked');
+          for (name in settings) {
+            if (!__hasProp.call(settings, name)) continue;
+            val = settings[name];
+            if (name === 'mode') {
+              continue;
+            }
+            $("#game input[name='" + name + "']'").val(val);
+          }
+          if (settings.mode === 'manual') {
+            $('#n').hide();
+            $('#n_manual').show();
+            $('#retreat_threshold').attr('disabled', 'disabled');
+            $('#advance_threshold').attr('disabled', 'disabled');
+          } else {
+            $('#n').show();
+            $('#n_manual').hide();
+            $('#n').attr('disabled', 'disabled');
+            $('#retreat_threshold').attr('disabled', false);
+            $('#advance_threshold').attr('disabled', false);
+          }
+          return $('#extra_count').html(settings.n * settings.n);
+        };
+        reset_settings = function() {
+          return lset('settings', _newProfile.settings);
+        };
+        clear_history = function() {
+          return lset('history', []);
+        };
+        $('#nav').on('click', 'li', function() {
+          var href;
+          $('.selected').removeClass('selected');
+          $('#content > div').hide();
+          $(this).addClass('selected');
+          href = $(this).children('a').attr('href');
+          $(href).show();
+          return false;
+        });
+        $('#log_out').click(function(e) {
+          Parse.User.logOut();
+          $('#game_settings').hide();
+          $('#profile').show();
+          return $('#profile_display').html('Log In');
+        });
+        $('#log_in_form').submit(function(e) {
+          var name, pass;
+          e.preventDefault();
+          name = $('#profile_name').val();
+          pass = $('#profile_pass').val();
+          Parse.User.logIn(name, pass, {
+            success: function(user) {
+              $('#profile').hide();
+              update_settings_display();
+              return $('#game_settings').show();
+            },
+            error: function(user, error) {
+              return flash(error.message, 'err');
+            }
+          });
+          $('#profile_name').val('');
+          $('#profile_pass').val('');
+          return false;
+        });
+        $('#trouble_logging_in').click(function(e) {
+          e.preventDefault();
+          $('#reset_pass_form').show();
+          $('#log_in_form').hide();
+          return false;
+        });
+        $('#cancel_reset_pass').click(function(e) {
+          e.preventDefault();
+          $('#reset_pass_form').hide();
+          $('#log_in_form').show();
+          return false;
+        });
+        $('#reset_pass_form').submit(function(e) {
+          var email;
+          e.preventDefault();
+          email = $('#reset_pass_email').val();
+          Parse.User.requestPasswordReset(email, {
+            success: function() {
+              flash('Password Reset email sent!', 'excellent');
+              $('#reset_pass_email').val('');
+              $('#reset_pass_form').hide();
+              return $('#log_in_form').show();
+            },
+            error: function(error) {
+              return flash(error.message, 'err');
+            }
+          });
+          return false;
+        });
+        $('#new_profile_form').submit(function(e) {
+          var email, key, name, pass, user, val;
+          e.preventDefault();
+          name = $('#new_profile_name').val();
+          pass = $('#new_profile_pass').val();
+          email = $('#new_profile_email').val();
+          user = new Parse.User;
+          user.set('username', name);
+          user.set('password', pass);
+          user.set('email', email);
+          for (key in _newProfile) {
+            if (!__hasProp.call(_newProfile, key)) continue;
+            val = _newProfile[key];
+            user.set(key, val);
+          }
+          user.signUp(null, {
+            success: function(user) {
+              $('#profile').hide();
+              update_settings_display();
+              $('#game_settings').show();
+              return Parse.User.logIn(name, pass, {
+                success: function(user) {
+                  flash('Success! You\'re all signed up and logged in!', 'excellent');
+                  $('#profile').hide();
+                  update_settings_display();
+                  return $('#game_settings').show();
+                },
+                error: function(user, error) {
+                  return flash(error.message, 'err');
+                }
+              });
+            },
+            error: function(user, error) {
+              return flash(error.message, 'err');
+            }
+          });
+          $('#new_profile_name').val('');
+          $('#new_profile_pass').val('');
+          $('#new_profile_email').val('');
+          return false;
+        });
+        $('#nav').on('click', 'a', function() {
+          $(this).parent().click();
+          return false;
+        });
+        grid = $('#grid td');
+        frand = function(min, max) {
+          return min + Math.random() * (max - min);
+        };
+        rand = function(min, max) {
+          return Math.round(frand(min, max));
+        };
+        choose = function(array) {
+          return array[rand(0, array.length - 1)];
+        };
+        window.highlight = function(el, klass, delay, ttl) {
+          if (klass == null) {
+            klass = 'highlighted';
+          }
+          if (delay == null) {
+            delay = 0;
+          }
+          if (ttl == null) {
+            ttl = 500;
+          }
+          return setTimeout(function() {
+            $(el).addClass(klass);
+            return setTimeout(function() {
+              return $(el).removeClass(klass);
+            }, ttl);
+          }, delay);
+        };
+        window.flash = function(text, cssClass, buttonText, cb) {
+          if (buttonText == null) {
+            buttonText = 'Continue';
+          }
+          if (cb == null) {
+            cb = void 0;
+          }
+          $('input').blur();
+          $('#flash').html(text);
+          $('#flash').removeClass('bad');
+          $('#flash').removeClass('better');
+          $('#flash').removeClass('excellent');
+          $('#flash').addClass(cssClass);
+          $('body').addClass('flash');
+          flash["continue"] = function() {
+            if (cb != null) {
+              cb();
+            }
+            return $('body').removeClass('flash');
+          };
+          return $('#continue').click(function() {
+            return flash["continue"]();
+          });
+        };
+        window.sounds = [];
+        all_loaded = void 0;
+        sounds_loaded = 0;
+        sounds_to_load = [
+          {
+            id: 'c',
+            url: ['c.ogg', 'c.mp3', 'c.m4a'],
+            volume: 50
+          }, {
+            id: 'h',
+            url: ['h.ogg', 'h.mp3', 'h.m4a'],
+            volume: 50
+          }, {
+            id: 'k',
+            url: ['k.ogg', 'k.mp3', 'k.m4a'],
+            volume: 50
+          }, {
+            id: 'l',
+            url: ['l.ogg', 'l.mp3', 'l.m4a'],
+            volume: 50
+          }, {
+            id: 'q',
+            url: ['q.ogg', 'q.mp3', 'q.m4a'],
+            volume: 50
+          }, {
+            id: 'r',
+            url: ['r.ogg', 'r.mp3', 'r.m4a'],
+            volume: 50
+          }, {
+            id: 's',
+            url: ['s.ogg', 's.mp3', 's.m4a'],
+            volume: 50
+          }, {
+            id: 't',
+            url: ['t.ogg', 't.mp3', 't.m4a'],
+            volume: 50
+          }
+        ];
+        soundManager.setup({
+          debugMode: false,
+          url: 'swf',
+          flashVersion: 9,
+          useHighPerformance: true,
+          useHTML5Audio: true,
+          preferFlash: false,
+          defaultOptions: {
+            autoLoad: true,
+            onload: function() {
+              console.log('sound loaded: ' + sounds_loaded + ' of ' + sounds_to_load.length);
+              if (++sounds_loaded === sounds_to_load.length) {
+                all_loaded();
+              }
+              return $('#sounds_loaded_count').html(sounds_loaded);
+            }
+          }
+        });
+        return soundManager.onready(function() {
+          var a_matches, b_matches, dstr, dual_n_back, generate_results, new_round, sound, strd, zpad, _i, _len;
+          for (_i = 0, _len = sounds_to_load.length; _i < _len; _i++) {
+            sound = sounds_to_load[_i];
+            sounds.push(soundManager.createSound(sound));
+          }
+          a_matches = function(turns, n, num) {
+            if (num < n) {
+              return false;
+            }
+            return turns[num].a === turns[num - n].a;
+          };
+          b_matches = function(turns, n, num) {
+            if (num < n) {
+              return false;
+            }
+            return turns[num].b === turns[num - n].b;
+          };
+          generate_results = function(turns, n) {
+            var a_correct, a_incorrect, a_match, a_missed, b_correct, b_incorrect, b_match, b_missed, cor, curr, err, i, percent, tot;
+            a_correct = b_correct = 0;
+            a_incorrect = b_incorrect = 0;
+            a_missed = b_missed = 0;
+            a_match = b_match = false;
+            i = 0;
+            while (i < turns.length) {
+              a_match = b_match = false;
+              curr = turns[i];
+              a_match = a_matches(turns, n, i);
+              b_match = b_matches(turns, n, i);
+              if (a_match) {
+                if (curr.ap) {
+                  ++a_correct;
+                } else {
+                  ++a_missed;
+                }
+              } else if (curr.ap) {
+                ++a_incorrect;
+              }
+              if (b_match) {
+                if (curr.bp) {
+                  ++b_correct;
+                } else {
+                  ++b_missed;
+                }
+              } else if (curr.bp) {
+                ++b_incorrect;
+              }
+              ++i;
+            }
+            cor = a_correct + b_correct;
+            err = a_missed + b_missed + a_incorrect + b_incorrect;
+            tot = cor + err;
+            percent = 100 * (cor / tot);
+            return {
+              a_correct: a_correct,
+              b_correct: b_correct,
+              a_incorrect: a_incorrect,
+              b_incorrect: b_incorrect,
+              a_missed: a_missed,
+              b_missed: b_missed,
+              percent: percent
+            };
+          };
+          zpad = function(n, d) {
+            if (n < d) {
+              return '0' + n;
+            } else {
+              return '' + n;
+            }
+          };
+          dstr = function(date) {
+            return zpad(date.getUTCFullYear(), 1000) + zpad(date.getUTCMonth(), 10) + zpad(date.getUTCDate(), 10);
+          };
+          strd = function(str) {
+            var d, date, m, y;
+            y = str.slice(0, 4);
+            m = str.slice(4, 6);
+            d = str.slice(6, 8);
+            date = new Date;
+            date.setUTCFullYear(y);
+            date.setUTCMonth(m);
+            date.setUTCDate(d);
+            date.setUTCHours(0);
+            date.setUTCMinutes(0);
+            date.setUTCSeconds(0);
+            date.setUTCMilliseconds(0);
+            return date;
+          };
+          window.draw_history_graph = function(container, history) {
+            var drawGraph, graph, i, o, options, x;
+            drawGraph = function(opts) {
+              var avg, avgArr, date, days, ds, dstring, i, max, maxArr, o, sum, vals;
+              o = Flotr._.extend(Flotr._.clone(options), opts || {});
+              ds = [];
+              i = 0;
+              days = {};
+              while (i < history.length) {
+                if (history[i].training) {
+                  date = dstr(new Date(Date.parse(history[i].timestamp)));
+                  if (!(days[date] != null)) {
+                    days[date] = [];
+                  }
+                  days[date].push(parseInt(history[i].n));
+                }
+                ++i;
+              }
+              avgArr = [];
+              maxArr = [];
+              for (dstring in days) {
+                if (!__hasProp.call(days, dstring)) continue;
+                vals = days[dstring];
+                sum = 0;
+                i = 0;
+                max = 0;
+                while (i < vals.length) {
+                  if (max < vals[i]) {
+                    max = vals[i];
+                  }
+                  sum += vals[i];
+                  ++i;
+                }
+                avg = sum / vals.length;
+                date = strd(dstring);
+                avgArr.push([date, avg]);
+                maxArr.push([date, max]);
+              }
+              ds.push({
+                data: avgArr,
+                label: "Average N of Session",
+                lines: {
+                  show: true
+                },
+                points: {
+                  show: true
+                }
+              });
+              ds.push({
+                data: maxArr,
+                label: "Max N of Session",
+                lines: {
+                  show: true
+                },
+                points: {
+                  show: true
+                }
+              });
+              return Flotr.draw(container, ds, o);
+            };
+            options = void 0;
+            graph = void 0;
+            x = void 0;
+            o = void 0;
+            i = 0;
+            options = {
+              xaxis: {
+                mode: "time",
+                labelsAngle: 45
+              },
+              selection: {
+                mode: "x"
+              },
+              HtmlText: false,
+              title: "Time",
+              legend: {
+                position: 'nw'
+              }
+            };
+            graph = drawGraph();
+            Flotr.EventAdapter.observe(container, "flotr:select", function(area) {
+              return graph = drawGraph({
+                xaxis: {
+                  min: area.x1,
+                  max: area.x2,
+                  mode: "time",
+                  labelsAngle: 45
+                },
+                yaxis: {
+                  min: area.y1,
+                  max: area.y2
+                }
+              });
+            });
+            return Flotr.EventAdapter.observe(container, "flotr:click", function() {
+              return graph = drawGraph();
+            });
+          };
+          dual_n_back = function(n, count, turn_dur) {
+            var a, a_match, b, b_match, current, i, intvl, settings, start, started, timestamp, turns;
+            if (turn_dur == null) {
+              turn_dur = 3000;
+            }
+            settings = lget('settings');
+            started = false;
+            timestamp = new Date;
+            turns = [];
+            a_match = b_match = false;
+            current = 0;
+            i = 0;
+            while (i < count) {
+              a = rand(0, grid.length - 1);
+              b = rand(0, sounds.length - 1);
+              turns.push({
+                a: a,
+                b: b,
+                ap: false,
+                bp: false
+              });
+              if ((i >= n) && (Math.random() < 0.17)) {
+                turns[i - n].a = a;
+              }
+              if ((i >= n) && (Math.random() < 0.17)) {
+                turns[i - n].b = b;
+              }
+              ++i;
+            }
+            $('#type').html("Dual " + n + "-Back");
+            start = void 0;
+            intvl = 0;
+            start = function(done) {
+              started = true;
+              current = 0;
+              return setTimeout(function() {
+                return intvl = setInterval(function() {
+                  setTimeout(function() {
+                    if (current > 0) {
+                      if (!turns[current - 1].ap && a_matches(turns, n, current - 1)) {
+                        highlight($('#a_button'), 'miss', 0, 70);
+                      }
+                      if (!turns[current - 1].bp && b_matches(turns, n, current - 1)) {
+                        return highlight($('#b_button'), 'miss', 0, 70);
+                      }
+                    }
+                  }, turn_dur - 100);
+                  if (current >= count) {
+                    clearInterval(intvl);
+                    done(generate_results(turns, n));
+                    return;
+                  }
+                  $('#type').html("Dual " + n + "-Back");
+                  $('#remaining').html("" + (current + 1) + " of " + count);
+                  highlight(grid[turns[current].a]);
+                  sounds[turns[current].b].play();
+                  return ++current;
+                }, turn_dur);
+              }, 2250 - turn_dur);
+            };
+            return {
+              n: n,
+              count: count,
+              turns: turns,
+              turn_dur: turn_dur,
+              timestamp: timestamp,
+              training: settings.mode === 'training',
+              a_pressed: function() {
+                if (!turns[current - 1].ap) {
+                  if (a_matches(turns, n, current - 1)) {
+                    highlight($('#a_button'), 'success', 0, 250);
+                  } else {
+                    highlight($('#a_button'), 'failure', 0, 250);
+                  }
+                  return turns[current - 1].ap = true;
+                }
+              },
+              b_pressed: function() {
+                if (!turns[current - 1].bp) {
+                  if (b_matches(turns, n, current - 1)) {
+                    highlight($('#b_button'), 'success', 0, 250);
+                  } else {
+                    highlight($('#b_button'), 'failure', 0, 250);
+                  }
+                  return turns[current - 1].bp = true;
+                }
+              },
+              start: function(done) {
+                if (done == null) {
+                  done = new Function;
+                }
+                return start(done);
+              },
+              stop: function() {
+                if (intvl) {
+                  clearInterval(intvl);
+                  return $('body').removeClass('playing');
+                }
+              }
+            };
+          };
+          new_round = function() {
+            var count, n, s, turndur;
+            if (!(window.round != null)) {
+              s = lget('settings');
+              $('body').addClass('playing');
+              if (s.mode === 'training') {
+                n = parseInt(s.n);
+              } else {
+                n = parseInt(s.n_manual);
+              }
+              count = parseInt(s.count) + n * n;
+              turndur = parseInt(s.turndur);
+              window.round = dual_n_back(n, count, turndur);
+              $('#results').hide();
+              return round.start(function(r) {
+                var cssclass, h, msg, percent, settings, strikes;
+                settings = lget('settings');
+                h = lget('history');
+                if (!(h != null)) {
+                  h = [];
+                }
+                h.push(round);
+                lset('history', h);
+                window.round = void 0;
+                percent = Math.round(r.percent);
+                lset('lastgame', new Date);
+                if (percent < 50) {
+                  cssclass = 'bad';
+                  msg = choose(['Don\'t be discouraged!', 'Give it another try!', 'Keep practicing!', 'Don\'t worry, you\'ll get there.']);
+                } else if (percent < 60) {
+                  cssclass = 'better';
+                  msg = choose(['Not bad.', 'Keep practicing!']);
+                } else if (percent < 70) {
+                  cssclass = 'better';
+                  msg = choose(['You\'re getting there!', 'Not bad!']);
+                } else if (percent < 80) {
+                  cssclass = 'better';
+                  msg = choose(['Nice score!', 'Nice job! Keep it up!', 'Well done!']);
+                } else if (percent < 100) {
+                  cssclass = 'excellent';
+                  msg = choose(['Excellent!', 'Now you\'ve got it!', 'Bravo!', '*high fives*']);
+                } else {
+                  cssclass = 'excellent';
+                  msg = choose(['Perfect! *high fives*', 'Outstanding!', 'Masterful!', '<i>Dayum.</i> Is this too easy for you?']);
+                }
+                if (s.mode === 'training') {
+                  if (percent >= s.advance_threshold) {
+                    ++s.n;
+                    strikes = 0;
+                    msg += "<b><br>N increased to " + s.n + "</b>!";
+                  } else if (percent < s.retreat_threshold) {
+                    strikes = parseInt(lget('strikes')) || 0;
+                    if (n >= 2) {
+                      msg += "<br>Strike " + (++strikes) + " of 3";
+                      if (strikes >= 3) {
+                        strikes = 0;
+                        --s.n;
+                        msg += "<b><br><i>N</i> decreased to " + s.n + "</b>";
+                      }
+                    }
+                  }
+                  lset('strikes', strikes);
+                }
+                lset('settings', s);
+                update_settings_display();
+                return flash("" + percent + "% correct<br>" + msg, cssclass, 'Okay', function() {
+                  $('#nav a[href="#stats"]').click();
+                  $('body').removeClass('playing');
+                  return draw_history_graph($('#graph')[0], lget('history'));
+                });
+              });
+            }
+          };
+          return all_loaded = function() {
+            var h, lastgame, settings;
+            $('body').removeClass('loading');
+            $('#nav').show();
+            $('#content').show();
+            if (!Parse.User.current()) {
+              $('#profile').show();
+              $('#game_settings').hide();
+            } else {
+              $('#profile').hide();
+              $('#game_settings').show();
+              h = lget('history') || [];
+              draw_history_graph($('#graph')[0], h);
+              settings = lget('settings');
+              if (settings.mode === 'training') {
+                lastgame = new Date(lget('lastgame'));
+                if (((new Date) - lastgame) > 24 * 60 * 60 * 1000) {
+                  settings.n = 2;
+                  lset('strikes', 0);
+                }
+              }
+              lset('settings', settings);
+              update_settings_display();
+            }
+            $(window).keydown(function(e) {
+              switch (e.which) {
+                case 65:
+                  if (!(window.round != null)) {
+                    return true;
+                  }
+                  round.a_pressed();
+                  break;
+                case 76:
+                  if (!(window.round != null)) {
+                    return true;
+                  }
+                  round.b_pressed();
+                  break;
+                case 32:
+                  if ($('body').hasClass('flash')) {
+                    flash["continue"]();
+                  } else if (!$('body').hasClass('playing')) {
+                    new_round();
+                  }
+                  break;
+                case 27:
+                  if (!(window.round != null)) {
+                    return true;
+                  }
+                  round.stop();
+                  window.round = void 0;
+              }
+              return true;
+            });
+            $(window).on('click', '#a_button', function() {
+              if (!(window.round != null)) {
+                return true;
+              }
+              return round.a_pressed();
+            });
+            $(window).on('click', '#b_button', function() {
+              if (!(window.round != null)) {
+                return true;
+              }
+              return round.b_pressed();
+            });
+            $('#cancel').click(function() {
+              if (window.round != null) {
+                round.stop();
+                return window.round = void 0;
+              }
+            });
+            $('#game_settings').on('change', 'input', function() {
+              settings = lget('settings');
+              settings[this.name] = this.value;
+              lset('settings', settings);
+              return update_settings_display();
+            });
+            $('#clear-history').click(function() {
+              if (!confirm("Are you sure?")) {
+                return;
+              }
+              clear_history();
+              return draw_history_graph($('#graph')[0], lget('history'));
+            });
+            $('#reset-settings').click(function() {
+              if (!confirm("Are you sure?")) {
+                return;
+              }
+              reset_settings();
+              return update_settings_display();
+            });
+            $('#new-game').click(function() {
+              return new_round();
+            });
+            return $('#nav [href="#game"]').click();
+          };
+        });
+      });
+    }).call(this);</script></body></html>

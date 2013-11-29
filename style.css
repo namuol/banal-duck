@@ -1,0 +1,786 @@
+body {
+  -webkit-transition: background;
+  -moz-transition: background;
+  -o-transition: background;
+  -ms-transition: background;
+  transition: background;
+  height: 100%;
+  width: 100%;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  color: #fff;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+  background-color: #6995ac;
+  background-image: url("logo.png"), url("bg.png");
+  background-position: bottom right, bottom right;
+  background-repeat: no-repeat, repeat;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  font-family: 'Carme', sans-serif;
+  overflow: hidden;
+}
+#vignette {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  -webkit-transition: opacity 1000ms;
+  -moz-transition: opacity 1000ms;
+  -o-transition: opacity 1000ms;
+  -ms-transition: opacity 1000ms;
+  transition: opacity 1000ms;
+  background: -webkit-radial-gradient(transparent 0%, #000);
+  background: -moz-radial-gradient(transparent 0%, #000);
+  background: -o-radial-gradient(transparent 0%, #000);
+  opacity: 0.5;
+  -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=50);
+  filter: alpha(opacity=50);
+  z-index: -3;
+}
+#main {
+  position: fixed;
+  top: 0;
+  left: 0;
+  -webkit-transition: -webkit-transform 750ms;
+  -moz-transition: -moz-transform 750ms;
+  -ms-transition: -ms-transform 750ms;
+  -o-transition: -o-transform 750ms;
+  -webkit-transition: -webkit-transform 750ms;
+  -moz-transition: -moz-transform 750ms;
+  -o-transition: -o-transform 750ms;
+  -ms-transition: -ms-transform 750ms;
+  transition: transform 750ms;
+  -webkit-transform: translate(100%, 0);
+  -moz-transform: translate(100%, 0);
+  -o-transform: translate(100%, 0);
+  -ms-transform: translate(100%, 0);
+  transform: translate(100%, 0);
+  -webkit-transform: translate3d(100%, 0, 0);
+  -moz-transform: translate3d(100%, 0, 0);
+  -o-transform: translate3d(100%, 0, 0);
+  -ms-transform: translate3d(100%, 0, 0);
+  transform: translate3d(100%, 0, 0);
+  width: 100%;
+  height: 100%;
+}
+#layout {
+  height: 100%;
+  width: 100%;
+}
+#layout td {
+  text-align: center;
+  width: 33%;
+}
+#grid {
+  border-collapse: collapse;
+  margin: 0 auto;
+}
+#grid_wrap {
+  width: 453px;
+  min-width: 453px;
+}
+#grid_wrap fieldset {
+  float: none;
+}
+#grid td {
+  border: 1px solid #222;
+  background: #dde;
+  width: 150px;
+  height: 150px;
+}
+#a_button,
+#b_button {
+  font-weight: bold;
+}
+#grid td.highlighted {
+  background: #369;
+}
+.success {
+  background: rgba(200,255,200,0.5);
+}
+.failure {
+  background: rgba(255,200,200,0.5);
+}
+.miss {
+  background: rgba(200,200,255,0.5);
+}
+#type {
+  float: left;
+}
+#remaining {
+  float: right;
+}
+#results {
+  text-shadow: 0px 1px 3px rgba(0,0,0,0.9);
+  display: inline-block;
+  color: #ccc;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.75);
+  top: 0;
+  left: 0;
+  position: absolute;
+  text-align: center;
+}
+#instructions {
+  text-align: left;
+  font-size: 18pt;
+}
+#start_game_msg {
+  width: 100%;
+  text-align: center;
+  position: absolute;
+  bottom: 15px;
+  font-size: 24pt;
+}
+#flash_bg {
+  background: rgba(0,0,0,0.6);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  -webkit-transition: opacity 250ms;
+  -moz-transition: opacity 250ms;
+  -o-transition: opacity 250ms;
+  -ms-transition: opacity 250ms;
+  transition: opacity 250ms;
+  opacity: 0;
+  -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+  filter: alpha(opacity=0);
+  height: 0;
+  z-index: 20;
+}
+body.flash #flash_bg {
+  -webkit-transition: opacity 250ms;
+  -moz-transition: opacity 250ms;
+  -o-transition: opacity 250ms;
+  -ms-transition: opacity 250ms;
+  transition: opacity 250ms;
+  opacity: 1;
+  -ms-filter: none;
+  filter: none;
+  height: 100%;
+}
+body.flash #flash_wrapper {
+  -webkit-transition: -webkit-transform 250ms;
+  -moz-transition: -moz-transform 250ms;
+  -ms-transition: -ms-transform 250ms;
+  -o-transition: -o-transform 250ms;
+  -webkit-transition: -webkit-transform 250ms;
+  -moz-transition: -moz-transform 250ms;
+  -o-transition: -o-transform 250ms;
+  -ms-transition: -ms-transform 250ms;
+  transition: transform 250ms;
+  -webkit-transform: translate(0, 0);
+  -moz-transform: translate(0, 0);
+  -o-transform: translate(0, 0);
+  -ms-transform: translate(0, 0);
+  transform: translate(0, 0);
+  -webkit-transform: translate3d(0, 0, 0);
+  -moz-transform: translate3d(0, 0, 0);
+  -o-transform: translate3d(0, 0, 0);
+  -ms-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
+}
+#flash_wrapper {
+  -webkit-transition: -webkit-transform 250ms;
+  -moz-transition: -moz-transform 250ms;
+  -ms-transition: -ms-transform 250ms;
+  -o-transition: -o-transform 250ms;
+  -webkit-transition: -webkit-transform 250ms;
+  -moz-transition: -moz-transform 250ms;
+  -o-transition: -o-transform 250ms;
+  -ms-transition: -ms-transform 250ms;
+  transition: transform 250ms;
+  -webkit-transform: translate(0, 100%);
+  -moz-transform: translate(0, 100%);
+  -o-transform: translate(0, 100%);
+  -ms-transform: translate(0, 100%);
+  transform: translate(0, 100%);
+  -webkit-transform: translate3d(0, 100%, 0);
+  -moz-transform: translate3d(0, 100%, 0);
+  -o-transform: translate3d(0, 100%, 0);
+  -ms-transform: translate3d(0, 100%, 0);
+  transform: translate3d(0, 100%, 0);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  z-index: 21;
+}
+#flash {
+  text-align: center;
+  font-size: 32pt;
+}
+#continue {
+  margin: 20px;
+  padding: 10px;
+  font-size: 24pt;
+}
+#graph-panel {
+  float: left;
+}
+#graph {
+  width: 600px;
+  height: 400px;
+  margin-left: 20px;
+}
+#content {
+  -webkit-transition: -webkit-transform 650ms;
+  -moz-transition: -moz-transform 650ms;
+  -ms-transition: -ms-transform 650ms;
+  -o-transition: -o-transform 650ms;
+  -webkit-transition: -webkit-transform 650ms;
+  -moz-transition: -moz-transform 650ms;
+  -o-transition: -o-transform 650ms;
+  -ms-transition: -ms-transform 650ms;
+  transition: transform 650ms;
+  position: fixed;
+  top: 40px;
+  z-index: 19 !important;
+}
+#nav {
+  z-index: 20 !important;
+  position: fixed;
+  top: 0;
+  font-family: 'Carme', sans-serif;
+  -webkit-transition: -webkit-transform 500ms;
+  -moz-transition: -moz-transform 500ms;
+  -ms-transition: -ms-transform 500ms;
+  -o-transition: -o-transform 500ms;
+  -webkit-transition: -webkit-transform 500ms;
+  -moz-transition: -moz-transform 500ms;
+  -o-transition: -o-transform 500ms;
+  -ms-transition: -ms-transform 500ms;
+  transition: transform 500ms;
+  -webkit-box-shadow: rgba(0,0,0,0.5) 0 4px 16px;
+  box-shadow: rgba(0,0,0,0.5) 0 4px 16px;
+  overflow: hidden;
+  width: 100%;
+  height: 40px;
+}
+body.loading #content,
+body.loading #nav,
+body.loading #main,
+body.playing #content {
+  height: 0;
+}
+#loading_wrapper table {
+  width: 100%;
+  height: 100%;
+}
+#loading {
+  font-family: 'Carme', sans-serif;
+  font-size: 48pt;
+  text-align: center;
+  top: -100%;
+  -webkit-transition: opacity 250ms;
+  -moz-transition: opacity 250ms;
+  -o-transition: opacity 250ms;
+  -ms-transition: opacity 250ms;
+  transition: opacity 250ms;
+  opacity: 0;
+  -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+  filter: alpha(opacity=0);
+  left: 0;
+}
+body.loading #loading {
+  top: 0;
+  -webkit-transition: opacity 250ms;
+  -moz-transition: opacity 250ms;
+  -o-transition: opacity 250ms;
+  -ms-transition: opacity 250ms;
+  transition: opacity 250ms;
+  opacity: 1;
+  -ms-filter: none;
+  filter: none;
+}
+body.playing #nav,
+body.loading #nav {
+  -webkit-transform: translate(0, -60px);
+  -moz-transform: translate(0, -60px);
+  -o-transform: translate(0, -60px);
+  -ms-transform: translate(0, -60px);
+  transform: translate(0, -60px);
+  -webkit-transform: translate3d(0, -60px, 0);
+  -moz-transform: translate3d(0, -60px, 0);
+  -o-transform: translate3d(0, -60px, 0);
+  -ms-transform: translate3d(0, -60px, 0);
+  transform: translate3d(0, -60px, 0);
+  -webkit-transition: -webkit-transform 750ms;
+  -moz-transition: -moz-transform 750ms;
+  -ms-transition: -ms-transform 750ms;
+  -o-transition: -o-transform 750ms;
+  -webkit-transition: -webkit-transform 750ms;
+  -moz-transition: -moz-transform 750ms;
+  -o-transition: -o-transform 750ms;
+  -ms-transition: -ms-transform 750ms;
+  transition: transform 750ms;
+}
+body.playing #content,
+body.loading #content {
+  -webkit-transform: translate(-100%, 0);
+  -moz-transform: translate(-100%, 0);
+  -o-transform: translate(-100%, 0);
+  -ms-transform: translate(-100%, 0);
+  transform: translate(-100%, 0);
+  -webkit-transform: translate3d(-100%, 0, 0);
+  -moz-transform: translate3d(-100%, 0, 0);
+  -o-transform: translate3d(-100%, 0, 0);
+  -ms-transform: translate3d(-100%, 0, 0);
+  transform: translate3d(-100%, 0, 0);
+}
+body.playing #vignette,
+body.loading #vignette {
+  opacity: 1;
+  -ms-filter: none;
+  filter: none;
+}
+body.playing #main {
+  display: block;
+  -webkit-transition: -webkit-transform 750ms;
+  -moz-transition: -moz-transform 750ms;
+  -ms-transition: -ms-transform 750ms;
+  -o-transition: -o-transform 750ms;
+  -webkit-transition: -webkit-transform 750ms;
+  -moz-transition: -moz-transform 750ms;
+  -o-transition: -o-transform 750ms;
+  -ms-transition: -ms-transform 750ms;
+  transition: transform 750ms;
+  -webkit-transform: translate(0, 0);
+  -moz-transform: translate(0, 0);
+  -o-transform: translate(0, 0);
+  -ms-transform: translate(0, 0);
+  transform: translate(0, 0);
+  -webkit-transform: translate3d(0, 0, 0);
+  -moz-transform: translate3d(0, 0, 0);
+  -o-transform: translate3d(0, 0, 0);
+  -ms-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
+}
+#nav > ul {
+  margin: 0;
+  padding: 0;
+}
+#nav > ul > li {
+  -webkit-border-radius: 0 !important;
+  border-radius: 0 !important;
+  border: 0 !important;
+  font-size: 14pt;
+  font-weight: bold;
+  text-align: center;
+  float: left;
+  width: 33%;
+  padding-top: 10px;
+  height: 30px;
+}
+#nav > ul > li.first {
+  padding-left: 1%;
+}
+#nav a {
+  color: #fff;
+  text-decoration: none;
+}
+#nav li a:hover {
+  cursor: default;
+}
+#content > div {
+  z-index: 2 !important;
+  padding: 20px;
+}
+#game {
+  font-weight: bold;
+}
+legend {
+  font-weight: bold;
+  font-family: 'Carme';
+  color: rgba(0,0,0,0.5);
+  float: left;
+  font-size: 15pt;
+  padding: 0;
+  padding-bottom: 10px;
+  margin: 0;
+  margin-top: -35px;
+  text-shadow: 0 1px 0 rgba(255,255,255,0.8), 0 0px 0 rgba(0,0,0,0.8);
+}
+#game-mode,
+#settings {
+  float: left;
+  width: 200px;
+}
+#n,
+#n_manual {
+  width: 2.5em;
+}
+#n-wrap {
+  text-align: center;
+}
+button,
+input[type='radio'] + label,
+#nav > ul > li {
+  font-family: 'Carme', sans-serif;
+  color: #fff;
+  border: 1px solid #000;
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0, rgba(0,0,0,0)), color-stop(1, rgba(0,0,0,0.75))), color;
+  background: -webkit-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.75) 100%), color;
+  background: -moz-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.75) 100%), color;
+  background: -o-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.75) 100%), color;
+  background: -ms-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.75) 100%), color;
+  background: linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.75) 100%), #567;
+  background: -webkit-linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.75)), #567;
+  background: -moz-linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.75)), #567;
+  background: -o-linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.75)), #567;
+  -webkit-box-shadow: rgba(255,255,255,0.25) 0 -1px 0 inset, rgba(255,255,255,0.25) 0 1px 0 inset;
+  box-shadow: rgba(255,255,255,0.25) 0 -1px 0 inset, rgba(255,255,255,0.25) 0 1px 0 inset;
+  text-shadow: 0 -1px 0 rgba(0,0,0,0.8);
+}
+button:hover,
+input[type='radio'] + label:hover,
+#nav > ul > li:hover {
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0, rgba(0,0,0,0)), color-stop(1, rgba(0,0,0,0.75))), color;
+  background: -webkit-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.75) 100%), color;
+  background: -moz-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.75) 100%), color;
+  background: -o-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.75) 100%), color;
+  background: -ms-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.75) 100%), color;
+  background: linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.75) 100%), #789;
+  background: -webkit-linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.75)), #789;
+  background: -moz-linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.75)), #789;
+  background: -o-linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.75)), cactive;
+}
+button:active,
+input[type='radio'] + label:active,
+#nav > ul > li:active {
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0, rgba(0,0,0,0)), color-stop(1, rgba(0,0,0,0.75))), color;
+  background: -webkit-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.75) 100%), color;
+  background: -moz-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.75) 100%), color;
+  background: -o-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.75) 100%), color;
+  background: -ms-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.75) 100%), color;
+  background: linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.75) 100%), #567;
+  background: -webkit-linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.75)), #567;
+  background: -moz-linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.75)), #567;
+  background: -o-linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.75)), #567;
+  -webkit-box-shadow: rgba(0,0,0,0.5) 0 2px 6px inset;
+  box-shadow: rgba(0,0,0,0.5) 0 2px 6px inset;
+}
+button#new-game {
+  color: #fff;
+  border: 1px solid #000;
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0, rgba(0,0,0,0)), color-stop(1, rgba(0,0,0,0.75))), color;
+  background: -webkit-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.75) 100%), color;
+  background: -moz-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.75) 100%), color;
+  background: -o-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.75) 100%), color;
+  background: -ms-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.75) 100%), color;
+  background: linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.75) 100%), #585;
+  background: -webkit-linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.75)), #585;
+  background: -moz-linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.75)), #585;
+  background: -o-linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.75)), #585;
+  -webkit-box-shadow: rgba(255,255,255,0.25) 0 -1px 0 inset, rgba(255,255,255,0.25) 0 1px 0 inset;
+  box-shadow: rgba(255,255,255,0.25) 0 -1px 0 inset, rgba(255,255,255,0.25) 0 1px 0 inset;
+  text-shadow: 0 -1px 0 rgba(0,0,0,0.8);
+  float: left;
+  font-size: 18pt;
+  font-weight: bold;
+  width: 200px;
+  height: 50px;
+}
+button#new-game:hover {
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0, rgba(0,0,0,0)), color-stop(1, rgba(0,0,0,0.75))), color;
+  background: -webkit-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.75) 100%), color;
+  background: -moz-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.75) 100%), color;
+  background: -o-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.75) 100%), color;
+  background: -ms-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.75) 100%), color;
+  background: linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.75) 100%), #7a7;
+  background: -webkit-linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.75)), #7a7;
+  background: -moz-linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.75)), #7a7;
+  background: -o-linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.75)), cactive;
+}
+button#new-game:active {
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0, rgba(0,0,0,0)), color-stop(1, rgba(0,0,0,0.75))), color;
+  background: -webkit-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.75) 100%), color;
+  background: -moz-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.75) 100%), color;
+  background: -o-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.75) 100%), color;
+  background: -ms-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.75) 100%), color;
+  background: linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.75) 100%), #585;
+  background: -webkit-linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.75)), #585;
+  background: -moz-linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.75)), #585;
+  background: -o-linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.75)), #585;
+  -webkit-box-shadow: rgba(0,0,0,0.5) 0 2px 6px inset;
+  box-shadow: rgba(0,0,0,0.5) 0 2px 6px inset;
+}
+button#cancel {
+  position: absolute;
+  color: #fff;
+  border: 1px solid #000;
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0, rgba(0,0,0,0)), color-stop(1, rgba(0,0,0,0.75))), color;
+  background: -webkit-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.75) 100%), color;
+  background: -moz-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.75) 100%), color;
+  background: -o-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.75) 100%), color;
+  background: -ms-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.75) 100%), color;
+  background: linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.75) 100%), #933;
+  background: -webkit-linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.75)), #933;
+  background: -moz-linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.75)), #933;
+  background: -o-linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.75)), #933;
+  -webkit-box-shadow: rgba(255,255,255,0.25) 0 -1px 0 inset, rgba(255,255,255,0.25) 0 1px 0 inset;
+  box-shadow: rgba(255,255,255,0.25) 0 -1px 0 inset, rgba(255,255,255,0.25) 0 1px 0 inset;
+  text-shadow: 0 -1px 0 rgba(0,0,0,0.8);
+  float: left;
+  margin: 10px;
+  font-size: 18pt;
+  font-weight: bold;
+  width: 200px;
+  height: 50px;
+}
+button#cancel:hover {
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0, rgba(0,0,0,0)), color-stop(1, rgba(0,0,0,0.75))), color;
+  background: -webkit-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.75) 100%), color;
+  background: -moz-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.75) 100%), color;
+  background: -o-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.75) 100%), color;
+  background: -ms-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.75) 100%), color;
+  background: linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.75) 100%), #b44;
+  background: -webkit-linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.75)), #b44;
+  background: -moz-linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.75)), #b44;
+  background: -o-linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.75)), cactive;
+}
+button#cancel:active {
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0, rgba(0,0,0,0)), color-stop(1, rgba(0,0,0,0.75))), color;
+  background: -webkit-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.75) 100%), color;
+  background: -moz-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.75) 100%), color;
+  background: -o-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.75) 100%), color;
+  background: -ms-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.75) 100%), color;
+  background: linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.75) 100%), #933;
+  background: -webkit-linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.75)), #933;
+  background: -moz-linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.75)), #933;
+  background: -o-linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.75)), #933;
+  -webkit-box-shadow: rgba(0,0,0,0.5) 0 2px 6px inset;
+  box-shadow: rgba(0,0,0,0.5) 0 2px 6px inset;
+}
+input[type='radio'] {
+  display: none;
+}
+input[type='radio'] + label {
+  display: block;
+  margin: 10px;
+  padding: 6px;
+  height: 27px;
+  font-size: 16pt;
+  text-align: center;
+}
+input[type='radio']:checked + label,
+input[type='radio']:checked + label:hover {
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0, rgba(0,0,0,0)), color-stop(1, rgba(0,0,0,0.75))), color;
+  background: -webkit-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.75) 100%), color;
+  background: -moz-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.75) 100%), color;
+  background: -o-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.75) 100%), color;
+  background: -ms-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.75) 100%), color;
+  background: linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.75) 100%), #cc4;
+  background: -webkit-linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.75)), #cc4;
+  background: -moz-linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.75)), #cc4;
+  background: -o-linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.75)), #cc4;
+  -webkit-box-shadow: rgba(0,0,0,0.5) 0 2px 6px inset;
+  box-shadow: rgba(0,0,0,0.5) 0 2px 6px inset;
+}
+#nav li.selected,
+#nav li.selected:hover {
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0, rgba(0,0,0,0)), color-stop(1, rgba(0,0,0,0.75))), color;
+  background: -webkit-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.75) 100%), color;
+  background: -moz-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.75) 100%), color;
+  background: -o-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.75) 100%), color;
+  background: -ms-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.75) 100%), color;
+  background: linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.75) 100%), #c44;
+  background: -webkit-linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.75)), #c44;
+  background: -moz-linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.75)), #c44;
+  background: -o-linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.75)), #c44;
+  -webkit-box-shadow: rgba(0,0,0,0.5) 0 2px 6px inset;
+  box-shadow: rgba(0,0,0,0.5) 0 2px 6px inset;
+}
+fieldset {
+  float: left;
+  display: inline-block;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  border: 1px solid #000;
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #abc), color-stop(1, #789));
+  background: -webkit-linear-gradient(top, #abc 0%, #789 100%);
+  background: -moz-linear-gradient(top, #abc 0%, #789 100%);
+  background: -o-linear-gradient(top, #abc 0%, #789 100%);
+  background: -ms-linear-gradient(top, #abc 0%, #789 100%);
+  background: linear-gradient(top, #abc 0%, #789 100%);
+  background: -webkit-linear-gradient(#abc, #789);
+  background: -moz-linear-gradient(#abc, #789);
+  background: -o-linear-gradient(#abc, #789);
+  -webkit-box-shadow: rgba(0,0,0,0.5) 0 1px 2px inset;
+  box-shadow: rgba(0,0,0,0.5) 0 1px 2px inset;
+  color: rgba(0,0,0,0.75);
+  text-shadow: 0 1px 0 rgba(255,255,255,0.48);
+  padding: 5px;
+  margin: 5px;
+  margin-top: 35px;
+}
+fieldset section {
+  color: #fff;
+  text-shadow: 0 1px 1px rgba(0,0,0,0.9);
+}
+fieldset.outer > button {
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  margin: 5px;
+  padding: 4px;
+  font-size: 12pt;
+}
+fieldset.outer {
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #cdf), color-stop(1, #abc));
+  background: -webkit-linear-gradient(top, #cdf 0%, #abc 100%);
+  background: -moz-linear-gradient(top, #cdf 0%, #abc 100%);
+  background: -o-linear-gradient(top, #cdf 0%, #abc 100%);
+  background: -ms-linear-gradient(top, #cdf 0%, #abc 100%);
+  background: linear-gradient(top, #cdf 0%, #abc 100%);
+  background: -webkit-linear-gradient(#cdf, #abc);
+  background: -moz-linear-gradient(#cdf, #abc);
+  background: -o-linear-gradient(#cdf, #abc);
+  -webkit-box-shadow: rgba(255,255,255,0.25) 0 1px 0 inset, rgba(0,0,0,0.5) 0 2px 6px;
+  box-shadow: rgba(255,255,255,0.25) 0 1px 0 inset, rgba(0,0,0,0.5) 0 2px 6px;
+  margin-top: 0px;
+}
+input[type='text'],
+input[type='number'],
+input[type='password'] {
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+  background: rgba(0,0,0,0.25);
+  font-size: 14pt;
+  width: 6em;
+  margin-bottom: 10px;
+  border: 0;
+  color: #fff;
+  text-align: right;
+  text-shadow: 0 1px 0 rgba(0,0,0,0.8);
+  -webkit-box-shadow: rgba(0,0,0,0.5) 0 1px 0px inset;
+  box-shadow: rgba(0,0,0,0.5) 0 1px 0px inset;
+}
+fieldset button {
+  margin-top: 5px;
+}
+input[disabled='disabled'] {
+  color: rgba(255,255,255,0.5);
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.err {
+  color: #c22;
+}
+.bad {
+  color: #ccc;
+}
+.good {
+  color: #dd2;
+}
+.excellent {
+  color: #2d2;
+}
+#logo {
+  display: none;
+  font-weight: bold;
+  letter-spacing: -0.1em;
+  color: transparent;
+  position: fixed;
+  bottom: 0;
+  font-size: 128pt;
+  -webkit-transition: text-shadow 500ms;
+  -moz-transition: text-shadow 500ms;
+  -o-transition: text-shadow 500ms;
+  -ms-transition: text-shadow 500ms;
+  transition: text-shadow 500ms;
+  text-shadow: 0 0 60px rgba(255,255,255,0.5), 0 1px 60px rgba(0,0,0,0);
+}
+#logo:hover {
+  -webkit-transition: text-shadow 500ms;
+  -moz-transition: text-shadow 500ms;
+  -o-transition: text-shadow 500ms;
+  -ms-transition: text-shadow 500ms;
+  transition: text-shadow 500ms;
+  text-shadow: 0 0 0 #fff, 0 1px 4px rgba(0,0,0,0.5);
+}
+#focus_wrap {
+  z-index: 0 !important;
+  color: transparent;
+  position: fixed;
+  top: 0;
+  left: 0;
+  margin-left: 33.3333%;
+  width: 33.3333%;
+  height: 100%;
+  font-size: 64pt;
+  -webkit-transition: opacity 500ms 1500ms;
+  -moz-transition: opacity 500ms 1500ms;
+  -o-transition: opacity 500ms 1500ms;
+  -ms-transition: opacity 500ms 1500ms;
+  transition: opacity 500ms 1500ms;
+}
+#focus {
+  text-align: center;
+  z-index: 0 !important;
+  text-shadow: 0 0 64px rgba(255,255,255,0), 0 1px 64px rgba(0,0,0,0);
+  -webkit-transition: text-shadow 1000ms 500ms;
+  -moz-transition: text-shadow 1000ms 500ms;
+  -o-transition: text-shadow 1000ms 500ms;
+  -ms-transition: text-shadow 1000ms 500ms;
+  transition: text-shadow 1000ms 500ms;
+}
+body.playing #focus_wrap {
+  opacity: 0;
+  -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+  filter: alpha(opacity=0);
+}
+body.playing #focus {
+  text-shadow: 0 0 0 #fff, 0 1px 1px #000;
+}
+#new_profile input,
+#profile input {
+  padding: 2px;
+  margin: 2px;
+  width: 12em;
+  text-align: left;
+}
+a {
+  text-decoration: none;
+  font-weight: bold;
+  color: #bcf;
+}
+a:hover {
+  color: #cdf;
+}
+a:active {
+  color: #abf;
+}
+#back a {
+  position: fixed;
+  bottom: 0;
+  padding: 5px;
+  font-weight: normal;
+}
+a#trouble_logging_in {
+  text-shadow: none;
+  color: #ddd;
+  font-weight: normal;
+  float: right;
+}
+a#trouble_logging_in:hover {
+  color: #fff;
+}
+#reset_pass_form {
+  display: none;
+}
