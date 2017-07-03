@@ -15,4 +15,6 @@ git commit -am 'auto-deploy'
 git push origin gh-pages
 
 git checkout master
+
+yarn install
 `npm bin`/cake build
