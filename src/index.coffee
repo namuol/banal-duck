@@ -17,7 +17,6 @@ html ->
     script type:'text/javascript', src:'jquery-1.7.2.min.js'
     script type:'text/javascript', src:'soundmanager2.js'
     script type:'text/javascript', src:'flotr2.min.js'
-    script type:'text/javascript', src:'http://www.parsecdn.com/js/parse-1.0.21.min.js'
     text """
       <script type="text/javascript">
 
@@ -49,12 +48,31 @@ html ->
     div id:'nav', ->
       ul ->
         li class:'first', ->
-          a id:'profile_display', href:'#game', 'Log In'
+          a id:'profile_display', href:'#game', 'Game'
         li ->
           a href:'#stats', 'Stats'
         li ->
           a href:'#help', 'Help'
 
+    div id:'profile', ->
+      fieldset class:'outer', ->
+        fieldset ->
+          legend 'Choose a Profile'
+          select id:'profile_select', name:'profile_id', ->
+            option value:'test', 'Test'
+          button id:'profile_cancel', 'Cancel'
+        br ''
+        button id:'new_profile_button', 'Create New Profile'
+
+    div id:'new_profile', ->
+      fieldset class:'outer', ->
+        fieldset ->
+          legend 'Create a Profile'
+          form ->
+            input placeholder:'Enter Your Name', id:'new_profile_name', name:'new_profile_name', type:'text'
+            br ''
+            button id:'new_profile_create', 'Create'
+            button id:'new_profile_cancel', 'Cancel'
 
     div id:'content', ->
       div id:'help', ->
@@ -81,35 +99,7 @@ html ->
 
 
       div id:'game', ->
-        fieldset id:'profile', class:'outer', ->
-          fieldset ->
-            legend 'Quick Sign Up'
-            form id:'new_profile_form', ->
-              input placeholder:'Username', id:'new_profile_name', name:'new_profile_name', type:'text', required:'required'
-              br ''
-              input placeholder:'Password', id:'new_profile_pass', name:'new_profile_pass', type:'password', required:'required'
-              br ''
-              input placeholder:'Email (optional)', id:'new_profile_email', email:'new_profile_email', type:'text'
-              br ''
-              button id:'new_profile_create', 'Create'
-
-          fieldset ->
-            legend 'Log In'
-            form id:'log_in_form', ->
-              input placeholder:'Username', id:'profile_name', name:'profile_name', type:'text', required:'required'
-              br ''
-              input placeholder:'Password', id:'profile_pass', name:'profile_pass', type:'password', required:'required'
-              br ''
-              button id:'log_in_button', 'Log In'
-              a id:'trouble_logging_in', href:'#', 'Trouble logging in?'
-
-            form id:'reset_pass_form', ->
-              input placeholder:'Email', id:'reset_pass_email', name:'reset_pass_email', type:'text', required:'required'
-              br ''
-              button id:'reset_pass_button', 'Reset My Password'
-              button id:'cancel_reset_pass', 'Cancel'
-
-        fieldset id:'game_settings', class:'outer', ->
+        fieldset class:'outer', ->
           fieldset id:'game-mode', ->
             legend 'Progress Mode'
 
@@ -146,7 +136,7 @@ html ->
             button id:'new-game', 'NEW ROUND!'
           br ''
           button id:'reset-settings', 'Reset My Settings'
-          button id:'log_out', 'Log Out'
+          button id:'change_profile', 'Change Profile'
 
     div id:'flash_bg'
     table id:'flash_wrapper', ->
@@ -202,10 +192,6 @@ html ->
       #      `Y'      #
       ###           ###
       $ ->
-
-        Parse.initialize 'vrBnhG18TQkX99xX1MDw3paUIVJWYwmT5rVvkfJe',
-                         'GYI87sIoXXru3ToOa33Gculz7RSWAxupGWiQWwtT'
-
         _newProfile =
           settings:
             mode: 'training'
@@ -217,27 +203,32 @@ html ->
             advance_threshold: 80
           strikes: 0
           history: []
+        
+        # HACK:
+        window.hasProp = __hasProp
 
-        window.lget = (itemName) ->
-          user = Parse.User.current()
-          return undefined if not user
-          item = user.get itemName
+        window.lget = (item) ->
+          profile_id = localStorage.getItem 'current_profile'
+          return undefined if not profile_id?
+          profile = JSON.parse(localStorage.getItem('profiles'))[profile_id]
+          item = profile[item]
           return undefined if not item?
           return item
 
-        window.lset = (itemName, val) ->
-          user = Parse.User.current()
-          return if not user
-          changes = {}
-          changes[itemName] = val
-          user.save changes,
-            error: (user, error) ->
-              flash error.message, 'err'
+        window.lset = (item, val) ->
+          profile_id = localStorage.getItem 'current_profile'
+          return if not profile_id?
+          profiles = JSON.parse(localStorage.getItem('profiles'))
+          profile = profiles[profile_id]
+          profile[item] = val
+          profiles[profile_id] = profile
 
+          localStorage.setItem 'profiles', JSON.stringify profiles
           return val
 
         update_settings_display = ->
-          $('#profile_display').html '@' + Parse.User.current().get 'username'
+          current_profile = localStorage.getItem 'current_profile'
+          $('#profile_display').html '@' + current_profile
           settings = lget 'settings'
           $("#game input[name='mode']").attr 'checked', false
           $("#game input[name='mode'][value='#{settings.mode}']").attr 'checked', 'checked'
@@ -259,6 +250,15 @@ html ->
 
           $('#extra_count').html settings.n*settings.n
         
+        update_profile_list = ->
+          profiles = JSON.parse(localStorage.getItem 'profiles') or {}
+          curr = localStorage.getItem 'current_profile'
+          $('#profile_select').html('')
+          for own name,profile of profiles
+            $('#profile_select').append(
+              $("<option value:'#{name}'>#{name}</option>").attr('selected', curr is name ? true : undefined)
+            )
+
         reset_settings = ->
           lset 'settings', _newProfile.settings
 
@@ -272,91 +272,42 @@ html ->
           href = $(@).children('a').attr('href')
           $(href).show()
           return false
-
-        $('#log_out').click (e) ->
-          Parse.User.logOut()
-          $('#game_settings').hide()
+        
+        $('#change_profile').click ->
+          update_profile_list()
           $('#profile').show()
           $('#profile_display').html 'Log In'
 
-        $('#log_in_form').submit (e) ->
-          e.preventDefault()
+        $('#profile_select').change ->
+          localStorage.setItem 'current_profile', @value
+          update_settings_display()
+          $('#profile').hide()
 
-          name = $('#profile_name').val()
-          pass = $('#profile_pass').val()
-          Parse.User.logIn name, pass,
-            success: (user) ->
-              $('#profile').hide()
-              update_settings_display()
-              $('#game_settings').show()
-            error: (user, error) ->
-              flash error.message, 'err'
+        $('#profile_cancel').click ->
+          $('#profile').hide()
 
-          $('#profile_name').val ''
-          $('#profile_pass').val ''
-          return false
+        $('#new_profile_button').click ->
+          $('#new_profile').show()
+          $('#new_profile_name').focus()
+          $('#new_profile_cancel').show()
 
-        $('#trouble_logging_in').click (e) ->
-          e.preventDefault()
-          $('#reset_pass_form').show()
-          $('#log_in_form').hide()
-          return false
-
-        $('#cancel_reset_pass').click (e) ->
-          e.preventDefault()
-          $('#reset_pass_form').hide()
-          $('#log_in_form').show()
-          return false
-
-        $('#reset_pass_form').submit (e) ->
-          e.preventDefault()
-
-          email = $('#reset_pass_email').val()
-          Parse.User.requestPasswordReset email,
-            success: ->
-              flash 'Password Reset email sent!', 'excellent'
-              $('#reset_pass_email').val('')
-              $('#reset_pass_form').hide()
-              $('#log_in_form').show()
-            error: (error) ->
-              flash error.message, 'err'
-
-          return false
-
-        $('#new_profile_form').submit (e) ->
-          e.preventDefault()
-
+        $('#new_profile form').submit ->
           name = $('#new_profile_name').val()
-          pass = $('#new_profile_pass').val()
-          email = $('#new_profile_email').val()
-
-          user = new Parse.User
-          user.set 'username', name
-          user.set 'password', pass
-          user.set 'email', email
-          for own key,val of _newProfile
-            user.set key, val
-
-          user.signUp null,
-            success: (user) ->
-              $('#profile').hide()
-              update_settings_display()
-              $('#game_settings').show()
-              Parse.User.logIn name, pass,
-                success: (user) ->
-                  flash 'Success! You\'re all signed up and logged in!', 'excellent'
-                  $('#profile').hide()
-                  update_settings_display()
-                  $('#game_settings').show()
-                error: (user, error) ->
-                  flash error.message, 'err'
-            error: (user, error) ->
-              flash error.message, 'err'
-
+          return false if name.length <= 0
+          profiles = JSON.parse(localStorage.getItem('profiles')) or {}
+          profiles[name] = _newProfile
+          localStorage.setItem 'profiles', JSON.stringify profiles
+          localStorage.setItem 'current_profile', name
           $('#new_profile_name').val ''
-          $('#new_profile_pass').val ''
-          $('#new_profile_email').val ''
+          $('#new_profile').hide()
+          update_settings_display()
+          update_profile_list()
+          $('#profile').hide()
           return false
+
+        $('#new_profile_cancel').click ->
+          $('#new_profile_name').val ''
+          $('#new_profile').hide()
 
         $('#nav').on 'click', 'a', ->
           $(@).parent().click()
@@ -387,6 +338,7 @@ html ->
             if cb?
               cb()
             $('body').removeClass 'flash'
+
          
           $('#continue').click ->
             flash.continue()
@@ -777,16 +729,11 @@ html ->
             $('#nav').show()
             $('#content').show()
             
-            if not Parse.User.current()
-              $('#profile').show()
-              $('#game_settings').hide()
+            if not localStorage.getItem 'current_profile'
+              $('#new_profile').show()
+              $('#new_profile_cancel').hide()
+              
             else
-              $('#profile').hide()
-              $('#game_settings').show()
-
-              h = lget('history') or []
-              draw_history_graph $('#graph')[0], h
-
               settings = lget('settings')# or _newProfile.settings
               if settings.mode == 'training'
                 lastgame = new Date lget 'lastgame'
@@ -796,6 +743,9 @@ html ->
               lset 'settings', settings
               update_settings_display()
 
+            h = lget('history') or []
+
+            draw_history_graph $('#graph')[0], h
 
             $(window).keydown (e) ->
               switch e.which
@@ -828,7 +778,7 @@ html ->
                 round.stop()
                 window.round = undefined
 
-            $('#game_settings').on 'change', 'input', ->
+            $('#game').on 'change', 'input', ->
               settings = lget 'settings'
               settings[@name] = @value
               lset 'settings', settings

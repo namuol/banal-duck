@@ -225,6 +225,7 @@ body.playing #main
   transform translate3d(0,0,0)
 
 #nav > ul
+  list-style none
   margin 0
   padding 0
 
@@ -360,7 +361,6 @@ input[type='radio']:checked + label, input[type='radio']:checked + label:hover
   active_button(#c44)
 
 fieldset
-  float left
   display inline-block
   border-radius 5px
   border 1px solid #000
@@ -393,7 +393,7 @@ fieldset.outer
   box-shadow rgba(255, 255, 255, 0.25) 0 1px 0 inset, rgba(0,0,0,0.5) 0 2px 6px
   margin-top 0px
 
-input[type='text'], input[type='number'], input[type='password']
+input[type='text'], input[type='number']
   border-radius 4px
   background rgba(0,0,0,0.25)
   font-size 14pt
@@ -411,9 +411,6 @@ fieldset button
 input[disabled='disabled']
   color rgba(255,255,255,0.5)
   user-select none
-
-.err
-  color #c22
 
 .bad
   color #ccc
@@ -464,9 +461,25 @@ body.playing #focus
   text-shadow 0 0 0 rgba(255,255,255,1), 0 1px 1px rgba(0,0,0,1)
   //transition text-shadow 750ms 500ms
 
-#new_profile input, #profile input
-  padding 2px
-  margin 2px
+#new_profile, #profile
+  padding 30px
+  text-align center
+  background rgba(0,0,0,0.6)
+  display none
+  position fixed
+  top 0
+  left 0
+  width 100%
+  height 100%
+
+#new_profile
+  z-index 22 !important
+
+#profile
+  z-index 21 !important
+
+#new_profile input
+  margin 0
   width 12em
   text-align left 
 
