@@ -1,6 +1,6 @@
-#!/bin/sh
+#!/bin/bash
 
-cake build
+`npm bin`/cake build
 mkdir -p wat
 cp -r build/* wat/.
 
@@ -13,4 +13,4 @@ git commit -am 'auto-deploy'
 git push origin gh-pages
 
 git checkout master
-cake build
+`npm bin`/cake build
