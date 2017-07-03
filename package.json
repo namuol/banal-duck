@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "coffeecup": "^0.3.21",
+    "coffeescript": "^1.12.6",
+    "nib": "^1.1.2",
+    "stylus": "^0.54.5"
+  }
+}
